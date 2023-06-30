@@ -7,7 +7,8 @@ This example solution helps you to establish a Host and a service project and es
 No requirements.
 
 ## Pre-requisite
-1. User Running this should have following permissions.
+1. User should have two projects which will act as Host Project and a Service Project.
+2.1 User Running this should have following permissions.
    - **Host Project**
       - roles/compute.networkAdmin
       - roles/compute.securityAdmin
@@ -23,11 +24,14 @@ No requirements.
    - **Compute XpnPermission**
       - Should have `roles/compute.xpnAdmin` permission at a common folder owning the host and service project. Here is a [link](https://cloud.google.com/compute/docs/access/iam#compute.xpnAdmin) describing the same.
 
-2. You have modified the constants in **terraform.tfvars** as per your configuration like host_project_id, service_project_id etc.
-3. You have terraform and gcloud installed.
-4. You should have authenticated using gcloud command `gcloud auth application-default login`
-5. you can now cd in to the directory and execute -> `terraform init ` && `terraform plan`. Review the content displayed in the plan stage and if all looks good then move to next step.
-6. Run `terraform apply` and type `yes` when asked for confirmation/approval.
+2.2. [Optional] you can also create a service account and impersonate the service account and update `providers.tf.template` file by updating the `impersonate_service_account` field with the service account you have created with appropriate permission as described above and renaming the `providers.tf.template` to `providers.tf` file.
+There is a helped script provided which can be used to create a service account with relevant permission at localtion `cloudsql-easy-networking/helper-scripts/createserviceaccount.sh`.
+
+3. You have modified the constants in **terraform.tfvars** as per your configuration like host_project_id, service_project_id etc.
+4. You have terraform and gcloud installed.
+5. You should have authenticated using gcloud command `gcloud auth application-default login`
+6. you can now cd in to the directory and execute -> `terraform init ` && `terraform plan`. Review the content displayed in the plan stage and if all looks good then move to next step.
+7. Run `terraform apply` and type `yes` when asked for confirmation/approval.
 
 ## Providers
 

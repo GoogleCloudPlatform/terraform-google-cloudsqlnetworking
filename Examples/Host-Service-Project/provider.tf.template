@@ -1,0 +1,10 @@
+# Copyright 2023 Google LLC. This software is provided as is, without
+# warranty or representation for any use or purpose. Your use of it is
+# subject to your agreement with Google.
+
+provider "google" {
+  impersonate_service_account = "<Add Service account here> e.g.iac-sa@<Project-Id>.iam.gserviceaccount.com"
+}
+provider "google-beta" {
+  impersonate_service_account = "<Add Service account here> e.g.iac-sa@<Project-Id>.iam.gserviceaccount.com"
+}
