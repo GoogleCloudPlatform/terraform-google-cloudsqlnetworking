@@ -3,16 +3,28 @@
 # Fail on any error.
 set -e
 
-export HOST_PROJECT_ID="pm-singleproject-20"
-export SERVICE_PROJECT_ID="pm-test-10-e90f"
-export FOLDER_ID="816243559598"
-export USER_EMAIL_ID="parasmamgain@google.com"
+export HOST_PROJECT_ID=""
+export SERVICE_PROJECT_ID=""
+export FOLDER_ID=""
+export USER_EMAIL_ID=""
+
+echo "============ Creating Service Account for the service account                 ============"
 
 #Create a service account in the host project to which the permission will be assigned
 gcloud iam service-accounts create iac-sa \
     --description="iac-sa" \
     --display-name="iac-sa" \
     --project=$HOST_PROJECT_ID
+
+echo "=========================================================================================="
+
+echo "============ Setting Up XpnHost admin Permission for the service account      ============"
+
+gcloud resource-manager folders add-iam-policy-binding $FOLDER_ID \
+    --member="serviceAccount:iac-sa@$HOST_PROJECT_ID.iam.gserviceaccount.com" \
+    --role='roles/compute.xpnAdmin'
+
+echo "=========================================================================================="
 
 echo "============ Setting Up Permission for the service account in Host Project ============"
 
