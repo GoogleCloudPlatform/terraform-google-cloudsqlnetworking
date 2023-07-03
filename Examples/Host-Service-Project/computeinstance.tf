@@ -28,6 +28,9 @@ module "instance_template" {
     nat_ip       = "",
     network_tier = var.network_tier
   }]
+  depends_on = [
+    google_compute_shared_vpc_service_project.service1
+  ]
 }
 
 module "compute_instance" {
@@ -37,4 +40,7 @@ module "compute_instance" {
   num_instances       = var.target_size
   instance_template   = module.instance_template.self_link
   deletion_protection = false
+  depends_on = [
+    google_compute_shared_vpc_service_project.service1
+  ]
 }

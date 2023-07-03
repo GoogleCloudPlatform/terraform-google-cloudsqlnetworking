@@ -7,8 +7,10 @@ This example solution helps you to establish a Host and a service project and es
 No requirements.
 
 ## Pre-requisite
+
 1. User should have two projects which will act as Host Project and a Service Project.
-2.1 User Running this should have following permissions.
+
+2. a. User Running this should have following permissions.
    - **Host Project**
       - roles/compute.networkAdmin
       - roles/compute.securityAdmin
@@ -24,7 +26,7 @@ No requirements.
    - **Compute XpnPermission**
       - Should have `roles/compute.xpnAdmin` permission at a common folder owning the host and service project. Here is a [link](https://cloud.google.com/compute/docs/access/iam#compute.xpnAdmin) describing the same.
 
-2.2. [Optional] you can also create a service account and impersonate the service account and update `providers.tf.template` file by updating the `impersonate_service_account` field with the service account you have created with appropriate permission as described above and renaming the `providers.tf.template` to `providers.tf` file.
+   b. **[Optional]** you can also create a service account and impersonate the service account and update `providers.tf.template` file by updating the `impersonate_service_account` field with the service account you have created with appropriate permission as described above and renaming the `providers.tf.template` to `providers.tf` file.
 There is a helped script provided which can be used to create a service account with relevant permission at localtion `cloudsql-easy-networking/helper-scripts/createserviceaccount.sh`.
 
 3. You have modified the constants in **terraform.tfvars** as per your configuration like host_project_id, service_project_id etc.
@@ -32,6 +34,36 @@ There is a helped script provided which can be used to create a service account 
 5. You should have authenticated using gcloud command `gcloud auth application-default login`
 6. you can now cd in to the directory and execute -> `terraform init ` && `terraform plan`. Review the content displayed in the plan stage and if all looks good then move to next step.
 7. Run `terraform apply` and type `yes` when asked for confirmation/approval.
+
+## Examples
+
+1. Using existing network and subnetwork then terraform.tfvars should look like
+    ```
+    host_project_id        = "pm-singleproject-20"
+    service_project_id     = "pm-test-10-e90f"
+    database_version       = "MYSQL_8_0"
+    cloudsql_instance_name = "cn-sqlinstance10"
+    region                 = "us-central1"
+    zone                   = "us-central1-a"
+    create_network         = false
+    create_subnetwork      = false
+    network_id             = "projects/pm-singleproject-20/global/networks/example-vpc"
+    subnetwork_id          = "projects/pm-singleproject-20/regions/us-central1/subnetworks/subnet2"
+    ```
+
+2. Create new network and subnetwork
+    ```
+    host_project_id        = "pm-singleproject-20"
+    service_project_id     = "pm-test-10-e90f"
+    database_version       = "MYSQL_8_0"
+    cloudsql_instance_name = "cn-sqlinstance10"
+    region                 = "us-central1"
+    zone                   = "us-central1-a"
+    subnetwork_ip_cidr     = "10.2.0.0/16"
+    create_network         = true
+    create_subnetwork      = true
+    ```
+
 
 ## Providers
 
