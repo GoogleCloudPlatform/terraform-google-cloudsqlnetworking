@@ -8,6 +8,16 @@ output "host_subnetwork_id" {
   description = "Sub Network ID created inside the host VPC network created in the host project."
 }
 
+output "uservpc_network_id" {
+  value       = local.uservpc_network_id
+  description = "Network ID for the User VPC network created in the user project."
+}
+
+output "uservpc_subnetwork_id" {
+  value       = local.uservpc_subnetwork_id
+  description = "Sub Network ID created inside the User VPC network created in the User project."
+}
+
 output "private_ip_address" {
   value       = google_compute_global_address.private_ip_address.address
   description = "The IP address or beginning of the address range represented by this resource."
