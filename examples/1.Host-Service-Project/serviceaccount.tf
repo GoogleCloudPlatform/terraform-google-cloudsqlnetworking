@@ -21,6 +21,7 @@ module "terraform_service_accounts" {
     "${var.service_project_id}=>roles/resourcemanager.projectIamAdmin",
   ]
   depends_on = [
+    module.host_project,
     module.project_services
   ]
 }
@@ -36,5 +37,9 @@ module "gce_sa" {
     "${var.host_project_id}=>roles/compute.networkUser",
     "${var.service_project_id}=>roles/iam.serviceAccountUser",
     "${var.service_project_id}=>roles/cloudsql.client",
+  ]
+  depends_on = [
+    module.host_project,
+    module.project_services
   ]
 }

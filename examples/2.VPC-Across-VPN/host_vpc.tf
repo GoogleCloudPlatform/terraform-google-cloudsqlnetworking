@@ -10,6 +10,10 @@ resource "google_compute_network" "private_network" {
   auto_create_subnetworks = false
   project                 = var.host_project_id
   routing_mode            = var.network_routing_mode
+  depends_on = [
+    module.host_project,
+    module.project_services,
+  ]
 }
 
 resource "google_compute_subnetwork" "subnet" {
@@ -76,6 +80,11 @@ resource "google_compute_network" "uservpc_private_network" {
   auto_create_subnetworks = false
   project                 = var.user_project_id
   routing_mode            = var.user_network_routing_mode
+  depends_on = [
+    module.host_project,
+    module.project_services,
+    module.module.user_project_services
+  ]
 }
 
 resource "google_compute_subnetwork" "uservpc_subnet" {

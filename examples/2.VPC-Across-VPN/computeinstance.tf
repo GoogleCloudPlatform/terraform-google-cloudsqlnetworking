@@ -3,18 +3,20 @@
 ###############################################################################
 
 module "instance_template" {
-  source             = "terraform-google-modules/vm/google//modules/instance_template"
-  project_id         = var.service_project_id
-  subnetwork         = local.subnetwork_id
-  service_account    = local.vm_service_account
-  subnetwork_project = var.service_project_id
-  tags               = var.gce_tags
-  startup_script     = <<-EOT
+  source               = "terraform-google-modules/vm/google//modules/instance_template"
+  project_id           = var.service_project_id
+  subnetwork           = local.subnetwork_id
+  service_account      = local.vm_service_account
+  subnetwork_project   = var.service_project_id
+  tags                 = var.gce_tags
+  source_image_project = "ubuntu-os-cloud"
+  source_image_family  = "ubuntu-2204-lts"
+  metadata             = { "enable-oslogin" : true }
+  startup_script       = <<-EOT
                         #!/bin/sh
                         echo " ====== setting up the my sql cient ===== "
-                        curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
-                        sudo bash mariadb_repo_setup --mariadb-server-version=10.6
-                        sudo yum install MariaDB-server MariaDB-client -y
+                        sudo apt-get -y update
+                        sudo apt-get -y install mariadb-client-10.6
 
                         mysql --version
 

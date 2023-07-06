@@ -27,6 +27,7 @@ module "terraform_service_accounts" {
     "${var.user_project_id}=>roles/resourcemanager.projectIamAdmin",
   ]
   depends_on = [
+    module.host_project,
     module.project_services
   ]
 }
@@ -43,6 +44,10 @@ module "gce_sa" {
     "${var.service_project_id}=>roles/iam.serviceAccountUser",
     "${var.service_project_id}=>roles/cloudsql.client",
   ]
+  depends_on = [
+    module.host_project,
+    module.project_services
+  ]
 }
 
 // Create service account to be used by compute instance created inside the User Project
@@ -56,5 +61,10 @@ module "user_gce_sa" {
     "${var.user_project_id}=>roles/compute.networkUser",
     "${var.user_project_id}=>roles/iam.serviceAccountUser",
     "${var.service_project_id}=>roles/cloudsql.client",
+  ]
+  depends_on = [
+    module.host_project,
+    module.project_services,
+    module.module.user_project_services
   ]
 }
