@@ -3,6 +3,53 @@
 
 No requirements.
 
+## Examples
+
+1. Using existing network and subnetwork then terraform.tfvars should look like
+    ```
+    host_project_id        = "pm-singleproject-20"
+    service_project_id     = "pm-test-10-e90f"
+    database_version       = "MYSQL_8_0"
+    cloudsql_instance_name = "cn-sqlinstance11"
+    region                 = "us-central1"
+    zone                   = "us-central1-a"
+    network_name           = "cloudsql-easy"
+    network_id             = "projects/pm-singleproject-20/global/networks/cloudsql-easy"
+    subnetwork_id          = "projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet"
+    create_network         = false
+    create_subnetwork      = false
+    ## User Project Details
+    user_project_id            = "pm-singleproject-30"
+    user_region                = "us-central1"
+    uservpc_network_name       = "cloudsql-user"
+    create_user_vpc_network    = false
+    create_user_vpc_subnetwork = false
+    user_network_id            = "projects/pm-singleproject-30/global/networks/cloudsql-user"
+    user_subnetwork_id         = "projects/pm-singleproject-30/regions/us-central1/subnetworks/cloudsql-user-subnet"
+    ```
+
+2. Create new network and subnetwork
+    ```
+    host_project_id        = "pm-singleproject-20"
+    service_project_id     = "pm-test-10-e90f"
+    database_version       = "MYSQL_8_0"
+    cloudsql_instance_name = "cn-sqlinstance11"
+    region                 = "us-central1"
+    zone                   = "us-central1-a"
+    network_name           = "cloudsql-easy"
+    subnetwork_ip_cidr     = "10.2.0.0/16"
+    create_network         = true
+    create_subnetwork      = true
+    ## User Project Details
+    user_project_id            = "pm-singleproject-30"
+    user_region                = "us-central1"
+    uservpc_network_name       = "cloudsql-user"
+    uservpc_subnetwork_ip_cidr = "10.10.30.0/24"
+    create_user_vpc_network    = true
+    create_user_vpc_subnetwork = true
+    ```
+
+
 ## Providers
 
 | Name | Version |
