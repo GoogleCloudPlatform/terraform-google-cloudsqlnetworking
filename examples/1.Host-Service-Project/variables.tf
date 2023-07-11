@@ -54,7 +54,7 @@ variable "gce_tags" {
 
 variable "network_tier" {
   type        = string
-  default     = "STANDARD"
+  default     = "PREMIUM"
   description = "Networking tier to be used."
 }
 
@@ -94,3 +94,49 @@ variable "create_subnetwork" {
   description = "Variable to determine if a new sub network should be created or not."
 }
 
+#######
+# disk
+#######
+
+variable "source_image" {
+  description = "Source disk image. If neither source_image nor source_image_family is specified, defaults to the latest public image."
+  type        = string
+  default     = ""
+}
+
+variable "source_image_family" {
+  description = "Source image family. If neither source_image nor source_image_family is specified, defaults to the latest public image."
+  type        = string
+  default     = "ubuntu-2204-lts"
+}
+
+variable "source_image_project" {
+  description = "Project where the source image comes from. The default project contains images."
+  type        = string
+  default     = "ubuntu-os-cloud"
+}
+
+variable "deletion_protection" {
+  description = "Enable delete protection."
+  type        = bool
+  default     = true
+}
+
+#####################
+# Private Range
+#####################
+
+variable "cloudsql_private_range_name" {
+  description = "Name of the default IP range."
+  default     = "privateip-range"
+}
+
+variable "cloudsql_private_range_cidr" {
+  description = "Cidr of the private IP range."
+  default     = ""
+}
+
+variable "cloudsql_private_range_prefix_length" {
+  description = "Prefix length of the private IP range."
+  default     = "20"
+}

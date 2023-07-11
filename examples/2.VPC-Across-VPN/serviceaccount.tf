@@ -1,49 +1,57 @@
 
 // Create service account to be used by terraform
 module "terraform_service_accounts" {
-  source     = "terraform-google-modules/service-accounts/google"
-  version    = "~> 3.0"
+  source     = "../../modules/iam-service-account"
   project_id = var.host_project_id
-  prefix     = ""
-  names      = ["terraform-sa"]
-  project_roles = [
-    "${var.host_project_id}=>roles/compute.networkAdmin",
-    "${var.host_project_id}=>roles/compute.securityAdmin",
-    "${var.host_project_id}=>roles/iam.serviceAccountAdmin",
-    "${var.host_project_id}=>roles/serviceusage.serviceUsageAdmin",
-    "${var.host_project_id}=>roles/resourcemanager.projectIamAdmin",
-    "${var.service_project_id}=>roles/cloudsql.admin",
-    //add xpnhost permission
-    "${var.service_project_id}=>roles/compute.instanceAdmin",
-    "${var.service_project_id}=>roles/iam.serviceAccountAdmin",
-    "${var.service_project_id}=>roles/serviceusage.serviceUsageAdmin",
-    "${var.service_project_id}=>roles/iam.serviceAccountUser",
-    "${var.service_project_id}=>roles/resourcemanager.projectIamAdmin",
-
-    "${var.user_project_id}=>roles/compute.instanceAdmin",
-    "${var.user_project_id}=>roles/iam.serviceAccountAdmin",
-    "${var.user_project_id}=>roles/serviceusage.serviceUsageAdmin",
-    "${var.user_project_id}=>roles/iam.serviceAccountUser",
-    "${var.user_project_id}=>roles/resourcemanager.projectIamAdmin",
-  ]
+  name       = "terraform-sa"
+  # non-authoritative roles granted *to* the service accounts on other resources
+  iam_project_roles = {
+    "${var.host_project_id}" = [
+      "roles/compute.networkAdmin",
+      "roles/compute.networkUser",
+      "roles/compute.securityAdmin",
+      "roles/iam.serviceAccountAdmin",
+      "roles/serviceusage.serviceUsageAdmin",
+      "roles/resourcemanager.projectIamAdmin",
+    ],
+    "${var.service_project_id}" = [
+      "roles/iam.serviceAccountAdmin",
+      "roles/compute.instanceAdmin",
+      "roles/serviceusage.serviceUsageAdmin",
+      "roles/resourcemanager.projectIamAdmin",
+      "roles/iam.serviceAccountUser",
+      "roles/cloudsql.admin",
+    ],
+    "${var.user_project_id}" = [
+      "roles/iam.serviceAccountAdmin",
+      "roles/compute.instanceAdmin",
+      "roles/serviceusage.serviceUsageAdmin",
+      "roles/resourcemanager.projectIamAdmin",
+      "roles/iam.serviceAccountUser",
+    ],
+  }
   depends_on = [
     module.host_project,
-    module.project_services
+    module.project_services,
+    module.user_project_services
   ]
 }
 
-// Create service account to be used by compute instance created inside the Service Project
+// Create service account to be used by Compute Instance
 module "gce_sa" {
-  source     = "terraform-google-modules/service-accounts/google"
-  version    = "~> 3.0"
+  source     = "../../modules/iam-service-account"
   project_id = var.service_project_id
-  prefix     = ""
-  names      = ["gce-sa"]
-  project_roles = [
-    "${var.host_project_id}=>roles/compute.networkUser",
-    "${var.service_project_id}=>roles/iam.serviceAccountUser",
-    "${var.service_project_id}=>roles/cloudsql.client",
-  ]
+  name       = "gce-sa"
+  # non-authoritative roles granted *to* the service accounts on other resources
+  iam_project_roles = {
+    "${var.host_project_id}" = [
+      "roles/compute.networkUser",
+    ],
+    "${var.service_project_id}" = [
+      "roles/iam.serviceAccountUser",
+      "roles/cloudsql.client",
+    ]
+  }
   depends_on = [
     module.host_project,
     module.project_services
@@ -52,19 +60,22 @@ module "gce_sa" {
 
 // Create service account to be used by compute instance created inside the User Project
 module "user_gce_sa" {
-  source     = "terraform-google-modules/service-accounts/google"
-  version    = "~> 3.0"
+  source     = "../../modules/iam-service-account"
   project_id = var.user_project_id
-  prefix     = ""
-  names      = ["user-gce-sa"]
-  project_roles = [
-    "${var.user_project_id}=>roles/compute.networkUser",
-    "${var.user_project_id}=>roles/iam.serviceAccountUser",
-    "${var.service_project_id}=>roles/cloudsql.client",
-  ]
+  name       = "user-gce-sa"
+  # non-authoritative roles granted *to* the service accounts on other resources
+  iam_project_roles = {
+    "${var.user_project_id}" = [
+      "roles/compute.networkUser",
+      "roles/iam.serviceAccountUser",
+    ],
+    "${var.service_project_id}" = [
+      "roles/cloudsql.client",
+    ]
+  }
   depends_on = [
     module.host_project,
     module.project_services,
-    module.module.user_project_services
+    module.user_project_services
   ]
 }

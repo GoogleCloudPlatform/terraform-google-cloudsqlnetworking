@@ -1,6 +1,7 @@
 locals {
-  network_id    = var.create_network == true ? google_compute_network.private_network[0].id : var.network_id
-  subnetwork_id = var.create_subnetwork == true ? google_compute_subnetwork.subnet[0].id : var.subnetwork_id
+  network_name  = var.create_network == true ? module.host-vpc[0].name : var.network_name
+  network_id    = var.create_network == true ? module.host-vpc[0].id : var.network_id
+  subnetwork_id = var.create_subnetwork == true ? module.host-vpc[0].subnet_ids["${var.region}/${var.subnetwork_name}"] : var.subnetwork_id
   vm_service_account = {
     email  = module.gce_sa.email
     scopes = ["cloud-platform"]

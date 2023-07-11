@@ -7,11 +7,11 @@ module "mysql" {
   zone                = var.zone
   project_id          = var.project_id
   ip_configuration    = var.ip_configuration
-  deletion_protection = false
+  deletion_protection = var.deletion_protection
 }
 
 resource "random_string" "mysql_random_suffix" {
-  count               = var.create_mysql_db == true ? 1 : 0
+  count   = var.create_mysql_db == true ? 1 : 0
   length  = 3
   special = false
   upper   = false
@@ -26,10 +26,10 @@ module "mssql" {
   zone                = var.zone
   project_id          = var.project_id
   ip_configuration    = var.ip_configuration
-  deletion_protection = false
+  deletion_protection = var.deletion_protection
 }
 resource "random_string" "mssql_random_suffix" {
-  count               = var.create_mssql_db == true ? 1 : 0
+  count   = var.create_mssql_db == true ? 1 : 0
   length  = 3
   special = false
   upper   = false
@@ -43,10 +43,10 @@ module "postgresql" {
   zone                = var.zone
   project_id          = var.project_id
   ip_configuration    = var.ip_configuration
-  deletion_protection = false
+  deletion_protection = var.deletion_protection
 }
 resource "random_string" "postgressql_random_suffix" {
-  count               = var.create_postgressql_db == true ? 1 : 0
+  count   = var.create_postgressql_db == true ? 1 : 0
   length  = 3
   special = false
   upper   = false
