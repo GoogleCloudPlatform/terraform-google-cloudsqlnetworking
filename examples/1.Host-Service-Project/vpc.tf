@@ -1,5 +1,4 @@
 module "host-vpc" {
-  count      = var.create_network == true ? 1 : 0
   source     = "../../modules/net-vpc"
   project_id = var.host_project_id
   name       = var.network_name
@@ -32,4 +31,17 @@ module "host-vpc" {
     module.host_project,
     module.project_services
   ]
+}
+
+data "google_compute_network" "host_vpc" {
+  count   = var.create_network == false ? 1 : 0
+  name    = var.network_name
+  project = var.host_project_id
+}
+
+data "google_compute_subnetwork" "host_vpc_subnetwork" {
+  count   = var.create_subnetwork == false ? 1 : 0
+  name    = var.subnetwork_name
+  project = var.host_project_id
+  region  = var.region
 }

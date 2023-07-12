@@ -55,7 +55,7 @@ module "user_google_compute_instance" {
   subnetwork_id        = local.uservpc_subnetwork_id
   vm_service_account   = local.user_vm_service_account
   region               = var.user_region
-  zone                 = var.zone
+  zone                 = var.user_zone
   subnetwork_project   = var.user_project_id
   gce_tags             = var.gce_tags
   source_image         = var.source_image

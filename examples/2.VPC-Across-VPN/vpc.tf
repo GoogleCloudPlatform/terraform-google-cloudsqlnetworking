@@ -3,7 +3,6 @@
 #######################   VPC details for the Host Project ####################
 ###############################################################################
 module "host-vpc" {
-  count      = var.create_network == true ? 1 : 0
   source     = "../../modules/net-vpc"
   project_id = var.host_project_id
   name       = var.network_name
@@ -38,13 +37,24 @@ module "host-vpc" {
   ]
 }
 
+data "google_compute_network" "host_vpc" {
+  count   = var.create_network == false ? 1 : 0
+  name    = var.network_name
+  project = var.host_project_id
+}
+
+data "google_compute_subnetwork" "host_vpc_subnetwork" {
+  count   = var.create_subnetwork == false ? 1 : 0
+  name    = var.subnetwork_name
+  project = var.host_project_id
+  region  = var.region
+}
 
 ###############################################################################
 #######################   VPC details for the User Project ####################
 ###############################################################################
 
 module "user-vpc" {
-  count      = var.create_user_vpc_network == true ? 1 : 0
   source     = "../../modules/net-vpc"
   project_id = var.user_project_id
   name       = var.uservpc_network_name
@@ -67,4 +77,17 @@ module "user-vpc" {
     module.project_services,
     module.user_project_services
   ]
+}
+
+data "google_compute_network" "user_vpc" {
+  count   = var.create_user_vpc_network == false ? 1 : 0
+  name    = var.uservpc_network_name
+  project = var.user_project_id
+}
+
+data "google_compute_subnetwork" "user_vpc_subnetwork" {
+  count   = var.create_user_vpc_subnetwork == false ? 1 : 0
+  name    = var.uservpc_subnetwork_name
+  project = var.user_project_id
+  region  = var.user_region
 }

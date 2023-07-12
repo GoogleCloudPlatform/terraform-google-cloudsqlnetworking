@@ -1,5 +1,5 @@
 output "host_vpc_name" {
-  value       = module.host-vpc[0].name
+  value       = local.network_name
   description = "Name of the VPC created in the host project."
 }
 

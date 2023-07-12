@@ -28,18 +28,6 @@ variable "database_version" {
   description = "Database version of the mysql in Cloud SQL ."
 }
 
-variable "network_id" {
-  type        = string
-  default     = ""
-  description = "Complete network Id. This is required when var.create_network is set of false. e.g. : projects/pm-singleproject-20/global/networks/cloudsql-easy"
-}
-
-variable "subnetwork_id" {
-  type        = string
-  default     = ""
-  description = "Complete subnetwork Id. This is required when var.create_subnetwork is set of false. e.g. : projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet"
-}
-
 variable "subnetwork_ip_cidr" {
   type        = string
   description = "CIDR range for the subnet to be created if var.create_subnetwork is set to true."
@@ -72,14 +60,12 @@ variable "target_size" {
 
 variable "network_name" {
   type        = string
-  default     = "cloudsql-easy"
-  description = "Name of the VPC network to be created if var.create_network is marked as true. If set as false, then provide the name of the existing network to be used."
+  description = "Name of the VPC network to be created if var.create_network is marked as true or Name of the already existing network if var.create_network is false."
 }
 
 variable "subnetwork_name" {
   type        = string
-  default     = "cloudsql-easy-subnet"
-  description = "Name of the sub network to be created if var.create_subnetwork is marked as true."
+  description = "Name of the sub network to be created if var.create_subnetwork is marked as true or Name of the already existing sub network if var.create_subnetwork is false."
 }
 
 variable "create_network" {
@@ -101,14 +87,12 @@ variable "create_subnetwork" {
 
 variable "uservpc_network_name" {
   type        = string
-  default     = "cloudsql-user"
-  description = "Name of the VPC network to be created if var.create_user_vpc_network is marked as true."
+  description = "Name of the VPC network to be created if var.create_user_vpc_network is marked as true or Name of the already existing network if var.create_user_vpc_network is false."
 }
 
 variable "uservpc_subnetwork_name" {
   type        = string
-  default     = "cloudsql-user-subnet"
-  description = "Name of the sub network to be created if var.create_user_vpc_subnetwork is marked as true."
+  description = "Name of the sub network to be created if var.create_user_vpc_subnetwork is marked as true or Name of the already existing sub network if var.create_user_vpc_subnetwork is false.."
 }
 
 variable "create_user_vpc_network" {
@@ -139,16 +123,9 @@ variable "user_region" {
   description = "Name of a GCP region."
 }
 
-variable "user_network_id" {
+variable "user_zone" {
   type        = string
-  default     = ""
-  description = "Complete network Id. This is required when var.create_network is set of false. e.g. : projects/pm-singleproject-20/global/networks/cloudsql-easy"
-}
-
-variable "user_subnetwork_id" {
-  type        = string
-  default     = ""
-  description = "Complete subnetwork Id. This is required when var.create_subnetwork is set of false. e.g. : projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet"
+  description = "Name of a GCP zone, should be in the same region as specified in the user_region variable."
 }
 
 variable "uservpc_subnetwork_ip_cidr" {

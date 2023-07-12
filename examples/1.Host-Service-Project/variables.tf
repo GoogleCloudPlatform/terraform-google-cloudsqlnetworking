@@ -28,17 +28,6 @@ variable "database_version" {
   description = "Database version of the mysql in Cloud SQL ."
 }
 
-variable "network_id" {
-  type        = string
-  default     = ""
-  description = "Complete network Id. This is required when var.create_network is set of false. e.g. : projects/pm-singleproject-20/global/networks/cloudsql-easy"
-}
-
-variable "subnetwork_id" {
-  type        = string
-  default     = ""
-  description = "Complete subnetwork Id. This is required when var.create_subnetwork is set of false. e.g. : projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet"
-}
 
 variable "subnetwork_ip_cidr" {
   type        = string
@@ -72,14 +61,12 @@ variable "target_size" {
 
 variable "network_name" {
   type        = string
-  default     = "cloudsql-easy"
-  description = "Name of the VPC network to be created if var.create_network is marked as true."
+  description = "Name of the VPC network to be created if var.create_network is marked as true or Name of the already existing network if var.create_network is false."
 }
 
 variable "subnetwork_name" {
   type        = string
-  default     = "cloudsql-easy-subnet"
-  description = "Name of the sub network to be created if var.create_subnetwork is marked as true."
+  description = "Name of the sub network to be created if var.create_subnetwork is marked as true or Name of the already existing sub network if var.create_subnetwork is false."
 }
 
 variable "create_network" {
