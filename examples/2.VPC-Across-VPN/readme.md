@@ -159,29 +159,13 @@ No requirements.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloudsql_instance_name"></a> [cloudsql\_instance\_name](#input\_cloudsql\_instance\_name) | Name of the cloud sql instance which will be created. | `string` | n/a | yes |
-| <a name="input_cloudsql_private_range_cidr"></a> [cloudsql\_private\_range\_cidr](#input\_cloudsql\_private\_range\_cidr) | Cidr of the private IP range. | `string` | `""` | no |
-| <a name="input_cloudsql_private_range_name"></a> [cloudsql\_private\_range\_name](#input\_cloudsql\_private\_range\_name) | Name of the default IP range. | `string` | `"privateip-range"` | no |
-| <a name="input_cloudsql_private_range_prefix_length"></a> [cloudsql\_private\_range\_prefix\_length](#input\_cloudsql\_private\_range\_prefix\_length) | Prefix length of the private IP range. | `string` | `"20"` | no |
-| <a name="input_create_network"></a> [create\_network](#input\_create\_network) | Variable to determine if a new network should be created or not. | `bool` | `true` | no |
-| <a name="input_create_subnetwork"></a> [create\_subnetwork](#input\_create\_subnetwork) | Variable to determine if a new sub network should be created or not. | `bool` | `true` | no |
-| <a name="input_create_user_vpc_network"></a> [create\_user\_vpc\_network](#input\_create\_user\_vpc\_network) | Variable to determine if a new network should be created or not. | `bool` | `true` | no |
-| <a name="input_create_user_vpc_subnetwork"></a> [create\_user\_vpc\_subnetwork](#input\_create\_user\_vpc\_subnetwork) | Variable to determine if a new sub network should be created or not. | `bool` | `true` | no |
 | <a name="input_database_version"></a> [database\_version](#input\_database\_version) | Database version of the mysql in Cloud SQL . | `string` | n/a | yes |
-| <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Enable delete protection. | `bool` | `true` | no |
-| <a name="input_gce_tags"></a> [gce\_tags](#input\_gce\_tags) | List of tags to be applied to gce instance. | `list(string)` | <pre>[<br>  "cloudsql"<br>]</pre> | no |
 | <a name="input_host_project_id"></a> [host\_project\_id](#input\_host\_project\_id) | Project Id of the Host GCP Project. | `string` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | Name of the VPC network to be created if var.create\_network is marked as true or Name of the already existing network if var.create\_network is false. | `string` | n/a | yes |
-| <a name="input_network_routing_mode"></a> [network\_routing\_mode](#input\_network\_routing\_mode) | Network Routing Mode to be used, Could be REGIONAL or GLOBAL. | `string` | `"GLOBAL"` | no |
-| <a name="input_network_tier"></a> [network\_tier](#input\_network\_tier) | Networking tier to be used. | `string` | `"STANDARD"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Name of a GCP region. | `string` | n/a | yes |
 | <a name="input_service_project_id"></a> [service\_project\_id](#input\_service\_project\_id) | Project Id of the Service GCP Project attached to the Host GCP project. | `string` | n/a | yes |
-| <a name="input_source_image"></a> [source\_image](#input\_source\_image) | Source disk image. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `""` | no |
-| <a name="input_source_image_family"></a> [source\_image\_family](#input\_source\_image\_family) | Source image family. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `"ubuntu-2204-lts"` | no |
-| <a name="input_source_image_project"></a> [source\_image\_project](#input\_source\_image\_project) | Project where the source image comes from. The default project contains images. | `string` | `"ubuntu-os-cloud"` | no |
 | <a name="input_subnetwork_ip_cidr"></a> [subnetwork\_ip\_cidr](#input\_subnetwork\_ip\_cidr) | CIDR range for the subnet to be created if var.create\_subnetwork is set to true. | `string` | n/a | yes |
 | <a name="input_subnetwork_name"></a> [subnetwork\_name](#input\_subnetwork\_name) | Name of the sub network to be created if var.create\_subnetwork is marked as true or Name of the already existing sub network if var.create\_subnetwork is false. | `string` | n/a | yes |
-| <a name="input_target_size"></a> [target\_size](#input\_target\_size) | Number of GCE instances to be created. | `number` | `1` | no |
-| <a name="input_user_network_routing_mode"></a> [user\_network\_routing\_mode](#input\_user\_network\_routing\_mode) | Network Routing Mode to be used, Could be REGIONAL or GLOBAL. | `string` | `"GLOBAL"` | no |
 | <a name="input_user_project_id"></a> [user\_project\_id](#input\_user\_project\_id) | Project Id of the User GCP Project. | `string` | n/a | yes |
 | <a name="input_user_region"></a> [user\_region](#input\_user\_region) | Name of a GCP region. | `string` | n/a | yes |
 | <a name="input_user_zone"></a> [user\_zone](#input\_user\_zone) | Name of a GCP zone, should be in the same region as specified in the user\_region variable. | `string` | n/a | yes |
@@ -189,6 +173,22 @@ No requirements.
 | <a name="input_uservpc_subnetwork_ip_cidr"></a> [uservpc\_subnetwork\_ip\_cidr](#input\_uservpc\_subnetwork\_ip\_cidr) | CIDR range for the subnet to be created if var.create\_subnetwork is set to true. | `string` | n/a | yes |
 | <a name="input_uservpc_subnetwork_name"></a> [uservpc\_subnetwork\_name](#input\_uservpc\_subnetwork\_name) | Name of the sub network to be created if var.create\_user\_vpc\_subnetwork is marked as true or Name of the already existing sub network if var.create\_user\_vpc\_subnetwork is false.. | `string` | n/a | yes |
 | <a name="input_zone"></a> [zone](#input\_zone) | Name of a GCP zone, should be in the same region as specified in the region variable. | `string` | n/a | yes |
+| <a name="input_cloudsql_private_range_cidr"></a> [cloudsql\_private\_range\_cidr](#input\_cloudsql\_private\_range\_cidr) | Cidr of the private IP range. | `string` | `""` | no |
+| <a name="input_cloudsql_private_range_name"></a> [cloudsql\_private\_range\_name](#input\_cloudsql\_private\_range\_name) | Name of the default IP range. | `string` | `"privateip-range"` | no |
+| <a name="input_cloudsql_private_range_prefix_length"></a> [cloudsql\_private\_range\_prefix\_length](#input\_cloudsql\_private\_range\_prefix\_length) | Prefix length of the private IP range. | `string` | `"20"` | no |
+| <a name="input_create_network"></a> [create\_network](#input\_create\_network) | Variable to determine if a new network should be created or not. | `bool` | `true` | no |
+| <a name="input_create_subnetwork"></a> [create\_subnetwork](#input\_create\_subnetwork) | Variable to determine if a new sub network should be created or not. | `bool` | `true` | no |
+| <a name="input_create_user_vpc_network"></a> [create\_user\_vpc\_network](#input\_create\_user\_vpc\_network) | Variable to determine if a new network should be created or not. | `bool` | `true` | no |
+| <a name="input_create_user_vpc_subnetwork"></a> [create\_user\_vpc\_subnetwork](#input\_create\_user\_vpc\_subnetwork) | Variable to determine if a new sub network should be created or not. | `bool` | `true` | no |
+| <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Enable delete protection. | `bool` | `true` | no |
+| <a name="input_gce_tags"></a> [gce\_tags](#input\_gce\_tags) | List of tags to be applied to gce instance. | `list(string)` | <pre>[<br>  "cloudsql"<br>]</pre> | no |
+| <a name="input_network_routing_mode"></a> [network\_routing\_mode](#input\_network\_routing\_mode) | Network Routing Mode to be used, Could be REGIONAL or GLOBAL. | `string` | `"GLOBAL"` | no |
+| <a name="input_network_tier"></a> [network\_tier](#input\_network\_tier) | Networking tier to be used. | `string` | `"STANDARD"` | no |
+| <a name="input_source_image"></a> [source\_image](#input\_source\_image) | Source disk image. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `""` | no |
+| <a name="input_source_image_family"></a> [source\_image\_family](#input\_source\_image\_family) | Source image family. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `"ubuntu-2204-lts"` | no |
+| <a name="input_source_image_project"></a> [source\_image\_project](#input\_source\_image\_project) | Project where the source image comes from. The default project contains images. | `string` | `"ubuntu-os-cloud"` | no |
+| <a name="input_target_size"></a> [target\_size](#input\_target\_size) | Number of GCE instances to be created. | `number` | `1` | no |
+| <a name="input_user_network_routing_mode"></a> [user\_network\_routing\_mode](#input\_user\_network\_routing\_mode) | Network Routing Mode to be used, Could be REGIONAL or GLOBAL. | `string` | `"GLOBAL"` | no |
 
 ## Outputs
 
