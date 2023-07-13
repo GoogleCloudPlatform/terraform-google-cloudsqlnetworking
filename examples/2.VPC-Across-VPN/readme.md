@@ -55,6 +55,9 @@ A cloudsql connection is then established using private ip of cloud sql which is
       }
       ```
 
+      **Note :** User should have service account admin and projectiam admin permissions in the respective GCP projects in order to assign the above mentioned permissions.
+
+
 ## Execution
 
 1. User should have authenticated using gcloud command `gcloud auth application-default login` command in the cli/machine using which user plans to execute the terraform code. This [link](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) describes more detail about the `gcloud auth` command mentioned above.

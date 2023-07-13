@@ -43,6 +43,8 @@ This example solution guides user to establish a Host and a service project and 
         }
         ```
 
+        **Note :** User should have service account admin and project iam admin permissions in the respective GCP projects in order to assign the above mentioned permissions.
+
 ## Execution
 
 1. User should have authenticated using gcloud command `gcloud auth application-default login` command in the cli/machine using which user plans to execute the terraform code. This [link](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) describes more detail about the `gcloud auth` command mentioned above.
