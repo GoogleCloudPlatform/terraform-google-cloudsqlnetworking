@@ -6,6 +6,10 @@ A third GCP Project is used an HA VPN Connection is established between the VPC 
 
 A cloudsql connection is then established using private ip of cloud sql which is created inside the service project and between a VM instance created inside the user project.
 
+## Architecture
+
+![VPN Scenario](../images/vpn_scenario.png)
+
 ## Pre-requisite
 
 1. User should have terraform and gcloud installed in the machine from which they plan to execute this script. Here are the link that describes the [terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) steps and [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install) .

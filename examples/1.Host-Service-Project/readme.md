@@ -2,6 +2,10 @@
 
 This example solution guides user to establish a Host and a service project and established a cloudsql connection between a VM instance and the cloud sql instance using the private ip of the compute instance. CloudSql and Compute instance are created in the service project and the host project contains the vpc, subnets, firewall rules etc.
 
+## Architecture
+
+![Host Service Scenario](../images/host_svc.png)
+
 ## Pre-requisite
 
 1. User should have terraform and gcloud installed in the machine from which they plan to execute this script. Here are the link that describes the [terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) steps and [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install) .

@@ -12,6 +12,8 @@ set -e
 #  parameters, will print the full command, with credentials, in the build logs.
 # set -x
 
+echo $1
+
 if [ "$1" == "release" ]; then
   echo "===== Running release ====="
   terraform init && terraform apply --auto-approve
