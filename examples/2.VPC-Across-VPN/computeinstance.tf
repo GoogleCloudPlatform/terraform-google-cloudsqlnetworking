@@ -16,22 +16,7 @@ module "google_compute_instance" {
   source_image_family  = var.source_image_family
   target_size          = var.target_size
   deletion_protection  = var.deletion_protection
-  startup_script       = <<-EOT
-                          #!/bin/sh
-                          echo " ====== setting up the my sql cient ===== "
-                          sudo apt-get -y update
-                          sudo apt-get -y install mariadb-client-10.6
-
-                          mysql --version
-
-                          echo " ====== setting up the cloud sql proxy ===== "
-                          curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.4.0/cloud-sql-proxy.linux.amd64
-                          chmod +x cloud-sql-proxy
-
-                          ./cloud-sql-proxy --version
-
-                          echo " ====== Startup Script Execution Complete ===== "
-                      EOT
+  startup_script       = data.template_file.mysql_installer.rendered
   metadata = {
     "enable-oslogin" : true
   }
@@ -63,22 +48,7 @@ module "user_google_compute_instance" {
   source_image_family  = var.source_image_family
   target_size          = var.target_size
   deletion_protection  = false
-  startup_script       = <<-EOT
-                          #!/bin/sh
-                          echo " ====== setting up the my sql cient ===== "
-                          sudo apt-get -y update
-                          sudo apt-get -y install mariadb-client-10.6
-
-                          mysql --version
-
-                          echo " ====== setting up the cloud sql proxy ===== "
-                          curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.4.0/cloud-sql-proxy.linux.amd64
-                          chmod +x cloud-sql-proxy
-
-                          ./cloud-sql-proxy --version
-
-                          echo " ====== Startup Script Execution Complete ===== "
-                      EOT
+  startup_script       = data.template_file.mysql_installer.rendered
   metadata = {
     "enable-oslogin" : true
   }
@@ -91,3 +61,12 @@ module "user_google_compute_instance" {
   ]
 }
 
+data "template_file" "mysql_installer" {
+  template = file("../startupscripts/setupsql.sh")
+  vars = {
+    host_ip          = lookup(module.sql-db.mysql_cloudsql_instance_details,"private_ip_address","")
+    default_username = "default"
+    default_password = lookup(module.sql-db.mysql_cloudsql_instance_details,"generated_user_password","")
+    database_name    = var.test_dbname
+  }
+}

@@ -33,5 +33,9 @@ output "uservpc_subnetwork_id" {
   description = "Sub Network ID created inside the User VPC network created in the User project."
 }
 
+output "cloudsql_instance_name" {
+  value       = module.sql-db.mysql_cloudsql_instance_name
+  description = "Name of the my cloud sql instance created in the service project."
+}
 
 

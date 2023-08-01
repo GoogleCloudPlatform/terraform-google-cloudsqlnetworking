@@ -91,7 +91,7 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	print("\n\n")
 	actualModuleAddress := make([]string, 0)
 	for _, element := range content.ResourceChangesMap {
-		if !slices.Contains(actualModuleAddress, element.ModuleAddress) {
+		if !slices.Contains(actualModuleAddress, element.ModuleAddress) && len(element.ModuleAddress) > 0 {
 			actualModuleAddress = append(actualModuleAddress,element.ModuleAddress)
 		}
 	}

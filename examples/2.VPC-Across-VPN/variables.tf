@@ -133,6 +133,12 @@ variable "uservpc_subnetwork_ip_cidr" {
   description = "CIDR range for the subnet to be created if var.create_subnetwork is set to true."
 }
 
+variable "test_dbname" {
+  type        = string
+  default     = "test_db"
+  description = "Database Name to be created from startup script."
+}
+
 #######
 # disk
 #######

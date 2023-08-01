@@ -81,6 +81,12 @@ variable "create_subnetwork" {
   description = "Variable to determine if a new sub network should be created or not."
 }
 
+variable "test_dbname" {
+  type        = string
+  default     = "test_db"
+  description = "Database Name to be created from startup script."
+}
+
 #######
 # disk
 #######

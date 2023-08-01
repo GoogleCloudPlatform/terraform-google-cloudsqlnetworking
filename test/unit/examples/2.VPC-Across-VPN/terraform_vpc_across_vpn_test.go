@@ -83,10 +83,9 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	//plan *PlanStruct
 	planStruct := terraform.InitAndPlanAndShow(t, terraformOptions)
 	content, err := terraform.ParsePlanJSON(planStruct)
-	print("\n\n")
 	actualModuleAddress := make([]string, 0)
 	for _, element := range content.ResourceChangesMap {
-		if !slices.Contains(actualModuleAddress, element.ModuleAddress) {
+		if !slices.Contains(actualModuleAddress, element.ModuleAddress) && len(element.ModuleAddress) > 0 {
 			actualModuleAddress = append(actualModuleAddress,element.ModuleAddress)
 		}
 	}
