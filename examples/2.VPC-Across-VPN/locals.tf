@@ -21,4 +21,6 @@ locals {
     email  = module.user_gce_sa.email
     scopes = ["cloud-platform"]
   }
+  private_ip_address               = module.host-vpc.psa_ranges["${var.cloudsql_private_range_name}"].address
+  private_ip_address_prefix_length = module.host-vpc.psa_ranges["${var.cloudsql_private_range_name}"].prefix_length
 }

@@ -101,10 +101,10 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	fmt.Println(" ====================================================== ")
 	fmt.Println(" ========= Verify VPN Tunnel ========= ")
 
-	var vpnTunnelName = []string { "ha-vpn-tunnel1","ha-vpn-tunnel2","ha-vpn-tunnel3","ha-vpn-tunnel4"}
+	var vpnTunnelName = []string { "ha-vpn-1-remote-0","ha-vpn-1-remote-1","ha-vpn-2-remote-0","ha-vpn-2-remote-1"}
 	var projectId = ""
 	for _, v := range vpnTunnelName {
-		if v == "ha-vpn-tunnel1" || v=="ha-vpn-tunnel2" {
+		if v == "ha-vpn-1-remote-0" || v=="ha-vpn-1-remote-1" {
 			projectId = host_project_id;
 		} else {
 			projectId = user_project_id;
@@ -254,10 +254,10 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	fmt.Println(" ====================================================== ")
 	fmt.Println(" ========= Verify VPN Tunnel ========= ")
 
-	var vpnTunnelName = []string { "ha-vpn-tunnel1","ha-vpn-tunnel2","ha-vpn-tunnel3","ha-vpn-tunnel4"}
+	var vpnTunnelName = []string { "ha-vpn-1-remote-0","ha-vpn-1-remote-1","ha-vpn-2-remote-0","ha-vpn-2-remote-1"}
 	var projectId = ""
 	for _, v := range vpnTunnelName {
-		if v == "ha-vpn-tunnel1" || v=="ha-vpn-tunnel2" {
+		if v == "ha-vpn-1-remote-0" || v=="ha-vpn-1-remote-1" {
 			projectId = host_project_id;
 		} else {
 			projectId = user_project_id;
@@ -272,7 +272,7 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 		}
 		result = gjson.Parse(op)
 		if err != nil {
-			fmt.Sprintf("===Error %s Encountered while executing %s", err ,text)
+			fmt.Sprintf("=== Error %s Encountered while executing %s", err ,text)
 		}
 		fmt.Printf(" \n========= validating tunnel %s ============\n",v);
 		fmt.Println(" ========= check if tunnel is up & running ========= ",)

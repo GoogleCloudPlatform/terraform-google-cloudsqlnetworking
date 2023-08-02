@@ -16,7 +16,7 @@ module "google_compute_instance" {
   source_image_family  = var.source_image_family
   target_size          = var.target_size
   deletion_protection  = var.deletion_protection
-  startup_script       = data.template_file.mysql_installer.rendered
+  #startup_script       = data.template_file.mysql_installer.rendered
   metadata = {
     "enable-oslogin" : true
   }
@@ -47,7 +47,7 @@ module "user_google_compute_instance" {
   source_image_project = var.source_image_project
   source_image_family  = var.source_image_family
   target_size          = var.target_size
-  deletion_protection  = false
+  deletion_protection  = var.deletion_protection
   startup_script       = data.template_file.mysql_installer.rendered
   metadata = {
     "enable-oslogin" : true

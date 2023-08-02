@@ -181,3 +181,32 @@ variable "cloudsql_private_range_prefix_length" {
   description = "Prefix length of the private IP range."
   default     = "20"
 }
+
+
+#######
+# vpn
+#######
+
+variable "ha_vpn_gateway1_name" {
+  type    = string
+  description = "Name of the VPN Gateway at host project."
+  default = "ha-vpn-1"
+}
+
+variable "ha_vpn_gateway2_name" {
+  type    = string
+  description = "Name of the VPN Gateway at user project."
+  default = "ha-vpn-2"
+}
+
+variable "router1_asn" {
+  type    = number
+  description = "ASN number required for the router1."
+  default = 64513
+}
+
+variable "router2_asn" {
+  type    = number
+  description = "ASN number required for the router2."
+  default = 64514
+}
