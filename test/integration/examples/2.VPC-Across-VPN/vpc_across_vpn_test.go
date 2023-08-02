@@ -15,10 +15,16 @@ var host_project_id          = "pm-singleproject-20";
 var service_project_id       = "pm-test-10-e90f";
 var user_project_id          = "pm-singleproject-30";
 var cloudsql_instance_name   = "cn-sqlinstance10-test";
+var network_name             = "cloudsql-easy";
 var subnetwork_name          = "cloudsql-easy-subnet";
 var region                   = "us-central1";
-var test_dbname              = "test_db"
-var database_version         = "MYSQL_8_0"
+var test_dbname              = "test_db";
+var database_version         = "MYSQL_8_0";
+var user_region              = "us-west1";
+var user_zone                = "us-west1-a";
+var uservpc_network_name     = "user-cloudsql-easy";
+var uservpc_subnetwork_name  = "user-cloudsql-easy-subnet";
+
 
 // name the function as Test*
 func TestMySqlPrivateAndVPNModule(t *testing.T) {
@@ -27,11 +33,10 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	region                   = "us-central1";
 	user_project_id          = "pm-singleproject-30";
 	cloudsql_instance_name   = "cn-sqlinstance10-test";
-	network_name             := "cloudsql-easy";
+	network_name             = "cloudsql-easy";
 	subnetwork_name          = "cloudsql-easy-subnet";
 
 	tfVars := map[string]interface{}{
-
 		"cloudsql_instance_name" : cloudsql_instance_name,
 		"region"                 : region,
 		"network_name"           : network_name,
@@ -142,9 +147,9 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 }
 
 func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
-	host_project_id          = "pm-host-networking";
-  service_project_id       = "pm-service1-networking";
-  user_project_id          = "pm-userproject-networking";
+	host_project_id          = "pm-singleproject-20";
+	service_project_id       = "pm-test-10-e90f";
+	user_project_id          = "pm-singleproject-30";
 	network_name             = "host-cloudsql-easy";
 	subnetwork_name          = "host-cloudsql-easy-subnet";
 	region                   = "us-central1";
@@ -183,12 +188,26 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	})
 
 
-	//validate if the VPC already exists, else create one outside of the terraform
+	//validate if the VPC already exists in host project
+	text := "compute"
+	cmd := shell.Command{
+		Command : "gcloud",
+		Args : []string{text,"networks","describe",network_name,"--project="+host_project_id,"--format=json"},
+	}
+	op,err := shell.RunCommandAndGetOutputE(t, cmd)
+	if err != nil {
+		t.Fatalf("Expected Network : %s does not exists in Project : %s ", network_name, host_project_id)
+	}
 
-
-	//validate if the subnet already exists, else create one outside of the terraform
-
-
+	//validate if the subnet already exists in host project
+	cmd = shell.Command{
+		Command : "gcloud",
+		Args : []string{text,"networks","subnets","describe",subnetwork_name,"--project="+host_project_id,"--region="+region,"--format=json"},
+	}
+	op,err = shell.RunCommandAndGetOutputE(t, cmd)
+	if err != nil {
+		t.Fatalf("Expected Sub network : %s does not exists in Project : %s ", subnetwork_name, host_project_id)
+	}
 
 	// Clean up resources with "terraform destroy" at the end of the test.
 	defer terraform.Destroy(t, terraformOptions)
@@ -213,12 +232,12 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	assert.Equal(t,subnetworkId , output)
 
 	// Validate if SQL instance wih private IP is up and running
-	text := "sql"
-	cmd := shell.Command{
+	text = "sql"
+	cmd = shell.Command{
 		Command : "gcloud",
 		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
 	}
-	op,err := shell.RunCommandAndGetOutputE(t, cmd)
+	op,err = shell.RunCommandAndGetOutputE(t, cmd)
 	if !gjson.Valid(op) {
 		t.Fatalf("Error parsing output, invalid json: %s", op)
 	}

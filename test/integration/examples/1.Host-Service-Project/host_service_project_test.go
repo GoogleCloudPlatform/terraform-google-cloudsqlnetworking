@@ -60,8 +60,8 @@ func TestMySqlPrivateModule(t *testing.T) {
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	//wait for 60 seconds to let resource acheive stable state
-	time.Sleep(60* time.Second)
+	//wait for 90 seconds to let resource acheive stable state
+	time.Sleep(90* time.Second)
 
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
 	output := terraform.Output(t, terraformOptions, "host_vpc_name")
@@ -140,10 +140,26 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 		VarFiles: [] string {"dev.tfvars" },
 	})
 
-	//validate if the VPC already exists, else create one outside of the terraform
+	//validate if the VPC already exists in host project
+	text := "compute"
+	cmd := shell.Command{
+		Command : "gcloud",
+		Args : []string{text,"networks","describe",network_name,"--project="+host_project_id,"--format=json"},
+	}
+	op,err := shell.RunCommandAndGetOutputE(t, cmd)
+	if err != nil {
+		t.Fatalf("Expected Network : %s does not exists in Project : %s ", network_name, host_project_id)
+	}
 
-
-	//validate if the subnet already exists, else create one outside of the terraform
+	//validate if the subnet already exists in host project
+	cmd = shell.Command{
+		Command : "gcloud",
+		Args : []string{text,"networks","subnets","describe",subnetwork_name,"--project="+host_project_id,"--region="+region,"--format=json"},
+	}
+	op,err = shell.RunCommandAndGetOutputE(t, cmd)
+	if err != nil {
+		t.Fatalf("Expected Sub network : %s does not exists in Project : %s ", subnetwork_name, host_project_id)
+	}
 
 
 	// Clean up resources with "terraform destroy" at the end of the test.
@@ -152,8 +168,8 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	//wait for 60 seconds to let resource acheive stable state
-	time.Sleep(60* time.Second)
+	//wait for 90 seconds to let resource acheive stable state
+	time.Sleep(90* time.Second)
 
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
 	output := terraform.Output(t, terraformOptions, "host_vpc_name")
@@ -167,12 +183,12 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	subnetworkId := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",host_project_id,region,subnetwork_name)
 	assert.Equal(t,subnetworkId , output)
 	//gcloud sql instances describe cn-sqlinstance10-u9s --project pm-test-10-e90f "sql","instances","describe","cn-sqlinstance10-u9s","--project","pm-test-10-e90f"
-	text := "sql"
-	cmd := shell.Command{
+	text = "sql"
+	cmd = shell.Command{
 		Command : "gcloud",
 		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
 	}
-	op,err := shell.RunCommandAndGetOutputE(t, cmd)
+	op,err = shell.RunCommandAndGetOutputE(t, cmd)
 	if !gjson.Valid(op) {
 		t.Fatalf("Error parsing output, invalid json: %s", op)
 	}
