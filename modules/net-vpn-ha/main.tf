@@ -82,7 +82,7 @@ resource "google_compute_router" "router" {
         description = range.value
       }
     }
-    asn                = var.router_config.asn
+    asn = var.router_config.asn
   }
 }
 

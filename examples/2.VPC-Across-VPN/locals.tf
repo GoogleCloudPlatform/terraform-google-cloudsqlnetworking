@@ -1,6 +1,6 @@
 locals {
-  network_name  = var.create_network == true ? try(module.host-vpc.name,"") : var.network_name
-  network_id    = var.create_network == true ? try(module.host-vpc.id,"") : data.google_compute_network.host_vpc[0].id
+  network_name  = var.create_network == true ? try(module.host-vpc.name, "") : var.network_name
+  network_id    = var.create_network == true ? try(module.host-vpc.id, "") : data.google_compute_network.host_vpc[0].id
   subnetwork_id = var.create_subnetwork == true ? try(module.host-vpc.subnet_ids["${var.region}/${var.subnetwork_name}"], "") : data.google_compute_subnetwork.host_vpc_subnetwork[0].id
   vm_service_account = {
     email  = module.gce_sa.email

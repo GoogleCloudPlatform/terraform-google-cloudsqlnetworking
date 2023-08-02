@@ -7,8 +7,8 @@ module "host_project_vpn" {
   name       = var.ha_vpn_gateway1_name
   peer_gateways = {
     default = {
-        gcp = module.user_project_vpn.self_link
-      }
+      gcp = module.user_project_vpn.self_link
+    }
   }
   router_config = {
     asn = var.router2_asn
@@ -48,8 +48,8 @@ module "user_project_vpn" {
   router_config = { asn = var.router1_asn }
   peer_gateways = {
     default = {
-        gcp = module.host_project_vpn.self_link
-      }
+      gcp = module.host_project_vpn.self_link
+    }
   }
   tunnels = {
     remote-0 = {

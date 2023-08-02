@@ -64,9 +64,9 @@ module "user_google_compute_instance" {
 data "template_file" "mysql_installer" {
   template = file("../startupscripts/setupsql.sh")
   vars = {
-    host_ip          = lookup(module.sql-db.mysql_cloudsql_instance_details,"private_ip_address","")
+    host_ip          = lookup(module.sql-db.mysql_cloudsql_instance_details, "private_ip_address", "")
     default_username = "default"
-    default_password = lookup(module.sql-db.mysql_cloudsql_instance_details,"generated_user_password","")
+    default_password = lookup(module.sql-db.mysql_cloudsql_instance_details, "generated_user_password", "")
     database_name    = var.test_dbname
   }
 }
