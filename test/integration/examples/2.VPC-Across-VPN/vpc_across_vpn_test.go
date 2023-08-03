@@ -18,16 +18,18 @@ var cloudsql_instance_name   = "cn-sqlinstance10-test";
 var network_name             = "cloudsql-easy";
 var subnetwork_name          = "cloudsql-easy-subnet";
 var region                   = "us-central1";
+var zone 										 = "us-central1-a";
 var test_dbname              = "test_db";
-var database_version         = "MYSQL_8_0";
 var user_region              = "us-west1";
 var user_zone                = "us-west1-a";
 var uservpc_network_name     = "user-cloudsql-easy";
 var uservpc_subnetwork_name  = "user-cloudsql-easy-subnet";
-
+var database_version 					= "MYSQL_8_0"
+var deletion_protection       = false;
 
 // name the function as Test*
 func TestMySqlPrivateAndVPNModule(t *testing.T) {
+	var iteration int;
 	host_project_id          = "pm-singleproject-20";
 	service_project_id       = "pm-test-10-e90f";
 	region                   = "us-central1";
@@ -35,16 +37,36 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	cloudsql_instance_name   = "cn-sqlinstance10-test";
 	network_name             = "cloudsql-easy";
 	subnetwork_name          = "cloudsql-easy-subnet";
+	subnetwork_ip_cidr       := "10.2.0.0/16"
+	uservpc_network_name       = "cloudsql-user"
+	uservpc_subnetwork_name    = "cloudsql-user-subnet"
+	uservpc_subnetwork_ip_cidr := "10.10.30.0/24"
+	user_region                = "us-west1"
+	user_zone                  = "us-west1-a"
 
 	tfVars := map[string]interface{}{
-		"cloudsql_instance_name" : cloudsql_instance_name,
-		"region"                 : region,
-		"network_name"           : network_name,
-		"subnetwork_name"        : subnetwork_name, // this subnetwork will be created
-		"test_dbname"            : test_dbname,
-		"host_project_id"        : host_project_id,
-    "service_project_id"     : service_project_id,
-    "user_project_id"        : user_project_id,
+		"host_project_id"            : host_project_id,
+    "service_project_id"         : service_project_id,
+		"database_version"           : database_version,
+		"cloudsql_instance_name"     : cloudsql_instance_name,
+		"region"                     : region,
+		"zone"                       : zone,
+		"create_network"             : true,
+		"create_subnetwork"          : true,
+		"network_name"               : network_name,
+		"subnetwork_name"            : subnetwork_name, // this subnetwork will be created
+		"subnetwork_ip_cidr"         : subnetwork_ip_cidr,
+    "user_project_id"            : user_project_id,
+		"user_region"                : user_region,
+		"user_zone"                  : user_zone,
+		"create_user_vpc_network"    : true,
+		"create_user_vpc_subnetwork" : true,
+		"uservpc_network_name"       : uservpc_network_name,
+		"uservpc_subnetwork_name"    : uservpc_subnetwork_name,
+		"uservpc_subnetwork_ip_cidr" : uservpc_subnetwork_ip_cidr,
+		"test_dbname"                : test_dbname,
+		"deletion_protection" 	     : deletion_protection,
+
 	}
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
@@ -53,7 +75,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 		//PlanFilePath: "./plan",
 		NoColor: true,
 		SetVarsAfterVarFiles: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	// Clean up resources with "terraform destroy" at the end of the test.
@@ -131,11 +153,25 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	//Iterate through list of database to ensure a new db was created
 	fmt.Println(" ====================================================== ")
 	fmt.Println(" =========== Verify DB Creation =========== ")
-	cmd = shell.Command{
-		Command : "gcloud",
-		Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+	iteration = 0;
+	// performs iterations for 3 times to check if the database gets created or not
+	for {
+		cmd = shell.Command{
+			Command : "gcloud",
+			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+		}
+		op,err = shell.RunCommandAndGetOutputE(t, cmd)
+		if err == nil || iteration > 3 {
+			break
+		} else {
+			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", test_dbname, cloudSqlInstanceName, service_project_id)
+		}
+		time.Sleep(60 * time.Second)
+		iteration++;
 	}
-	op,err = shell.RunCommandAndGetOutputE(t, cmd)
+	if err != nil {
+		t.Fatalf("Expected Database Name : %s at Cloudsql Instance :%s does not exists in Project : %s ", test_dbname, cloudSqlInstanceName, service_project_id)
+	}
 	if !gjson.Valid(op) {
 		t.Fatalf("Error parsing output, invalid json: %s", op)
 	}
@@ -147,35 +183,36 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 }
 
 func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
+	var iteration int;
 	host_project_id          = "pm-singleproject-20";
 	service_project_id       = "pm-test-10-e90f";
 	user_project_id          = "pm-singleproject-30";
+	cloudsql_instance_name   = "cn-sqlinstance10-test";
 	network_name             = "host-cloudsql-easy";
 	subnetwork_name          = "host-cloudsql-easy-subnet";
-	region                   = "us-central1";
-	user_region              = "us-west1";
-	user_zone                = "us-west1-a";
 	uservpc_network_name     = "user-cloudsql-easy";
 	uservpc_subnetwork_name  = "user-cloudsql-easy-subnet";
 
 	tfVars := map[string]interface{}{
 		"host_project_id"            : host_project_id,
-    "service_project_id"         : service_project_id,
-		"region"                     : region,
-		"create_subnetwork"          : false,
-		"create_network"             : false,
-		"network_name"               : network_name,
-		"subnetwork_name"            : subnetwork_name,
-		"cloudsql_instance_name"     : cloudsql_instance_name,
+		"service_project_id"         : service_project_id,
 		"database_version"           : database_version,
-		"test_dbname"                : test_dbname,
-    "user_project_id"            : user_project_id,
+		"cloudsql_instance_name"     : cloudsql_instance_name,
+		"region"                     : region,
+		"zone"                       : zone,
+		"create_network"             : false,
+		"create_subnetwork"          : false,
+		"network_name"               : network_name,
+		"subnetwork_name"            : subnetwork_name, // this subnetwork will be created
+		"user_project_id"            : user_project_id,
 		"user_region"                : user_region,
-    "user_zone"                  : user_zone,
+		"user_zone"                  : user_zone,
 		"create_user_vpc_network"    : false,
-    "create_user_vpc_subnetwork" : false,
-    "uservpc_network_name"       : uservpc_network_name,
-    "uservpc_subnetwork_name"    : uservpc_subnetwork_name,
+		"create_user_vpc_subnetwork" : false,
+		"uservpc_network_name"       : uservpc_network_name,
+		"uservpc_subnetwork_name"    : uservpc_subnetwork_name,
+		"test_dbname"                : test_dbname,
+		"deletion_protection" 	     : deletion_protection,
 	}
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
@@ -184,7 +221,7 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 		//PlanFilePath: "./plan",
 		NoColor: true,
 		SetVarsAfterVarFiles: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 
@@ -284,11 +321,25 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	//Iterate through list of database to ensure a new db was created
 	fmt.Println(" ====================================================== ")
 	fmt.Println(" =========== Verify DB Creation =========== ")
-	cmd = shell.Command{
-		Command : "gcloud",
-		Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+	iteration = 0;
+	//performs iterations for 3 times to check if the database gets created or not
+	for {
+		cmd = shell.Command{
+			Command : "gcloud",
+			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+		}
+		op,err = shell.RunCommandAndGetOutputE(t, cmd)
+		if err == nil || iteration > 3 {
+			break
+		} else {
+			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", test_dbname, cloudSqlInstanceName, service_project_id)
+		}
+		time.Sleep(60 * time.Second)
+		iteration++;
 	}
-	op,err = shell.RunCommandAndGetOutputE(t, cmd)
+	if err != nil {
+		t.Fatalf("Expected Database Name : %s at Cloudsql Instance :%s does not exists in Project : %s ", test_dbname, cloudSqlInstanceName, service_project_id)
+	}
 	if !gjson.Valid(op) {
 		t.Fatalf("Error parsing output, invalid json: %s", op)
 	}
