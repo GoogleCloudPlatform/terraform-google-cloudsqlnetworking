@@ -13,6 +13,7 @@ set -e
 # set -x
 
 echo $1
+echo " ======= Initiating Test ======= "
 
 if [ "$1" == "release" ]; then
   echo "===== Running release ====="
