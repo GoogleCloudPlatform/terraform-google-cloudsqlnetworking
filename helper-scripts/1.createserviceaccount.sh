@@ -49,6 +49,10 @@ gcloud projects add-iam-policy-binding $HOST_PROJECT_ID \
     --member="serviceAccount:$SA_NAME@$HOST_PROJECT_ID.iam.gserviceaccount.com" \
     --role="roles/compute.securityAdmin"
 
+gcloud projects add-iam-policy-binding $HOST_PROJECT_ID \
+    --member="serviceAccount:$SA_NAME@$HOST_PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/storage.objectAdmin"
+
 # Following permission are assigned to the User who can then impersonate this service account
 
 gcloud iam service-accounts add-iam-policy-binding \

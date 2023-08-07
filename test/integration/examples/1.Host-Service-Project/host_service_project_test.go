@@ -20,6 +20,11 @@ var zone 											= "us-central1-a";
 var test_dbname               = "test_db"
 var database_version 					= "MYSQL_8_0"
 var deletion_protection       = false;
+var backendConfig  						=  map[string]interface{}{
+	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
+	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
+	"prefix" 											: "test/example1",
+ }
 
 /*
 This test creates all the resources including the vpc network and subnetwork along with other
@@ -57,11 +62,13 @@ func TestMySqlPrivateModule(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		Vars : tfVars,
-		TerraformDir: terraformDirectoryPath,
-		//PlanFilePath: "./plan",
-		NoColor: true,
+		BackendConfig : backendConfig,
+		TerraformDir  : terraformDirectoryPath,
+		//PlanFilePath : "./plan",
+		Reconfigure : true,
+		NoColor : true,
 		SetVarsAfterVarFiles: true,
-		// VarFiles: [] string {"dev.tfvars" }, //an additional tfvars containing configuration files can be passed here
+		//VarFiles: [] string {"dev.tfvars" }, //an additional tfvars containing configuration files can be passed here
 	})
 
 	// Clean up resources with "terraform destroy" at the end of the test.
@@ -148,8 +155,8 @@ It then validates if
 func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	var iteration int;
 
-	host_project_id          = "pm-host-networking";
-  service_project_id       = "pm-service1-networking";
+	host_project_id          = "pm-singleproject-20";
+  service_project_id       = "pm-test-10-e90f";
 	network_name             := "host-cloudsql-easy";
 	subnetwork_name          := "host-cloudsql-easy-subnet";
 
@@ -171,6 +178,8 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		Vars : tfVars,
 		TerraformDir: terraformDirectoryPath,
+		BackendConfig : backendConfig,
+		Reconfigure : true,
 		//PlanFilePath: "./plan",
 		NoColor: true,
 		SetVarsAfterVarFiles: true,
@@ -219,7 +228,6 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	cloudSqlInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
 	subnetworkId := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",host_project_id,region,subnetwork_name)
 	assert.Equal(t,subnetworkId , output)
-	//gcloud sql instances describe cn-sqlinstance10-u9s --project pm-test-10-e90f "sql","instances","describe","cn-sqlinstance10-u9s","--project","pm-test-10-e90f"
 	text = "sql"
 	cmd = shell.Command{
 		Command : "gcloud",
