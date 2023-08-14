@@ -2,7 +2,7 @@ package vpc_across_vpn_test
 
 import (
 	"testing"
-	"slices"
+	"golang.org/x/exp/slices"
 	"github.com/stretchr/testify/assert"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )

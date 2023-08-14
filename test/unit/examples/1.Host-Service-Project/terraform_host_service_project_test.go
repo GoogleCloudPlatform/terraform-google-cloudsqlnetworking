@@ -3,7 +3,7 @@ package host_service_test
 import (
 	"fmt"
 	"testing"
-	"slices"
+	"golang.org/x/exp/slices"
 	"github.com/stretchr/testify/assert"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
