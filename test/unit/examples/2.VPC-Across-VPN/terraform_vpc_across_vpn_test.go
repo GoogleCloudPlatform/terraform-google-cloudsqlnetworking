@@ -26,6 +26,7 @@ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		BackendConfig : backendConfig,
+		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		VarFiles: [] string {"dev.tfvars" },
@@ -47,6 +48,7 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		BackendConfig : backendConfig,
+		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
 	})
@@ -61,6 +63,7 @@ func TestResourcesCount(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		BackendConfig : backendConfig,
+		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		VarFiles: [] string {"dev.tfvars" },
@@ -84,6 +87,7 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		BackendConfig : backendConfig,
+		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		VarFiles: [] string {"dev.tfvars" },
