@@ -10,7 +10,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/shell"
 )
 
-const terraformDirectoryPath  = "../../../../../cloudsql-easy-networking/examples/1.Host-Service-Project";
+const terraformDirectoryPath  = "../../../../examples/1.Host-Service-Project";
 var host_project_id           = "pm-singleproject-20";
 var service_project_id        = "pm-test-10-e90f";
 var cloudsql_instance_name    = "cn-sqlinstance10-test";

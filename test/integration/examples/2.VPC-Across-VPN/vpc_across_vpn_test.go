@@ -10,7 +10,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/shell"
 )
 
-const terraformDirectoryPath   = "../../../../../cloudsql-easy-networking/examples/2.VPC-Across-VPN";
+const terraformDirectoryPath   = "../../../../examples/2.VPC-Across-VPN";
 var host_project_id          = "pm-singleproject-20";
 var service_project_id       = "pm-test-10-e90f";
 var user_project_id          = "pm-singleproject-30";

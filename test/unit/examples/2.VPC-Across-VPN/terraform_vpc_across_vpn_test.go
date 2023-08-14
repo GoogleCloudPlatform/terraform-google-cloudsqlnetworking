@@ -8,6 +8,47 @@ import (
 )
 
 const terraformDirectoryPath = "../../../../examples/2.VPC-Across-VPN";
+var host_project_id            = "pm-singleproject-20";
+var service_project_id         = "pm-test-10-e90f";
+var database_version 				   = "MYSQL_8_0"
+var region                     = "us-central1";
+var zone										   = "us-central1-a";
+var user_project_id            = "pm-singleproject-30";
+var cloudsql_instance_name     = "cn-sqlinstance10-test";
+var network_name               = "cloudsql-easy";
+var subnetwork_name            = "cloudsql-easy-subnet";
+var subnetwork_ip_cidr         = "10.2.0.0/16"
+var uservpc_network_name       = "cloudsql-user"
+var uservpc_subnetwork_name    = "cloudsql-user-subnet"
+var uservpc_subnetwork_ip_cidr = "10.10.30.0/24"
+var test_dbname 							 = "test_db"
+var user_region                = "us-west1"
+var user_zone                  = "us-west1-a"
+var deletion_protection 			 = false
+var tfVars = map[string]interface{}{
+	"host_project_id"            : host_project_id,
+	"service_project_id"         : service_project_id,
+	"database_version"           : database_version,
+	"cloudsql_instance_name"     : cloudsql_instance_name,
+	"region"                     : region,
+	"zone"                       : zone,
+	"create_network"             : true,
+	"create_subnetwork"          : true,
+	"network_name"               : network_name,
+	"subnetwork_name"            : subnetwork_name, // this subnetwork will be created
+	"subnetwork_ip_cidr"         : subnetwork_ip_cidr,
+	"user_project_id"            : user_project_id,
+	"user_region"                : user_region,
+	"user_zone"                  : user_zone,
+	"create_user_vpc_network"    : true,
+	"create_user_vpc_subnetwork" : true,
+	"uservpc_network_name"       : uservpc_network_name,
+	"uservpc_subnetwork_name"    : uservpc_subnetwork_name,
+	"uservpc_subnetwork_ip_cidr" : uservpc_subnetwork_ip_cidr,
+	"test_dbname"                : test_dbname,
+	"deletion_protection" 	     : deletion_protection,
+
+}
 var backendConfig  						=  map[string]interface{}{
 	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
 	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
@@ -25,11 +66,12 @@ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		Vars : tfVars,
 		BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	planExitCode := terraform.InitAndPlanWithExitCode(t, terraformOptions)
@@ -62,11 +104,12 @@ func TestResourcesCount(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		Vars : tfVars,
 		BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	//plan *PlanStruct
@@ -86,11 +129,12 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		Vars : tfVars,
 		BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	//plan *PlanStruct

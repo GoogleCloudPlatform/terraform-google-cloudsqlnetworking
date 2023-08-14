@@ -9,13 +9,39 @@ import (
 )
 
 const terraformDirectoryPath = "../../../../examples/1.Host-Service-Project";
+var host_project_id           = "pm-singleproject-20";
+var service_project_id        = "pm-test-10-e90f";
+var cloudsql_instance_name    = "cn-sqlinstance10-test";
+var network_name              = "cloudsql-easy"
+var subnetwork_ip_cidr        = "10.2.0.0/16"
+var subnetwork_name           = "cloudsql-easy-subnet";
+var region                    = "us-central1";
+var zone 											= "us-central1-a";
+var test_dbname               = "test_db"
+var database_version 					= "MYSQL_8_0"
+var deletion_protection       = false
 var backendConfig  						=  map[string]interface{}{
 	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
 	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
 	"prefix" 											: "test/example1",
  }
 
-func TestInitAndPlanRunWithTfVars(t *testing.T) {
+ var tfVars = map[string]interface{}{
+	"host_project_id"            : host_project_id,
+	"service_project_id"         : service_project_id,
+	"database_version"           : database_version,
+	"cloudsql_instance_name"     : cloudsql_instance_name,
+	"region"                     : region,
+	"zone"                       : zone,
+	"create_network"             : true,
+	"create_subnetwork"          : true,
+	"network_name"               : network_name,
+	"subnetwork_name"            : subnetwork_name,
+	"subnetwork_ip_cidr"         : subnetwork_ip_cidr,
+	"deletion_protection" 			 : deletion_protection,
+	"test_dbname"                : test_dbname,
+}
+ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	/*
 	 0 = Succeeded with empty diff (no changes)
 	 1 = Error
@@ -26,11 +52,12 @@ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		Vars : tfVars,
 		BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		Reconfigure : true,
 		NoColor: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	planExitCode := terraform.InitAndPlanWithExitCode(t, terraformOptions)
@@ -67,11 +94,12 @@ func TestResourcesCount(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		Vars : tfVars,
 		BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	//plan *PlanStruct
@@ -91,11 +119,12 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		Vars : tfVars,
 		BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		Reconfigure : true,
 		NoColor: true,
-		VarFiles: [] string {"dev.tfvars" },
+		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	//plan *PlanStruct
