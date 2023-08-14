@@ -7,7 +7,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-const terraformDirectoryPath = "../../../../../cloudsql-easy-networking/examples/2.VPC-Across-VPN";
+const terraformDirectoryPath = "../../../../examples/2.VPC-Across-VPN";
 
 func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	/*

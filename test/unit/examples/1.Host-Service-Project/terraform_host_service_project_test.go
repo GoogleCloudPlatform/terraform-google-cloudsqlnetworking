@@ -8,7 +8,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-const terraformDirectoryPath = "../../../../../cloudsql-easy-networking/examples/1.Host-Service-Project";
+const terraformDirectoryPath = "../../../../examples/1.Host-Service-Project";
 
 func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	/*
