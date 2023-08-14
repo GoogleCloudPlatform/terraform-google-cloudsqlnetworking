@@ -9,6 +9,11 @@ import (
 )
 
 const terraformDirectoryPath = "../../../../examples/1.Host-Service-Project";
+var backendConfig  						=  map[string]interface{}{
+	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
+	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
+	"prefix" 											: "test/example1",
+ }
 
 func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	/*
@@ -21,6 +26,7 @@ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		VarFiles: [] string {"dev.tfvars" },
@@ -41,6 +47,7 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		NoColor: true,
 	})
@@ -58,6 +65,7 @@ func TestResourcesCount(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		VarFiles: [] string {"dev.tfvars" },
@@ -80,6 +88,7 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
+		BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		VarFiles: [] string {"dev.tfvars" },
