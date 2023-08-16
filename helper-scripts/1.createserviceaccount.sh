@@ -79,6 +79,7 @@ gcloud iam service-accounts add-iam-policy-binding \
 #     --role="roles/iam.serviceAccountTokenCreator" \
 #     --project=pm-singleproject-20
 
+
 echo "=========================================================================================="
 
 echo "============ Setting Up Permission for the service account in Service Project ============"
