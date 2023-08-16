@@ -66,6 +66,18 @@ gcloud iam service-accounts add-iam-policy-binding \
     --member="user:$USER_EMAIL_ID" \
     --role="roles/iam.serviceAccountTokenCreator" \
     --project=$HOST_PROJECT_ID
+# Assign permission to cloudbuild/louhi accounts
+# gcloud iam service-accounts add-iam-policy-binding \
+#     iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com \
+#     --member="serviceAccount:louhi-prod-1-5648536207228928@louhi-prod-1.iam.gserviceaccount.com" \
+#     --role="roles/iam.serviceAccountUser" \
+#     --project=pm-singleproject-20
+
+# gcloud iam service-accounts add-iam-policy-binding \
+#     iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com \
+#     --member="serviceAccount:louhi-prod-1-5648536207228928@louhi-prod-1.iam.gserviceaccount.com" \
+#     --role="roles/iam.serviceAccountTokenCreator" \
+#     --project=pm-singleproject-20
 
 echo "=========================================================================================="
 
