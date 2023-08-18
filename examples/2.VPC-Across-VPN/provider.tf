@@ -10,9 +10,9 @@ provider "google-beta" {
 }
 
 terraform {
- backend "gcs" {
-   bucket  = ""
-   prefix  = ""
- }
+  backend "gcs" {
+    bucket = ""
+    prefix = ""
+  }
 }
 
