@@ -11,8 +11,8 @@ provider "google-beta" {
 
 terraform {
   backend "gcs" {
-    bucket = ""
-    prefix = ""
+    bucket =  ""
+    prefix =  ""
   }
 }
 
