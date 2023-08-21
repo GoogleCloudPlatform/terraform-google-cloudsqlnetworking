@@ -190,6 +190,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 }
 
 func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
+
 	var iteration int;
 	host_project_id          = "pm-singleproject-20";
 	service_project_id       = "pm-test-10-e90f";
