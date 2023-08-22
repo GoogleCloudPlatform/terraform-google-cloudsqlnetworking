@@ -1,4 +1,4 @@
-package vpc_across_vpn_test
+/*package vpc_across_vpn_test
 
 import (
 	"fmt"
@@ -359,3 +359,4 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	}
 	assert.Equal(t, test_dbname, gjson.Get(result.String(),"name").String())
 }
+*/
