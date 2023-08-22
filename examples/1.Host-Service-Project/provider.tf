@@ -13,5 +13,6 @@ terraform {
   backend "gcs" {
     bucket = ""
     prefix = ""
+    impersonate_service_account = ""
   }
 }
