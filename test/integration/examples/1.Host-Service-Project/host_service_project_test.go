@@ -94,7 +94,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 	text := "sql"
 	cmd := shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
 	}
 	op,err := shell.RunCommandAndGetOutputE(t, cmd)
 	if !gjson.Valid(op) {
@@ -118,7 +118,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 	for {
 		cmd = shell.Command{
 			Command : "gcloud",
-			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
 		}
 		op,err = shell.RunCommandAndGetOutputE(t, cmd)
 		if err == nil || iteration > 3 {
@@ -190,7 +190,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	text := "compute"
 	cmd := shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"networks","describe",network_name,"--project="+host_project_id,"--format=json"},
+		Args : []string{text,"networks","describe",network_name,"--project="+host_project_id,"--format=json","--verbosity=none"},
 	}
 	op,err := shell.RunCommandAndGetOutputE(t, cmd)
 	if err != nil {
@@ -200,7 +200,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	//validate if the subnet already exists in host project
 	cmd = shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"networks","subnets","describe",subnetwork_name,"--project="+host_project_id,"--region="+region,"--format=json"},
+		Args : []string{text,"networks","subnets","describe",subnetwork_name,"--project="+host_project_id,"--region="+region,"--format=json","--verbosity=none"},
 	}
 	op,err = shell.RunCommandAndGetOutputE(t, cmd)
 	if err != nil {
@@ -231,7 +231,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	text = "sql"
 	cmd = shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
 	}
 	op,err = shell.RunCommandAndGetOutputE(t, cmd)
 	if !gjson.Valid(op) {
@@ -255,7 +255,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	for {
 		cmd = shell.Command{
 			Command : "gcloud",
-			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json"},
+			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
 		}
 		op,err = shell.RunCommandAndGetOutputE(t, cmd)
 		if err == nil || iteration > 3 {
