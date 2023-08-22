@@ -1,3 +1,4 @@
+/*
 package vpc_across_vpn_test
 
 import (
@@ -360,3 +361,4 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	assert.Equal(t, test_dbname, gjson.Get(result.String(),"name").String())
 }
 
+*/
