@@ -1,5 +1,6 @@
 **/.terraform
 **/dev*.tfvars
+**/providers.tf
 **/terraform.tfstate*
 **/.terraform.tfstate.lock.info
 **/.terraform.lock.hcl
