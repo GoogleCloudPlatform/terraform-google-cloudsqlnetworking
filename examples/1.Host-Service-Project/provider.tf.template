@@ -3,16 +3,16 @@
 # subject to your agreement with Google.
 
 provider "google" {
-  impersonate_service_account = "ENTER_SERVICE_ACCOUNT_HERE"
+  impersonate_service_account = "ENTER_TF_SERVICE_ACCOUNT"
 }
 provider "google-beta" {
-  impersonate_service_account = "ENTER_SERVICE_ACCOUNT_HERE"
+  impersonate_service_account = "ENTER_TF_SERVICE_ACCOUNT"
 }
 
 terraform {
   backend "gcs" {
-    bucket                      = "ENTER_BUCKET_NAME_HERE"
-    prefix                      = "ENTER_PREFIX_HERE"
-    impersonate_service_account = "ENTER_SERVICE_ACCOUNT_HERE"
+    bucket                      = "ENTER_TF_BUCKET_NAME"
+    prefix                      = "ENTER_TF_EXAMPLE1_PREFIX"
+    impersonate_service_account = "ENTER_TF_SERVICE_ACCOUNT"
   }
 }
