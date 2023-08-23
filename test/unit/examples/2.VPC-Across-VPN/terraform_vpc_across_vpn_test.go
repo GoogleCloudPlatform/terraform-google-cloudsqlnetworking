@@ -49,11 +49,11 @@ var tfVars = map[string]interface{}{
 	"deletion_protection" 	     : deletion_protection,
 
 }
-var backendConfig  						=  map[string]interface{}{
-	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
-	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
-	"prefix" 											: "test/example2",
- }
+// var backendConfig  						=  map[string]interface{}{
+// 	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
+// 	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
+// 	"prefix" 											: "test/example2",
+//  }
 
 func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	/*
@@ -67,7 +67,7 @@ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		BackendConfig : backendConfig,
+		//BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
@@ -89,7 +89,7 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
-		BackendConfig : backendConfig,
+		//BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
@@ -105,7 +105,7 @@ func TestResourcesCount(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		BackendConfig : backendConfig,
+		//BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,
@@ -130,7 +130,7 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		BackendConfig : backendConfig,
+		//BackendConfig : backendConfig,
 		Reconfigure : true,
 		PlanFilePath: "./plan",
 		NoColor: true,

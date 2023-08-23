@@ -10,9 +10,10 @@ provider "google-beta" {
 }
 
 terraform {
- backend "gcs" {
-   bucket  = "ENTER_BUCKET_NAME_HERE"
-   prefix  = "ENTER_PREFIX_HERE"
-   impersonate_service_account = "ENTER_SERVICE_ACCOUNT_HERE"
- }
+  backend "gcs" {
+    bucket                      = "ENTER_BUCKET_NAME_HERE"
+    prefix                      = "ENTER_PREFIX_HERE"
+    impersonate_service_account = "ENTER_SERVICE_ACCOUNT_HERE"
+  }
 }
+
