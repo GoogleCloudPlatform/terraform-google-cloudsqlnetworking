@@ -34,6 +34,8 @@ var deletion_protection       = false;
 
 // name the function as Test*
 func TestMySqlPrivateAndVPNModule(t *testing.T) {
+	//wait for 60 seconds to allow resources to be available
+	time.Sleep(60 * time.Second)
 	var iteration int;
 	host_project_id          = "pm-singleproject-20";
 	service_project_id       = "pm-test-10-e90f";
@@ -190,7 +192,8 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 }
 
 func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
-
+	//wait for 60 seconds to allow resources to be available
+	time.Sleep(60 * time.Second)
 	var iteration int;
 	host_project_id          = "pm-singleproject-20";
 	service_project_id       = "pm-test-10-e90f";
