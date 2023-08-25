@@ -68,7 +68,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 		TerraformDir  : terraformDirectoryPath,
 		//PlanFilePath : "./plan",
 		Reconfigure : true,
-		lock: true,
+		Lock: true,
 		NoColor : true,
 		SetVarsAfterVarFiles: true,
 		//VarFiles: [] string {"dev.tfvars" }, //an additional tfvars containing configuration files can be passed here
@@ -185,7 +185,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 		TerraformDir: terraformDirectoryPath,
 		//BackendConfig : backendConfig,
 		Reconfigure : true,
-		lock: true,
+		Lock: true,
 		//PlanFilePath: "./plan",
 		NoColor: true,
 		SetVarsAfterVarFiles: true,
