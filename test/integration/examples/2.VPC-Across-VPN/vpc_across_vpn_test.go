@@ -83,6 +83,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 		//PlanFilePath: "./plan",
 		Reconfigure : true,
 		NoColor: true,
+		lock: true,
 		SetVarsAfterVarFiles: true,
 		//VarFiles: [] string {"dev.tfvars" },
 	})
@@ -232,6 +233,7 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 		TerraformDir: terraformDirectoryPath,
 		//PlanFilePath: "./plan",
 		Reconfigure : true,
+		lock: true,
 		NoColor: true,
 		SetVarsAfterVarFiles: true,
 		//VarFiles: [] string {"dev.tfvars" },
