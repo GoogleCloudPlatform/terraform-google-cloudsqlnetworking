@@ -56,6 +56,7 @@ var deletion_protection       = false
 		//BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		Reconfigure : true,
+		Lock: true,
 		NoColor: true,
 		//VarFiles: [] string {"dev.tfvars" },
 	})
@@ -77,6 +78,7 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 		TerraformDir: terraformDirectoryPath,
 		//BackendConfig : backendConfig,
 		Reconfigure : true,
+		Lock: true,
 		PlanFilePath: "./plan",
 		NoColor: true,
 	})
@@ -97,6 +99,7 @@ func TestResourcesCount(t *testing.T) {
 		Vars : tfVars,
 		//BackendConfig : backendConfig,
 		Reconfigure : true,
+		Lock: true,
 		PlanFilePath: "./plan",
 		NoColor: true,
 		//VarFiles: [] string {"dev.tfvars" },
@@ -123,6 +126,7 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 		//BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		Reconfigure : true,
+		Lock: true,
 		NoColor: true,
 		//VarFiles: [] string {"dev.tfvars" },
 	})
