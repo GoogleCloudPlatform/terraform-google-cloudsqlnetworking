@@ -14,6 +14,18 @@ variable "subnetwork_id" {
   description = "Complete subnetwork Id. This is required when var.create_subnetwork is set of false. e.g. : projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet"
 }
 
+variable "machine_type" {
+  type        = string
+  default     = "e2-small"
+  description = "Google compute instance machine type to be created."
+}
+
+variable "compute_instance_name" {
+  type        = string
+  default     = "cloudsql-easy-networking-001"
+  description = "Name of the compute instance machine that will be created."
+}
+
 variable "vm_service_account" {
   type = object({
     email  = string
