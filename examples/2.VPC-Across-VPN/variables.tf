@@ -52,12 +52,6 @@ variable "network_routing_mode" {
   description = "Network Routing Mode to be used, Could be REGIONAL or GLOBAL."
 }
 
-variable "target_size" {
-  type        = number
-  default     = 1
-  description = "Number of GCE instances to be created."
-}
-
 variable "network_name" {
   type        = string
   description = "Name of the VPC network to be created if var.create_network is marked as true or Name of the already existing network if var.create_network is false."
