@@ -132,6 +132,7 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | 3.90.1 |
+| <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
 
 ## Modules
 
@@ -140,9 +141,9 @@ No requirements.
 | <a name="module_firewall_rules"></a> [firewall\_rules](#module\_firewall\_rules) | ../../modules/firewall-rules | n/a |
 | <a name="module_gce_sa"></a> [gce\_sa](#module\_gce\_sa) | ../../modules/iam-service-account | n/a |
 | <a name="module_google_compute_instance"></a> [google\_compute\_instance](#module\_google\_compute\_instance) | ../../modules/computeinstance | n/a |
-| <a name="module_ha-vpn"></a> [ha-vpn](#module\_ha-vpn) | ../../modules/ha-vpn | n/a |
 | <a name="module_host-vpc"></a> [host-vpc](#module\_host-vpc) | ../../modules/net-vpc | n/a |
 | <a name="module_host_project"></a> [host\_project](#module\_host\_project) | ../../modules/services | n/a |
+| <a name="module_host_project_vpn"></a> [host\_project\_vpn](#module\_host\_project\_vpn) | ../../modules/net-vpn-ha | n/a |
 | <a name="module_project_services"></a> [project\_services](#module\_project\_services) | ../../modules/services | n/a |
 | <a name="module_sql-db"></a> [sql-db](#module\_sql-db) | ../../modules/cloudsql | n/a |
 | <a name="module_terraform_service_accounts"></a> [terraform\_service\_accounts](#module\_terraform\_service\_accounts) | ../../modules/iam-service-account | n/a |
@@ -151,6 +152,7 @@ No requirements.
 | <a name="module_user_gce_sa"></a> [user\_gce\_sa](#module\_user\_gce\_sa) | ../../modules/iam-service-account | n/a |
 | <a name="module_user_google_compute_instance"></a> [user\_google\_compute\_instance](#module\_user\_google\_compute\_instance) | ../../modules/computeinstance | n/a |
 | <a name="module_user_project_services"></a> [user\_project\_services](#module\_user\_project\_services) | ../../modules/services | n/a |
+| <a name="module_user_project_vpn"></a> [user\_project\_vpn](#module\_user\_project\_vpn) | ../../modules/net-vpn-ha | n/a |
 
 ## Resources
 
@@ -160,6 +162,7 @@ No requirements.
 | [google_compute_network.user_vpc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_network) | data source |
 | [google_compute_subnetwork.host_vpc_subnetwork](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork) | data source |
 | [google_compute_subnetwork.user_vpc_subnetwork](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_subnetwork) | data source |
+| [template_file.mysql_installer](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 
@@ -189,18 +192,24 @@ No requirements.
 | <a name="input_create_user_vpc_subnetwork"></a> [create\_user\_vpc\_subnetwork](#input\_create\_user\_vpc\_subnetwork) | Variable to determine if a new sub network should be created or not. | `bool` | `true` | no |
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Enable delete protection. | `bool` | `true` | no |
 | <a name="input_gce_tags"></a> [gce\_tags](#input\_gce\_tags) | List of tags to be applied to gce instance. | `list(string)` | <pre>[<br>  "cloudsql"<br>]</pre> | no |
+| <a name="input_ha_vpn_gateway1_name"></a> [ha\_vpn\_gateway1\_name](#input\_ha\_vpn\_gateway1\_name) | Name of the VPN Gateway at host project. | `string` | `"ha-vpn-1"` | no |
+| <a name="input_ha_vpn_gateway2_name"></a> [ha\_vpn\_gateway2\_name](#input\_ha\_vpn\_gateway2\_name) | Name of the VPN Gateway at user project. | `string` | `"ha-vpn-2"` | no |
 | <a name="input_network_routing_mode"></a> [network\_routing\_mode](#input\_network\_routing\_mode) | Network Routing Mode to be used, Could be REGIONAL or GLOBAL. | `string` | `"GLOBAL"` | no |
 | <a name="input_network_tier"></a> [network\_tier](#input\_network\_tier) | Networking tier to be used. | `string` | `"STANDARD"` | no |
+| <a name="input_router1_asn"></a> [router1\_asn](#input\_router1\_asn) | ASN number required for the router1. | `number` | `64513` | no |
+| <a name="input_router2_asn"></a> [router2\_asn](#input\_router2\_asn) | ASN number required for the router2. | `number` | `64514` | no |
 | <a name="input_source_image"></a> [source\_image](#input\_source\_image) | Source disk image. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `""` | no |
 | <a name="input_source_image_family"></a> [source\_image\_family](#input\_source\_image\_family) | Source image family. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `"ubuntu-2204-lts"` | no |
 | <a name="input_source_image_project"></a> [source\_image\_project](#input\_source\_image\_project) | Project where the source image comes from. The default project contains images. | `string` | `"ubuntu-os-cloud"` | no |
 | <a name="input_target_size"></a> [target\_size](#input\_target\_size) | Number of GCE instances to be created. | `number` | `1` | no |
+| <a name="input_test_dbname"></a> [test\_dbname](#input\_test\_dbname) | Database Name to be created from startup script. | `string` | `"test_db"` | no |
 | <a name="input_user_network_routing_mode"></a> [user\_network\_routing\_mode](#input\_user\_network\_routing\_mode) | Network Routing Mode to be used, Could be REGIONAL or GLOBAL. | `string` | `"GLOBAL"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cloudsql_instance_name"></a> [cloudsql\_instance\_name](#output\_cloudsql\_instance\_name) | Name of the my cloud sql instance created in the service project. |
 | <a name="output_host_network_id"></a> [host\_network\_id](#output\_host\_network\_id) | Network ID for the host VPC network created in the host project. |
 | <a name="output_host_psa_ranges"></a> [host\_psa\_ranges](#output\_host\_psa\_ranges) | PSA range allocated for the private service connection in the host vpc. |
 | <a name="output_host_subnetwork_id"></a> [host\_subnetwork\_id](#output\_host\_subnetwork\_id) | Sub Network ID created inside the host VPC network created in the host project. |

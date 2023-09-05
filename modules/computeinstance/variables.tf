@@ -71,12 +71,6 @@ variable "zone" {
   description = "Name of a GCP zone, should be in the same region as specified in the region variable."
 }
 
-variable "target_size" {
-  type        = number
-  default     = 1
-  description = "Number of GCE instances to be created."
-}
-
 #######
 # disk
 #######
