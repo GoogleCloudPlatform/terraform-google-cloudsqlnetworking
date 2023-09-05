@@ -16,10 +16,10 @@ module "google_compute_instance" {
   metadata = {
     "enable-oslogin" : true
   }
-  access_config = [{
+  access_config = {
     nat_ip       = "",
     network_tier = var.network_tier
-  }]
+  }
   depends_on = [
     module.host-vpc
   ]

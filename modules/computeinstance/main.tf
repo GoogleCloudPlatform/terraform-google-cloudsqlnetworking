@@ -11,14 +11,16 @@ resource "google_compute_instance" "compute_instance" {
       image = "${var.source_image_project}/${var.source_image_family}"
     }
   }
-
   network_interface {
     subnetwork = var.subnetwork_id
-    access_config {
-      network_tier = var.network_tier
+    dynamic "access_config" {
+      for_each = var.access_config == null ? [] : [1]
+      content {
+        network_tier = try(var.access_config.network_tier, var.network_tier)
+        nat_ip       = try(var.access_config.nat_ip, "")
+      }
     }
   }
-
   metadata                = var.metadata
   metadata_startup_script = var.startup_script
   service_account {
