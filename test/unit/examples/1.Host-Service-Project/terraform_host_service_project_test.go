@@ -109,7 +109,7 @@ func TestResourcesCount(t *testing.T) {
 	planStruct := terraform.InitAndPlan(t, terraformOptions)
 
 	resourceCount := terraform.GetResourceCount(t, planStruct)
-	assert.Equal(t,49,resourceCount.Add)
+	assert.Equal(t,51,resourceCount.Add)
 	assert.Equal(t,0,resourceCount.Change)
 	assert.Equal(t,0,resourceCount.Destroy)
 }
@@ -117,7 +117,7 @@ func TestResourcesCount(t *testing.T) {
 func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	// Construct the terraform options with default retryable errors to handle the most common
 	// retryable errors in terraform testing.
-	expectedModulesAddress := [] string {"module.firewall_rules.module.firewall_rules","module.gce_sa","module.host-vpc","module.terraform_service_accounts","module.google_compute_instance","module.sql-db.module.mysql[0]","module.host_project.module.project_services","module.project_services.module.project_services","module.sql-db"}
+	expectedModulesAddress := [] string {"module.firewall_rules.module.firewall_rules","module.gce_sa","module.host-vpc","module.terraform_service_accounts","module.google_compute_instance","module.sql-db.module.mysql[0]","module.host_project.module.project_services","module.project_services.module.project_services","module.sql-db","module.nat[0]"}
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
