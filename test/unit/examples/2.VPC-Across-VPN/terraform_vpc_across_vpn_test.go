@@ -119,7 +119,7 @@ func TestResourcesCount(t *testing.T) {
 	planStruct := terraform.InitAndPlan(t, terraformOptions)
 
 	resourceCount := terraform.GetResourceCount(t, planStruct)
-	assert.Equal(t,89,resourceCount.Add)
+	assert.Equal(t,91,resourceCount.Add)
 	assert.Equal(t,0,resourceCount.Change)
 	assert.Equal(t,0,resourceCount.Destroy)
 }
@@ -127,7 +127,7 @@ func TestResourcesCount(t *testing.T) {
 func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	// Construct the terraform options with default retryable errors to handle the most common
 	// retryable errors in terraform testing.
-	expectedModulesAddress := [] string {"module.google_compute_instance","module.sql-db.module.mysql[0]","module.gce_sa","module.host_project_vpn","module.user_project_vpn","module.host-vpc","module.terraform_service_accounts","module.user-vpc","module.project_services.module.project_services","module.firewall_rules.module.firewall_rules","module.user_project_services.module.project_services","module.user_google_compute_instance","module.user_gce_sa","module.host_project.module.project_services","module.sql-db","module.user_firewall_rules.module.firewall_rules",}
+	expectedModulesAddress := [] string {"module.google_compute_instance","module.sql-db.module.mysql[0]","module.gce_sa","module.host_project_vpn","module.user_project_vpn","module.host-vpc","module.terraform_service_accounts","module.user-vpc","module.project_services.module.project_services","module.firewall_rules.module.firewall_rules","module.user_project_services.module.project_services","module.user_google_compute_instance","module.user_gce_sa","module.host_project.module.project_services","module.sql-db","module.user_firewall_rules.module.firewall_rules","module.user-nat[0]"}
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.

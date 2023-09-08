@@ -19,12 +19,9 @@ module "google_compute_instance" {
   metadata = {
     "enable-oslogin" : true
   }
-  access_config = {
-    nat_ip       = "",
-    network_tier = var.network_tier
-  }
+  access_config = var.access_config
   depends_on = [
-    module.host-vpc
+    module.host-vpc,
   ]
 }
 
@@ -50,12 +47,10 @@ module "user_google_compute_instance" {
   metadata = {
     "enable-oslogin" : true
   }
-  access_config = {
-    nat_ip       = "",
-    network_tier = var.network_tier
-  }
+  access_config = var.access_config
   depends_on = [
-    module.user-vpc
+    module.user-vpc,
+    module.user-nat
   ]
 }
 

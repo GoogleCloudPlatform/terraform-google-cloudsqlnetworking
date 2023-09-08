@@ -18,7 +18,8 @@ module "google_compute_instance" {
   }
   access_config = var.access_config
   depends_on = [
-    module.host-vpc
+    module.host-vpc,
+    module.nat,
   ]
 }
 

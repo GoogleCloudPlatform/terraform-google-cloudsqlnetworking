@@ -91,3 +91,27 @@ data "google_compute_subnetwork" "user_vpc_subnetwork" {
   project = var.user_project_id
   region  = var.user_region
 }
+
+module "user-nat" {
+  count                 = var.create_nat ? 1 : 0
+  source                = "../../modules/net-cloudnat"
+  project_id            = var.user_project_id
+  region                = var.user_region
+  name                  = var.nat_name
+  router_network        = var.uservpc_network_name
+  router_create         = true
+  config_source_subnets = "LIST_OF_SUBNETWORKS"
+  router_name           = var.router_name
+  config_port_allocation = {
+    enable_endpoint_independent_mapping = false
+    enable_dynamic_port_allocation      = true
+  }
+  subnetworks = [{
+    self_link            = local.uservpc_subnetwork_id,
+    config_source_ranges = ["PRIMARY_IP_RANGE"],
+    secondary_ranges     = []
+  }]
+  depends_on = [
+    module.user-vpc
+  ]
+}

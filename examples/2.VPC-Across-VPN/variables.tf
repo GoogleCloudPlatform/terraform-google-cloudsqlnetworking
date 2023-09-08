@@ -204,3 +204,32 @@ variable "router2_asn" {
   description = "ASN number required for the router2."
   default     = 64514
 }
+
+
+variable "router_name" {
+  description = "Name of the router to be used by the NAT."
+  default     = "sqleasynatrouter"
+}
+
+variable "nat_name" {
+  description = "Name of the cloud nat to be created."
+  default     = "sqleasy-nat"
+}
+
+variable "create_nat" {
+  description = "Boolean variable to create the Cloud NAT for allowing the VM to connect to external Internet."
+  type        = bool
+  default     = true
+}
+
+###########################
+# Public IP
+###########################
+variable "access_config" {
+  description = "Access configurations, i.e. IPs via which the VM instance can be accessed via the Internet."
+  type = object({
+    nat_ip       = string
+    network_tier = string
+  })
+  default = null
+}
