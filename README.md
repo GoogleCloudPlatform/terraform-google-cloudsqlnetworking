@@ -71,6 +71,7 @@ examples/2.VPC-Across-VPN/provider.tf.template >examples/2.VPC-Across-VPN/provid
 
 ## Testing
 
+Following sections describes how the examples can be tested in a GCP environment
 
 ### Unit Test
 
@@ -134,3 +135,7 @@ Be sure you have the correct Terraform version (1.5.x), you can choose the binar
 
 ### gcloud
 Ensure you have gcloud already installed [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install)
+
+## Contributions
+
+If you have any specific suggestions or ideas then feel free to share that by creating an issue against this repo.
