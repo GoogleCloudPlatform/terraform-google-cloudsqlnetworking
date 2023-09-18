@@ -129,6 +129,7 @@ Following sections describes how the examples can be tested in a GCP environment
 
 
 ## Installation
+
 ### Terraform
 Be sure you have the correct Terraform version (1.5.x), you can choose the binary here:
 - https://releases.hashicorp.com/terraform/
