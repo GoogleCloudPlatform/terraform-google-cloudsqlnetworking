@@ -15,6 +15,7 @@
 package vpc_across_vpn_test
 
 import (
+	"os"
 	"fmt"
 	"time"
 	"testing"
