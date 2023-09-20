@@ -25,9 +25,9 @@ import (
 )
 
 const terraformDirectoryPath   = "../../../../examples/2.VPC-Across-VPN";
-var host_project_id          = "pm-singleproject-20";
-var service_project_id       = "pm-test-10-e90f";
-var user_project_id          = "pm-singleproject-30";
+var host_project_id          = os.Getenv("TF_VAR_host_project_id");
+var service_project_id       = os.Getenv("TF_VAR_service_project_id");
+var user_project_id          = os.Getenv("TF_VAR_user_project_id");
 var cloudsql_instance_name   = "cn-sqlinstance10-test";
 var network_name             = "cloudsql-easy";
 var subnetwork_name          = "cloudsql-easy-subnet";
@@ -46,10 +46,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	//wait for 60 seconds to allow resources to be available
 	time.Sleep(60 * time.Second)
 	var iteration int;
-	host_project_id          = "pm-singleproject-20";
-	service_project_id       = "pm-test-10-e90f";
 	region                   = "us-central1";
-	user_project_id          = "pm-singleproject-30";
 	cloudsql_instance_name   = "cn-sqlinstance10-test";
 	network_name             = "cloudsql-easy";
 	subnetwork_name          = "cloudsql-easy-subnet";
@@ -203,9 +200,6 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	//wait for 60 seconds to allow resources to be available
 	time.Sleep(60 * time.Second)
 	var iteration int;
-	host_project_id          = "pm-singleproject-20";
-	service_project_id       = "pm-test-10-e90f";
-	user_project_id          = "pm-singleproject-30";
 	cloudsql_instance_name   = "cn-sqlinstance10-test";
 	network_name             = "host-cloudsql-easy";
 	subnetwork_name          = "host-cloudsql-easy-subnet";

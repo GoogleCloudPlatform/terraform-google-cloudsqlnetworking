@@ -25,8 +25,8 @@ import (
 )
 
 const terraformDirectoryPath  = "../../../../examples/1.Host-Service-Project";
-var host_project_id           = "pm-singleproject-20";
-var service_project_id        = "pm-test-10-e90f";
+var host_project_id           = os.Getenv("TF_VAR_host_project_id");
+var service_project_id        = os.Getenv("TF_VAR_service_project_id");
 var cloudsql_instance_name    = "cn-sqlinstance10-test";
 var subnetwork_name           = "cloudsql-easy-subnet";
 var region                    = "us-central1";
@@ -48,8 +48,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 	//wait for 60 seconds to allow resources to be available
 	time.Sleep(60 * time.Second)
 	var iteration int;
-	host_project_id          = "pm-singleproject-20";
-  service_project_id       = "pm-test-10-e90f";
+
 	network_name             := "cloudsql-easy";
 	subnetwork_name          = "cloudsql-easy-subnet";
 	subnetwork_ip_cidr       := "10.2.0.0/16";
@@ -167,8 +166,6 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	time.Sleep(60 * time.Second)
 	var iteration int;
 
-	host_project_id          = "pm-singleproject-20";
-  service_project_id       = "pm-test-10-e90f";
 	network_name             := "host-cloudsql-easy";
 	subnetwork_name          := "host-cloudsql-easy-subnet";
 
