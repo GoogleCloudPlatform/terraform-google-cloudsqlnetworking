@@ -15,6 +15,7 @@
 package vpc_across_vpn_test
 
 import (
+	"os"
 	"testing"
 	"golang.org/x/exp/slices"
 	"github.com/stretchr/testify/assert"
@@ -22,12 +23,12 @@ import (
 )
 
 const terraformDirectoryPath = "../../../../examples/2.VPC-Across-VPN";
-//var host_project_id           = ""; //to be passed as environment variable TF_VAR_host_project_id
-//var service_project_id        = ""; //to be passed as environment variable TF_VAR_service_project_id
+var host_project_id            = os.Getenv("TF_VAR_host_project_id");
+var service_project_id         = os.Getenv("TF_VAR_service_project_id");
 var database_version 				   = "MYSQL_8_0"
 var region                     = "us-central1";
 var zone										   = "us-central1-a";
-//var user_project_id            = ""; //to be passed as environment variable TF_VAR_user_project_id
+var user_project_id            = os.Getenv("TF_VAR_user_project_id");
 var cloudsql_instance_name     = "cn-sqlinstance10-test";
 var network_name               = "cloudsql-easy";
 var subnetwork_name            = "cloudsql-easy-subnet";
@@ -40,8 +41,8 @@ var user_region                = "us-west1"
 var user_zone                  = "us-west1-a"
 var deletion_protection 			 = false
 var tfVars = map[string]interface{}{
-	//"host_project_id"            : host_project_id,
-	//"service_project_id"         : service_project_id,
+	"host_project_id"            : host_project_id,
+	"service_project_id"         : service_project_id,
 	"database_version"           : database_version,
 	"cloudsql_instance_name"     : cloudsql_instance_name,
 	"region"                     : region,
@@ -51,7 +52,7 @@ var tfVars = map[string]interface{}{
 	"network_name"               : network_name,
 	"subnetwork_name"            : subnetwork_name, // this subnetwork will be created
 	"subnetwork_ip_cidr"         : subnetwork_ip_cidr,
-	//"user_project_id"            : user_project_id,
+	"user_project_id"            : user_project_id,
 	"user_region"                : user_region,
 	"user_zone"                  : user_zone,
 	"create_user_vpc_network"    : true,

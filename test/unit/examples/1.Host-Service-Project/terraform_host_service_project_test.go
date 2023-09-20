@@ -15,6 +15,7 @@
 package host_service_test
 
 import (
+	"os"
 	"fmt"
 	"testing"
 	"golang.org/x/exp/slices"
@@ -23,8 +24,8 @@ import (
 )
 
 const terraformDirectoryPath = "../../../../examples/1.Host-Service-Project";
-//var host_project_id           = ""; //to be passed as environment variable TF_VAR_host_project_id
-//var service_project_id        = ""; //to be passed as environment variable TF_VAR_service_project_id
+var host_project_id           = os.Getenv("TF_VAR_host_project_id");
+var service_project_id        = os.Getenv("TF_VAR_service_project_id");
 var cloudsql_instance_name    = "cn-sqlinstance10-test";
 var network_name              = "cloudsql-easy"
 var subnetwork_ip_cidr        = "10.2.0.0/16"
@@ -36,8 +37,8 @@ var database_version 					= "MYSQL_8_0"
 var deletion_protection       = false
 
  var tfVars = map[string]interface{}{
-	//"host_project_id"            : host_project_id,
-	//"service_project_id"         : service_project_id,
+	"host_project_id"            : host_project_id,
+	"service_project_id"         : service_project_id,
 	"database_version"           : database_version,
 	"cloudsql_instance_name"     : cloudsql_instance_name,
 	"region"                     : region,
