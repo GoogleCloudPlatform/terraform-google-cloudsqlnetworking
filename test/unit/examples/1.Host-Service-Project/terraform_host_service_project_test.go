@@ -23,8 +23,8 @@ import (
 )
 
 const terraformDirectoryPath = "../../../../examples/1.Host-Service-Project";
-var host_project_id           = "pm-singleproject-20";
-var service_project_id        = "pm-test-10-e90f";
+var host_project_id           = ""; //to be passed as environment variable TF_VAR_host_project_id
+var service_project_id        = ""; //to be passed as environment variable TF_VAR_service_project_id
 var cloudsql_instance_name    = "cn-sqlinstance10-test";
 var network_name              = "cloudsql-easy"
 var subnetwork_ip_cidr        = "10.2.0.0/16"

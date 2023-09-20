@@ -71,7 +71,17 @@ examples/2.VPC-Across-VPN/provider.tf.template >examples/2.VPC-Across-VPN/provid
 
 ## Testing
 
-Following sections describes how the examples can be tested in a GCP environment
+Following sections describes how the examples can be tested in a GCP environment.
+
+
+### Running locally
+While Running these locally(or in your development machines) make sure you have declared following as the environment variables.
+
+```
+export TF_VAR_host_project_id=<HOST_PROJECT_ID>
+export TF_VAR_service_project_id=<SERVICE_PROJECT_ID>
+export TF_VAR_user_project_id=<USER_PROJECT_ID>
+```
 
 ### Unit Test
 
