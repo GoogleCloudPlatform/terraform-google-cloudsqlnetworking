@@ -25,7 +25,7 @@ variable "subnetwork_project" {
 variable "subnetwork_id" {
   type        = string
   default     = ""
-  description = "Complete subnetwork Id. This is required when var.create_subnetwork is set of false. e.g. : projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet"
+  description = "Complete subnetwork Id. This is required when var.create_subnetwork is set of false. e.g. : projects/<GCP-HOST-PROJECT-ID>/regions/us-central1/subnetworks/cloudsql-easy-subnet"
 }
 
 variable "machine_type" {

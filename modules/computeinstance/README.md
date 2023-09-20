@@ -39,7 +39,7 @@ No modules.
 | <a name="input_source_image_family"></a> [source\_image\_family](#input\_source\_image\_family) | Source image family. If neither source\_image nor source\_image\_family is specified, defaults to the latest public image. | `string` | `"ubuntu-2204-lts"` | no |
 | <a name="input_source_image_project"></a> [source\_image\_project](#input\_source\_image\_project) | Project where the source image comes from. The default project contains images. | `string` | `"ubuntu-os-cloud"` | no |
 | <a name="input_startup_script"></a> [startup\_script](#input\_startup\_script) | User startup script to run when instances spin up | `string` | `""` | no |
-| <a name="input_subnetwork_id"></a> [subnetwork\_id](#input\_subnetwork\_id) | Complete subnetwork Id. This is required when var.create\_subnetwork is set of false. e.g. : projects/pm-singleproject-20/regions/us-central1/subnetworks/cloudsql-easy-subnet | `string` | `""` | no |
+| <a name="input_subnetwork_id"></a> [subnetwork\_id](#input\_subnetwork\_id) | Complete subnetwork Id. This is required when var.create\_subnetwork is set of false. e.g. : projects/<GCP-HOST-PROJECT-ID>/regions/us-central1/subnetworks/cloudsql-easy-subnet | `string` | `""` | no |
 
 ## Outputs
 

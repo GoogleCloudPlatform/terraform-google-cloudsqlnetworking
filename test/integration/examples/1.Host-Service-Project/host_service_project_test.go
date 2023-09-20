@@ -100,7 +100,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 	cloudSqlInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
 	subnetworkId := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",host_project_id,region,subnetwork_name)
 	assert.Equal(t,subnetworkId , output)
-	//gcloud sql instances describe cn-sqlinstance10-u9s --project pm-test-10-e90f "sql","instances","describe","cn-sqlinstance10-u9s","--project","pm-test-10-e90f"
+
 	text := "sql"
 	cmd := shell.Command{
 		Command : "gcloud",

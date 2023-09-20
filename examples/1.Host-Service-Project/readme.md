@@ -40,10 +40,10 @@ This example solution guides user to establish a Host and a service project and 
 
         ```
         provider "google" {
-          impersonate_service_account = "iac-sa@pm-singleproject-20.iam.gserviceaccount.com"
+          impersonate_service_account = "iac-sa@<GCP-HOST-PROJECT-ID>.iam.gserviceaccount.com"
         }
         provider "google-beta" {
-          impersonate_service_account = "iac-sa@pm-singleproject-20.iam.gserviceaccount.com"
+          impersonate_service_account = "iac-sa@<GCP-HOST-PROJECT-ID>.iam.gserviceaccount.com"
         }
         ```
 
@@ -65,8 +65,8 @@ This command creates an execution plan, which lets you preview the changes that 
 
 1. This example leverages the existing network and subnetwork. Network information like network_name, network_id and subnetword_id should be passed in the terraform.tfvars file. The terraform.tfvars should look like
     ```
-    host_project_id        = "pm-singleproject-20"
-    service_project_id     = "pm-test-10-e90f"
+    host_project_id        = "<GCP-HOST-PROJECT-ID>"
+    service_project_id     = "<GCP-SERVICE-PROJECT-ID>"
     database_version       = "MYSQL_8_0"
     cloudsql_instance_name = "cn-sqlinstance10"
     region                 = "us-central1"
@@ -79,8 +79,8 @@ This command creates an execution plan, which lets you preview the changes that 
 
 2. This example creates new network and subnetwork with the provided cidr range.
     ```
-    host_project_id        = "pm-singleproject-20"
-    service_project_id     = "pm-test-10-e90f"
+    host_project_id        = "<GCP-HOST-PROJECT-ID>"
+    service_project_id     = "<GCP-SERVICE-PROJECT-ID>"
     database_version       = "MYSQL_8_0"
     cloudsql_instance_name = "cn-sqlinstance10"
     region                 = "us-central1"

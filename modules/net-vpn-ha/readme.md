@@ -206,7 +206,7 @@ No modules.
 | <a name="input_ha_vpn_gateway2_name"></a> [ha\_vpn\_gateway2\_name](#input\_ha\_vpn\_gateway2\_name) | n/a | `string` | `"ha-vpn-2"` | no |
 | <a name="input_ha_vpn_router1_name"></a> [ha\_vpn\_router1\_name](#input\_ha\_vpn\_router1\_name) | n/a | `string` | `"ha-vpn-router1"` | no |
 | <a name="input_ha_vpn_router2_name"></a> [ha\_vpn\_router2\_name](#input\_ha\_vpn\_router2\_name) | n/a | `string` | `"ha-vpn-router2"` | no |
-| <a name="input_host_network_id"></a> [host\_network\_id](#input\_host\_network\_id) | Complete network Id. This is required when var.create\_network is set of false. e.g. : projects/pm-singleproject-20/global/networks/cloudsql-easy | `string` | n/a | yes |
+| <a name="input_host_network_id"></a> [host\_network\_id](#input\_host\_network\_id) | Complete network Id. This is required when var.create\_network is set of false. e.g. : projects/<GCP-HOST-PROJECT-ID>/global/networks/cloudsql-easy | `string` | n/a | yes |
 | <a name="input_host_project_id"></a> [host\_project\_id](#input\_host\_project\_id) | Project Id of the Host GCP Project. | `string` | n/a | yes |
 | <a name="input_private_ip_address"></a> [private\_ip\_address](#input\_private\_ip\_address) | The IP address or beginning of the address range represented by this resource. | `string` | n/a | yes |
 | <a name="input_private_ip_address_prefix_length"></a> [private\_ip\_address\_prefix\_length](#input\_private\_ip\_address\_prefix\_length) | The prefix length of the IP range. If not present, it means the address field is a single IP address. | `number` | n/a | yes |
@@ -227,7 +227,7 @@ No modules.
 | <a name="input_tunnel2_name"></a> [tunnel2\_name](#input\_tunnel2\_name) | n/a | `string` | `"ha-vpn-tunnel2"` | no |
 | <a name="input_tunnel3_name"></a> [tunnel3\_name](#input\_tunnel3\_name) | n/a | `string` | `"ha-vpn-tunnel3"` | no |
 | <a name="input_tunnel4_name"></a> [tunnel4\_name](#input\_tunnel4\_name) | n/a | `string` | `"ha-vpn-tunnel4"` | no |
-| <a name="input_user_network_id"></a> [user\_network\_id](#input\_user\_network\_id) | Complete network Id. This is required when var.create\_network is set of false. e.g. : projects/pm-singleproject-20/global/networks/cloudsql-easy | `string` | `""` | no |
+| <a name="input_user_network_id"></a> [user\_network\_id](#input\_user\_network\_id) | Complete network Id. This is required when var.create\_network is set of false. e.g. : projects/<GCP-HOST-PROJECT-ID>/global/networks/cloudsql-easy | `string` | `""` | no |
 | <a name="input_user_project_id"></a> [user\_project\_id](#input\_user\_project\_id) | Project Id of the User GCP Project. | `string` | n/a | yes |
 
 ## Outputs
