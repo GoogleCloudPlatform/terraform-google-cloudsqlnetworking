@@ -34,11 +34,6 @@ var zone 											= "us-central1-a";
 var test_dbname               = "test_db"
 var database_version 					= "MYSQL_8_0"
 var deletion_protection       = false
-// var backendConfig  						=  map[string]interface{}{
-// 	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
-// 	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
-// 	"prefix" 											: "test/example1",
-//  }
 
  var tfVars = map[string]interface{}{
 	"host_project_id"            : host_project_id,
@@ -67,7 +62,6 @@ var deletion_protection       = false
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		//BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		Reconfigure : true,
 		Lock: true,
@@ -90,7 +84,6 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
-		//BackendConfig : backendConfig,
 		Reconfigure : true,
 		Lock: true,
 		PlanFilePath: "./plan",
@@ -111,7 +104,6 @@ func TestResourcesCount(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		//BackendConfig : backendConfig,
 		Reconfigure : true,
 		Lock: true,
 		PlanFilePath: "./plan",
@@ -137,7 +129,6 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		//BackendConfig : backendConfig,
 		PlanFilePath: "./plan",
 		Reconfigure : true,
 		Lock: true,

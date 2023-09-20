@@ -40,11 +40,6 @@ var uservpc_network_name     = "user-cloudsql-easy";
 var uservpc_subnetwork_name  = "user-cloudsql-easy-subnet";
 var database_version 					= "MYSQL_8_0"
 var deletion_protection       = false;
-// var backendConfig  						=  map[string]interface{}{
-// 	"impersonate_service_account" : "iac-sa-test@pm-singleproject-20.iam.gserviceaccount.com",
-// 	"bucket" 											: "pm-cncs-cloudsql-easy-networking",
-// 	"prefix" 											: "test/example2",
-//  }
 
 // name the function as Test*
 func TestMySqlPrivateAndVPNModule(t *testing.T) {
@@ -92,9 +87,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		Vars : tfVars,
-		//BackendConfig : backendConfig,
 		TerraformDir: terraformDirectoryPath,
-		//PlanFilePath: "./plan",
 		Reconfigure : true,
 		NoColor: true,
 		Lock: true,
@@ -243,9 +236,7 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		Vars : tfVars,
-		//BackendConfig : backendConfig,
 		TerraformDir: terraformDirectoryPath,
-		//PlanFilePath: "./plan",
 		Reconfigure : true,
 		Lock: true,
 		NoColor: true,
