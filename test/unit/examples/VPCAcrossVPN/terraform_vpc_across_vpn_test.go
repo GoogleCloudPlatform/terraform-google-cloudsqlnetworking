@@ -12,46 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package host_service_test
+package vpcacrossvpntest
 
 import (
 	"os"
-	"fmt"
 	"testing"
 	"golang.org/x/exp/slices"
 	"github.com/stretchr/testify/assert"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-const terraformDirectoryPath = "../../../../examples/1.Host-Service-Project";
-var host_project_id           = os.Getenv("TF_VAR_host_project_id");
-var service_project_id        = os.Getenv("TF_VAR_service_project_id");
-var cloudsql_instance_name    = "cn-sqlinstance10-test";
-var network_name              = "cloudsql-easy"
-var subnetwork_ip_cidr        = "10.2.0.0/16"
-var subnetwork_name           = "cloudsql-easy-subnet";
-var region                    = "us-central1";
-var zone 											= "us-central1-a";
-var test_dbname               = "test_db"
-var database_version 					= "MYSQL_8_0"
-var deletion_protection       = false
-
- var tfVars = map[string]interface{}{
-	"host_project_id"            : host_project_id,
-	"service_project_id"         : service_project_id,
-	"database_version"           : database_version,
-	"cloudsql_instance_name"     : cloudsql_instance_name,
+const terraformDirectoryPath   = "../../../../examples/2.VPC-Across-VPN";
+var hostProjectID              = os.Getenv("TF_VAR_host_project_id");
+var serviceProjectID           = os.Getenv("TF_VAR_service_project_id");
+var databaseVersion 				   = "MYSQL_8_0"
+var region                     = "us-central1";
+var zone										   = "us-central1-a";
+var userProjectID              = os.Getenv("TF_VAR_user_project_id");
+var cloudSQLInstanceName       = "cn-sqlinstance10-test";
+var networkName                = "cloudsql-easy";
+var subnetworkName             = "cloudsql-easy-subnet";
+var subnetworkIPCidr           = "10.2.0.0/16"
+var uservpcNetworkName         = "cloudsql-user"
+var uservpcSubnetworkName      = "cloudsql-user-subnet"
+var uservpcSubnetworkIPCidr    = "10.10.30.0/24"
+var testDbname 							   = "test_db"
+var userRegion                 = "us-west1"
+var userZone                   = "us-west1-a"
+var deletionProtection 			   = false
+var tfVars = map[string]interface{}{
+	"host_project_id"            : hostProjectID,
+	"service_project_id"         : serviceProjectID,
+	"database_version"           : databaseVersion,
+	"cloudsql_instance_name"     : cloudSQLInstanceName,
 	"region"                     : region,
 	"zone"                       : zone,
 	"create_network"             : true,
 	"create_subnetwork"          : true,
-	"network_name"               : network_name,
-	"subnetwork_name"            : subnetwork_name,
-	"subnetwork_ip_cidr"         : subnetwork_ip_cidr,
-	"deletion_protection" 			 : deletion_protection,
-	"test_dbname"                : test_dbname,
+	"network_name"               : networkName,
+	"subnetwork_name"            : subnetworkName, // this subnetwork will be created
+	"subnetwork_ip_cidr"         : subnetworkIPCidr,
+	"user_project_id"            : userProjectID,
+	"user_region"                : userRegion,
+	"user_zone"                  : userZone,
+	"create_user_vpc_network"    : true,
+	"create_user_vpc_subnetwork" : true,
+	"uservpc_network_name"       : uservpcNetworkName,
+	"uservpc_subnetwork_name"    : uservpcSubnetworkName,
+	"uservpc_subnetwork_ip_cidr" : uservpcSubnetworkIPCidr,
+	"test_dbname"                : testDbname,
+	"deletion_protection" 	     : deletionProtection,
+
 }
- func TestInitAndPlanRunWithTfVars(t *testing.T) {
+
+func TestInitAndPlanRunWithTfVars(t *testing.T) {
 	/*
 	 0 = Succeeded with empty diff (no changes)
 	 1 = Error
@@ -63,9 +77,9 @@ var deletion_protection       = false
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		PlanFilePath: "./plan",
 		Reconfigure : true,
 		Lock: true,
+		PlanFilePath: "./plan",
 		NoColor: true,
 		//VarFiles: [] string {"dev.tfvars" },
 	})
@@ -90,11 +104,7 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 		PlanFilePath: "./plan",
 		NoColor: true,
 	})
-	planExitCode, err := terraform.InitAndPlanWithExitCodeE(t, terraformOptions)
-	if err != nil  {
-		fmt.Println("==Error==")
-		fmt.Print(err.Error())
-	}
+	planExitCode := terraform.InitAndPlanWithExitCode(t, terraformOptions)
 	assert.Equal(t, 1, planExitCode)
 }
 
@@ -116,7 +126,7 @@ func TestResourcesCount(t *testing.T) {
 	planStruct := terraform.InitAndPlan(t, terraformOptions)
 
 	resourceCount := terraform.GetResourceCount(t, planStruct)
-	assert.Equal(t,51,resourceCount.Add)
+	assert.Equal(t,91,resourceCount.Add)
 	assert.Equal(t,0,resourceCount.Change)
 	assert.Equal(t,0,resourceCount.Destroy)
 }
@@ -124,15 +134,15 @@ func TestResourcesCount(t *testing.T) {
 func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	// Construct the terraform options with default retryable errors to handle the most common
 	// retryable errors in terraform testing.
-	expectedModulesAddress := [] string {"module.firewall_rules.module.firewall_rules","module.gce_sa","module.host-vpc","module.terraform_service_accounts","module.google_compute_instance","module.sql-db.module.mysql[0]","module.host_project.module.project_services","module.project_services.module.project_services","module.sql-db","module.nat[0]"}
+	expectedModulesAddress := [] string {"module.google_compute_instance","module.sql-db.module.mysql[0]","module.gce_sa","module.host_project_vpn","module.user_project_vpn","module.host-vpc","module.terraform_service_accounts","module.user-vpc","module.project_services.module.project_services","module.firewall_rules.module.firewall_rules","module.user_project_services.module.project_services","module.user_google_compute_instance","module.user_gce_sa","module.host_project.module.project_services","module.sql-db","module.user_firewall_rules.module.firewall_rules","module.user-nat[0]"}
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: terraformDirectoryPath,
 		Vars : tfVars,
-		PlanFilePath: "./plan",
 		Reconfigure : true,
 		Lock: true,
+		PlanFilePath: "./plan",
 		NoColor: true,
 		//VarFiles: [] string {"dev.tfvars" },
 	})
@@ -140,7 +150,6 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 	//plan *PlanStruct
 	planStruct := terraform.InitAndPlanAndShow(t, terraformOptions)
 	content, err := terraform.ParsePlanJSON(planStruct)
-	print("\n\n")
 	actualModuleAddress := make([]string, 0)
 	for _, element := range content.ResourceChangesMap {
 		if !slices.Contains(actualModuleAddress, element.ModuleAddress) && len(element.ModuleAddress) > 0 {

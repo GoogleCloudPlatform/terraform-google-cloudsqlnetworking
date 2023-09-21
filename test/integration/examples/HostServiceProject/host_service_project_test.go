@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package host_service_project_test
+package hostservicetest
 
 import (
 	"os"
@@ -26,15 +26,15 @@ import (
 )
 
 const terraformDirectoryPath  = "../../../../examples/1.Host-Service-Project";
-var host_project_id           = os.Getenv("TF_VAR_host_project_id");
-var service_project_id        = os.Getenv("TF_VAR_service_project_id");
-var cloudsql_instance_name    = "cn-sqlinstance10-test";
-var subnetwork_name           = "cloudsql-easy-subnet";
+var hostProjectID             = os.Getenv("TF_VAR_host_project_id");
+var serviceProjectID          = os.Getenv("TF_VAR_service_project_id");
+var cloudSQLInstanceName      = "cn-sqlinstance10-test";
+var subnetworkName            = "cloudsql-easy-subnet";
 var region                    = "us-central1";
 var zone 											= "us-central1-a";
-var test_dbname               = "test_db"
-var database_version 					= "MYSQL_8_0"
-var deletion_protection       = false;
+var testDbname                = "test_db"
+var databaseVersion 					= "MYSQL_8_0"
+var deletionProtection        = false
 
 /*
 This test creates all the resources including the vpc network and subnetwork along with other
@@ -50,24 +50,24 @@ func TestMySqlPrivateModule(t *testing.T) {
 	time.Sleep(60 * time.Second)
 	var iteration int;
 
-	network_name             := "cloudsql-easy";
-	subnetwork_name          = "cloudsql-easy-subnet";
-	subnetwork_ip_cidr       := "10.2.0.0/16";
+	networkName             := "cloudsql-easy";
+	subnetworkName          = "cloudsql-easy-subnet";
+	subnetworkIPCidr        := "10.2.0.0/16";
 
 	tfVars := map[string]interface{}{
-		"host_project_id"            : host_project_id,
-    "service_project_id"         : service_project_id,
-		"database_version"           : database_version,
-		"cloudsql_instance_name"     : cloudsql_instance_name,
+		"host_project_id"            : hostProjectID,
+		"service_project_id"         : serviceProjectID,
+		"database_version"           : databaseVersion,
+		"cloudsql_instance_name"     : cloudSQLInstanceName,
 		"region"                     : region,
 		"zone"                       : zone,
 		"create_network"             : true,
 		"create_subnetwork"          : true,
-		"network_name"               : network_name,
-		"subnetwork_name"            : subnetwork_name,
-		"subnetwork_ip_cidr"         : subnetwork_ip_cidr,
-		"deletion_protection" 			 : deletion_protection,
-		"test_dbname"                : test_dbname,
+		"network_name"               : networkName,
+		"subnetwork_name"            : subnetworkName,
+		"subnetwork_ip_cidr"         : subnetworkIPCidr,
+		"deletion_protection" 			 : deletionProtection,
+		"test_dbname"                : testDbname,
 	}
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
@@ -94,17 +94,17 @@ func TestMySqlPrivateModule(t *testing.T) {
 	output := terraform.Output(t, terraformOptions, "host_vpc_name")
 
 	fmt.Println(" ========= Verify Subnet Name ========= ")
-	assert.Equal(t, network_name, output)
+	assert.Equal(t, networkName, output)
 	fmt.Println(" ========= Verify Subnetwork Id ========= ")
 	output = terraform.Output(t, terraformOptions, "host_subnetwork_id")
-	cloudSqlInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
-	subnetworkId := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",host_project_id,region,subnetwork_name)
-	assert.Equal(t,subnetworkId , output)
+	cloudSQLInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
+	subnetworkID := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",hostProjectID,region,subnetworkName)
+	assert.Equal(t,subnetworkID , output)
 
 	text := "sql"
 	cmd := shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
+		Args : []string{text,"instances","describe",cloudSQLInstanceName,"--project="+serviceProjectID,"--format=json","--verbosity=none"},
 	}
 	op,err := shell.RunCommandAndGetOutputE(t, cmd)
 	if !gjson.Valid(op) {
@@ -128,20 +128,20 @@ func TestMySqlPrivateModule(t *testing.T) {
 	for {
 		cmd = shell.Command{
 			Command : "gcloud",
-			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
+			Args : []string{"sql","databases","describe",testDbname,"--instance="+cloudSQLInstanceName,"--project="+serviceProjectID,"--format=json","--verbosity=none"},
 		}
 		op,err = shell.RunCommandAndGetOutputE(t, cmd)
 		if err == nil || iteration > 3 {
 			break
 		} else {
-			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", test_dbname, cloudSqlInstanceName, service_project_id)
+			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", testDbname, cloudSQLInstanceName, serviceProjectID)
 		}
 		time.Sleep(60 * time.Second)
 		iteration++;
 	}
 
 	if err != nil {
-		t.Fatalf("Expected Database Name : %s at Cloudsql Instance :%s does not exists in Project : %s ", test_dbname, cloudSqlInstanceName, service_project_id)
+		t.Fatalf("Expected Database Name : %s at Cloudsql Instance :%s does not exists in Project : %s ", testDbname, cloudSQLInstanceName, serviceProjectID)
 	}
 	if !gjson.Valid(op) {
 		t.Fatalf("Error parsing output, invalid json: %s", op)
@@ -150,7 +150,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 	if err != nil {
 		fmt.Sprintf("=== Error %s Encountered while executing %s", err ,text)
 	}
-	assert.Equal(t, test_dbname, gjson.Get(result.String(),"name").String())
+	assert.Equal(t, testDbname, gjson.Get(result.String(),"name").String())
 }
 
 /*
@@ -167,22 +167,22 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	time.Sleep(60 * time.Second)
 	var iteration int;
 
-	network_name             := "host-cloudsql-easy";
-	subnetwork_name          := "host-cloudsql-easy-subnet";
+	networkName             := "host-cloudsql-easy";
+	subnetworkName          := "host-cloudsql-easy-subnet";
 
 	tfVars := map[string]interface{}{
-		"host_project_id"            : host_project_id,
-    "service_project_id"         : service_project_id,
-		"database_version"           : database_version,
-		"cloudsql_instance_name"     : cloudsql_instance_name,
+		"host_project_id"            : hostProjectID,
+		"service_project_id"         : serviceProjectID,
+		"database_version"           : databaseVersion,
+		"cloudsql_instance_name"     : cloudSQLInstanceName,
 		"region"                     : region,
 		"zone"                       : zone,
 		"create_network"             : false,
 		"create_subnetwork"          : false,
-		"network_name"               : network_name,
-		"subnetwork_name"            : subnetwork_name,
-		"deletion_protection" 			 : deletion_protection,
-		"test_dbname"                : test_dbname,
+		"network_name"               : networkName,
+		"subnetwork_name"            : subnetworkName,
+		"deletion_protection" 			 : deletionProtection,
+		"test_dbname"                : testDbname,
 	}
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
@@ -200,21 +200,21 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	text := "compute"
 	cmd := shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"networks","describe",network_name,"--project="+host_project_id,"--format=json","--verbosity=none"},
+		Args : []string{text,"networks","describe",networkName,"--project="+hostProjectID,"--format=json","--verbosity=none"},
 	}
 	op,err := shell.RunCommandAndGetOutputE(t, cmd)
 	if err != nil {
-		t.Fatalf("Expected Network : %s does not exists in Project : %s ", network_name, host_project_id)
+		t.Fatalf("Expected Network : %s does not exists in Project : %s ", networkName, hostProjectID)
 	}
 
 	//validate if the subnet already exists in host project
 	cmd = shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"networks","subnets","describe",subnetwork_name,"--project="+host_project_id,"--region="+region,"--format=json","--verbosity=none"},
+		Args : []string{text,"networks","subnets","describe",subnetworkName,"--project="+hostProjectID,"--region="+region,"--format=json","--verbosity=none"},
 	}
 	op,err = shell.RunCommandAndGetOutputE(t, cmd)
 	if err != nil {
-		t.Fatalf("Expected Sub network : %s does not exists in Project : %s ", subnetwork_name, host_project_id)
+		t.Fatalf("Expected Sub network : %s does not exists in Project : %s ", subnetworkName, hostProjectID)
 	}
 
 
@@ -231,17 +231,17 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	output := terraform.Output(t, terraformOptions, "host_vpc_name")
 
 	fmt.Println(" ========= Verify Subnet Name ========= ")
-	assert.Equal(t, network_name, output)
+	assert.Equal(t, networkName, output)
 
 	fmt.Println(" ========= Verify Subnetwork Id ========= ")
 	output = terraform.Output(t, terraformOptions, "host_subnetwork_id")
-	cloudSqlInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
-	subnetworkId := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",host_project_id,region,subnetwork_name)
-	assert.Equal(t,subnetworkId , output)
+	cloudSQLInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
+	subnetworkID := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",hostProjectID,region,subnetworkName)
+	assert.Equal(t,subnetworkID , output)
 	text = "sql"
 	cmd = shell.Command{
 		Command : "gcloud",
-		Args : []string{text,"instances","describe",cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
+		Args : []string{text,"instances","describe",cloudSQLInstanceName,"--project="+serviceProjectID,"--format=json","--verbosity=none"},
 	}
 	op,err = shell.RunCommandAndGetOutputE(t, cmd)
 	if !gjson.Valid(op) {
@@ -265,20 +265,20 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	for {
 		cmd = shell.Command{
 			Command : "gcloud",
-			Args : []string{"sql","databases","describe",test_dbname,"--instance="+cloudSqlInstanceName,"--project="+service_project_id,"--format=json","--verbosity=none"},
+			Args : []string{"sql","databases","describe",testDbname,"--instance="+cloudSQLInstanceName,"--project="+serviceProjectID,"--format=json","--verbosity=none"},
 		}
 		op,err = shell.RunCommandAndGetOutputE(t, cmd)
 		if err == nil || iteration > 3 {
 			break
 		} else {
-			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", test_dbname, cloudSqlInstanceName, service_project_id)
+			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", testDbname, cloudSQLInstanceName, serviceProjectID)
 		}
 		time.Sleep(60 * time.Second)
 		iteration++;
 	}
 
 	if err != nil {
-		t.Fatalf("Expected Database Name : %s at Cloudsql Instance :%s does not exists in Project : %s ", test_dbname, cloudSqlInstanceName, service_project_id)
+		t.Fatalf("Expected Database Name : %s at Cloudsql Instance :%s does not exists in Project : %s ", testDbname, cloudSQLInstanceName, serviceProjectID)
 	}
 	if !gjson.Valid(op) {
 		t.Fatalf("Error parsing output, invalid json: %s", op)
@@ -287,5 +287,5 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	if err != nil {
 		fmt.Sprintf("=== Error %s Encountered while executing %s", err ,text)
 	}
-	assert.Equal(t, test_dbname, gjson.Get(result.String(),"name").String())
+	assert.Equal(t, testDbname, gjson.Get(result.String(),"name").String())
 }

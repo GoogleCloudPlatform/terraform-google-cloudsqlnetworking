@@ -1,0 +1,6 @@
+name: "terraform-google-cloudsqlnetworking"
+description: "This directory contains solution to makes it easier to create & manage the Google Cloud SQL instance along with dependent resources like cloud networking etc."
+
+third_party {
+  type: GROUP
+}
