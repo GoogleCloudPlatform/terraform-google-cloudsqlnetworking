@@ -1,10 +1,29 @@
 ## Introduction
 
-This example solution guides user to establish a HA VPN Connection between a user Project and a Host project having a service project attached to this Host Project.
+This example solution guides you to create a highly available (HA) VPN connection between a user project and a host project with a service project attached. The solution then establishes a Cloud SQL connection using the private IP address of a Cloud SQL instance created in the service project and a VM instance created in the user project.
 
-A third GCP Project is used an HA VPN Connection is established between the VPC of user project and the VPC of host project.
+This solution allows you to securely access Cloud SQL instances in a service project from a user project, without exposing the Cloud SQL instances to the public internet.
 
-A cloudsql connection is then established using private ip of cloud sql which is created inside the service project and between a VM instance created inside the user project.
+
+Here is a brief overview of the things being created by the terraform solution :
+
+1. Creates VPC Network and subnets in the Host Project and the User project.
+2. Configures the HA VPN connection.
+3. Creates a Cloud SQL instance in the service project.
+4. Creates a VM instance in the user project.
+5. Establishes a connection the Cloud SQL instance from the VM instance.
+
+### Benefits:
+
+- Securely access Cloud SQL instances in a service project from a user project
+- Improve performance and reliability by using HA VPN
+- Reduce costs by avoiding public IP addresses
+
+### Use cases:
+
+- Developing and testing applications that use Cloud SQL
+- Running production applications that use Cloud SQL
+- Connecting to Cloud SQL instances from on-premises networks
 
 ## Architecture
 
