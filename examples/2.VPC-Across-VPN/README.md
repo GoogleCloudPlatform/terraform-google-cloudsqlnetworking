@@ -5,10 +5,10 @@ This  solution guides user to create a highly available (HA) VPN connection betw
 This solution allows you to securely access Cloud SQL instances in a service project from a user project, without exposing the Cloud SQL instances to the public internet.
 
 
-Here is a brief overview of the resources being managed by the terraform solution :
+Here is a brief overview of the things being created by the terraform solution :
 
-1. Creates a VPC Network and its subnets in the Host Project and the User project.
-2. Configures an HA VPNconnection.
+1. Creates a VPC Network and subnets in the Host Project and the User project.
+2. Configures an HA VPN connection.
 3. Creates a Cloud SQL instance in the service project.
 4. Creates a VM instance in the user project.
 5. Establishes a connection the Cloud SQL instance from the VM instance.

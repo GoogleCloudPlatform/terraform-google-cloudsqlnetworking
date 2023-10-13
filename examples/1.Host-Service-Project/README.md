@@ -2,10 +2,12 @@
 
 This solution guides user through the steps to establish a host and a service project, create a Cloud SQL instance and a VM instance in the service project, and connect the VM instance to the Cloud SQL instance using the VM's private IP address. The host project contains the VPC, subnets, and firewall rules.
 
-Here is a brief overview of the resources being managed by the terraform solution :
+This example solution guides you through the steps to establish a host and service project, create a Cloud SQL instance and a VM instance in the service project, and connect the VM instance to the Cloud SQL instance using the VM's private IP address. The host project contains the VPC, subnets, and firewall rules.
 
-1. Create a VPC Network and its subnets in the Host Project.
-2. Establish a host and a service project.
+Here is a brief overview of the things being created by the terraform solution :
+
+1. Create VPC Network and subnets in the Host Project.
+2. Establish a host and service project.
 3. Creates a Cloud SQL instance in the service project.
 4. Creates a VM instance in the service project.
 5. Establishes a connection between the VM instance to the Cloud SQL instance using the private IP address.
