@@ -1,6 +1,18 @@
 ## Introduction
 
-This example solution guides user to establish a Host and a service project and established a cloudsql connection between a VM instance and the cloud sql instance using the private ip of the compute instance. CloudSql and Compute instance are created in the service project and the host project contains the vpc, subnets, firewall rules etc.
+This solution guides users through the steps to establish a host and a service project, create a Cloud SQL instance and a VM instance in the service project, and connect the VM instance to the Cloud SQL instance using the VM's private IP address. The host project contains the VPC networks, subnets and firewall rules.
+
+
+Here is a brief overview of the components being created by the terraform solution :
+
+1. Creates a VPC Network and subnets in the host project.
+2. Establishes a host and a service project.
+3. Creates a Cloud SQL instance in the service project.
+4. Creates a VM instance in the service project.
+5. Establishes a connection between the VM instance to the Cloud SQL instance using the private IP address.
+
+This example solution is a good starting point for anyone who needs to quickly and easily connect a VM instance to a Cloud SQL instance using private IP address of the cloud sql instance.
+
 
 ## Architecture
 
