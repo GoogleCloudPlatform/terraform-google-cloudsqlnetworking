@@ -15,7 +15,7 @@ jobs:
     - uses: actions/stale@v8
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'This issue is stale because it has been open 60 days with no activity. Remove stale label or comment or this will be closed in 7 days'
-        stale-pr-message: 'This PR is stale because it has been open 60 days with no activity. Remove stale label or comment or this will be closed in 7 days'
+        stale-issue-message: 'This issue is stale because it has been open for 60 days without activity. Remove the stale label or comment on this issue otherwise this issue will be auto-closed in 7 days.'
+        stale-pr-message: 'This PR is stale because it has been open for 60 days without activity. Remove the stale label or comment on this issue otherwise this issue will be auto-closed in 7 days.'
         exempt-issue-labels: triaged
         stale-pr-label: 'no-pr-activity'
