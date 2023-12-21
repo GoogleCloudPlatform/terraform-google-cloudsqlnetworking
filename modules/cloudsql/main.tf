@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2023-2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ module "mysql" {
   version             = "17.1.0"
   name                = "${var.name}-${random_string.mysql_random_suffix[0].result}"
   database_version    = var.database_version
+  region              = var.region
   zone                = var.zone
   project_id          = var.project_id
   ip_configuration    = var.ip_configuration
@@ -37,6 +38,7 @@ module "mssql" {
   version             = "17.1.0"
   name                = "${var.name}-${random_string.mssql_random_suffix[0].result}"
   database_version    = var.database_version
+  region              = var.region
   zone                = var.zone
   project_id          = var.project_id
   ip_configuration    = var.ip_configuration
@@ -54,6 +56,7 @@ module "postgresql" {
   version             = "17.1.0"
   name                = "${var.name}-${random_string.postgresql_random_suffix[0].result}"
   database_version    = var.database_version
+  region              = var.region
   zone                = var.zone
   project_id          = var.project_id
   ip_configuration    = var.ip_configuration

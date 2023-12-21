@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "sql-db" {
+module "sql_db" {
   source              = "../../modules/cloudsql"
   name                = var.cloudsql_instance_name
   database_version    = var.database_version
-  zone                = var.zone
   region              = var.region
-  project_id          = var.service_project_id
+  zone                = var.zone
+  project_id          = var.service_project_id == null ? var.host_project_id : var.service_project_id
   ip_configuration    = local.ip_configuration
   deletion_protection = var.deletion_protection
-  create_mysql_db     = true
+  create_mysql_db     = var.create_mysql_db
   depends_on = [
-    module.host-vpc
+    module.host_vpc
   ]
 }

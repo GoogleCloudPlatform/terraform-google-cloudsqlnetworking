@@ -16,6 +16,7 @@ module "sql_db" {
   source              = "../../modules/cloudsql"
   name                = var.cloudsql_instance_name
   database_version    = var.database_version
+  region              = var.region
   zone                = var.zone
   project_id          = var.producer_project_id
   ip_configuration    = local.ip_configuration

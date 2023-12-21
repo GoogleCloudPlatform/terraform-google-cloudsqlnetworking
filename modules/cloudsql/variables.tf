@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2023-2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@ variable "project_id" {
 variable "name" {
   type        = string
   description = "Name of the cloud sql instance which will be created."
+}
+
+variable "region" {
+  type        = string
+  description = "Name of a GCP region."
 }
 
 variable "zone" {

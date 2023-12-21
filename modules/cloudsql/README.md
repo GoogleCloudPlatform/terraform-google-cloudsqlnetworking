@@ -37,6 +37,7 @@ No requirements.
 | <a name="input_ip_configuration"></a> [ip\_configuration](#input\_ip\_configuration) | The ip configuration for the master instances. | <pre>object({<br>    authorized_networks                           = optional(list(map(string)))<br>    ipv4_enabled                                  = bool<br>    private_network                               = optional(string)<br>    require_ssl                                   = optional(bool)<br>    allocated_ip_range                            = optional(string)<br>    enable_private_path_for_google_cloud_services = optional(bool)<br>    psc_enabled                                   = optional(bool)<br>    psc_allowed_consumer_projects                 = optional(list(string))<br>  })</pre> | <pre>{<br>  "allocated_ip_range": null,<br>  "authorized_networks": [],<br>  "enable_private_path_for_google_cloud_services": false,<br>  "ipv4_enabled": true,<br>  "private_network": null,<br>  "psc_allowed_consumer_projects": [],<br>  "psc_enabled": false,<br>  "require_ssl": null<br>}</pre> | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the cloud sql instance which will be created. | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project Id of the GCP Project. | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Name of a GCP region. | `string` | n/a | yes |
 | <a name="input_zone"></a> [zone](#input\_zone) | Name of a GCP zone, should be in the same region as specified in the region variable. | `string` | n/a | yes |
 
 ## Outputs
@@ -44,6 +45,7 @@ No requirements.
 | Name | Description |
 |------|-------------|
 | <a name="output_cloudsql_instance_psc_attachment"></a> [cloudsql\_instance\_psc\_attachment](#output\_cloudsql\_instance\_psc\_attachment) | The psc\_service\_attachment\_link created for the master instance |
+| <a name="output_cloudsql_instance_details"></a> [cloudsql\_instance\_details](#output\_cloudsql\_instance\_details) | Details of the cloud sql instance created. |
 | <a name="output_mssql_cloudsql_instance_name"></a> [mssql\_cloudsql\_instance\_name](#output\_mssql\_cloudsql\_instance\_name) | Name of the cloud sql instance created in the service project. |
 | <a name="output_mysql_cloudsql_instance_details"></a> [mysql\_cloudsql\_instance\_details](#output\_mysql\_cloudsql\_instance\_details) | Details of the cloud sql instance created in the service project. |
 | <a name="output_mysql_cloudsql_instance_name"></a> [mysql\_cloudsql\_instance\_name](#output\_mysql\_cloudsql\_instance\_name) | Name of the cloud sql instance created in the service project. |

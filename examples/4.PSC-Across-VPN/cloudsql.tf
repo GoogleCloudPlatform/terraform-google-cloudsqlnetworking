@@ -17,6 +17,7 @@ module "sql_db" {
   name                = var.cloudsql_instance_name
   database_version    = var.database_version
   zone                = var.zone
+  region              = var.region
   project_id          = var.producer_project_id
   ip_configuration    = local.ip_configuration
   deletion_protection = var.deletion_protection
