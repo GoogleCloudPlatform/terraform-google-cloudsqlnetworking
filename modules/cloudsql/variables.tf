@@ -32,15 +32,18 @@ variable "database_version" {
   description = "Database version of the mysql in Cloud SQL ."
 }
 
+
 variable "ip_configuration" {
   description = "The ip configuration for the master instances."
   type = object({
-    authorized_networks                           = list(map(string))
+    authorized_networks                           = optional(list(map(string)))
     ipv4_enabled                                  = bool
-    private_network                               = string
-    require_ssl                                   = bool
-    allocated_ip_range                            = string
+    private_network                               = optional(string)
+    require_ssl                                   = optional(bool)
+    allocated_ip_range                            = optional(string)
     enable_private_path_for_google_cloud_services = optional(bool)
+    psc_enabled                                   = optional(bool)
+    psc_allowed_consumer_projects                 = optional(list(string))
   })
   default = {
     authorized_networks                           = []
@@ -49,6 +52,8 @@ variable "ip_configuration" {
     require_ssl                                   = null
     allocated_ip_range                            = null
     enable_private_path_for_google_cloud_services = false
+    psc_enabled                                   = false
+    psc_allowed_consumer_projects                 = []
   }
 }
 
@@ -64,12 +69,11 @@ variable "create_mssql_db" {
   description = "Flag to check if an mssql db needs to be created"
 }
 
-variable "create_postgressql_db" {
+variable "create_postgresql_db" {
   type        = bool
   default     = false
-  description = "Flag to check if an postgressql db needs to be created"
+  description = "Flag to check if an postgresql db needs to be created"
 }
-
 
 variable "deletion_protection" {
   type        = bool

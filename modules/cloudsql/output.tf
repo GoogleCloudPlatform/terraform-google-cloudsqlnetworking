@@ -28,6 +28,12 @@ output "mssql_cloudsql_instance_name" {
 }
 
 output "postgres_cloudsql_instance_name" {
-  value       = var.create_postgressql_db == true ? module.postgresql[0].instance_name : null
+  value       = var.create_postgresql_db == true ? module.postgresql[0].instance_name : null
   description = "Name of the cloud sql instance created in the service project."
+}
+
+output "cloudsql_instance_psc_attachment" {
+  value       = var.create_mysql_db == true ? module.mysql[0].instance_psc_attachment : module.postgresql[0].instance_psc_attachment
+  description = "The psc_service_attachment_link created for the master instance"
+  sensitive   = false
 }

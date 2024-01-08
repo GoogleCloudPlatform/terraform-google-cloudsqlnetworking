@@ -26,7 +26,8 @@ resource "google_compute_instance" "compute_instance" {
     }
   }
   network_interface {
-    subnetwork = var.subnetwork_id
+    subnetwork         = var.subnetwork_id
+    subnetwork_project = var.subnetwork_project
     dynamic "access_config" {
       for_each = var.access_config == null ? [] : [1]
       content {

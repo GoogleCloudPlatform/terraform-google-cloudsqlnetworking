@@ -3,8 +3,7 @@
 
 Streamline your Google Cloud SQL instance deployment and management with this comprehensive Terraform module repository. This repository simplifies Google Cloud networking configuration for Cloud SQL instances. It bundles Terraform modules to make it easier to create and manage Cloud SQL instances and all dependent resources, such as cloud networking resources, IAM policies and service accounts.
 
-This repository contains easy-to-use Terraform modules that would help you set up all the prerequisites components required to consume Cloud SQL with private IP in a GCP project. The modules make it easy to manage Cloud SQL and all relevant GCP resources.
-This solution will help different users like database administrators and application engineers who want to quickly configure Cloud SQL with cloud networking.
+This repository contains easy-to-use Terraform modules that would help you set up all the prerequisites components required to consume Cloud SQL with private IP in a GCP project. The modules make it easy to manage Cloud SQL and all relevant GCP resources. This solution will help different users like database administrators and application engineers who want to quickly configure Cloud SQL with cloud networking.
 
 Here are some specific benefits of using this repository:
 
@@ -35,6 +34,12 @@ Many examples are included in the [examples](./examples/) folder which describes
 
 2. [VPC across VPN Tunnel Scenario](./examples/2.VPC-Across-VPN) : This solution guides user to create a highly available (HA) VPN connection between a user project and a host project with a service project attached. The solution then establishes a Cloud SQL connection using the private IP address of Cloud SQL instance created in the service project and a VM instance created in the user project.
 
+3. [PSC across VPN Scenario](./examples/3.PSC) : This solution guides a user to create a PSC enabled Cloud SQL instance with a consumer and producer project setup having a compute VM instance created in the consumer project connecting to the Cloud SQL instance through PSC service endpoint. The consumer project contains the consumer VPC, service endpoint & firewall rules to connect to the SQL instance in the producer project.
+
+4. [PSC across VPN Scenario](./examples/4.PSC-Across-VPN) : This solution guides a user to create a HA VPN connection between user and consumer project to connect to a PSC enabled Cloud SQL instance in a producer project from a compute VM instance through PSC service endpoint. The compute instance in the consumer project connects to the PSC service endpoint via the VPN connection. The PSC service endpoint connects to the Cloud SQL instance.
+
+All [GA offerings](https://cloud.google.com/sql/docs/sqlserver/private-ip) for Cloud SQL (MySQL, PostgreSQL, MSSQL) are supported through our solutions. 
+
 ## Variables
 
 To control module's behavior, change variables' values. Behavior of each of these variables has been documented in the readme file for the respective examples. Some of the common variables has been described below but the respective readme file should act as reference point as it describe about them in more details:
@@ -63,7 +68,7 @@ Each providers.tf file carries information like service account to be impersonat
 
 Following are sample commands that can be used to update the existing provider.tf.template file to create an provider.tf file.
 
-1. For example1 - Host- Service project scenario
+- For example1 - Host- Service project scenario
 
 ```
 export _TF_SERVICE_ACCOUNT="<ENTER THE SERVICE ACCOUNT HERE>"
@@ -77,7 +82,7 @@ sed \
 examples/1.Host-Service-Project/provider.tf.template > examples/1.Host-Service-Project/provider.tf
 ```
 
-1. For example2 - VPC Across VPN scenario
+- For example2 - VPC Across VPN scenario
 
 ```
 export _TF_SERVICE_ACCOUNT="<ENTER THE SERVICE ACCOUNT HERE>"
@@ -91,17 +96,54 @@ sed \
 examples/2.VPC-Across-VPN/provider.tf.template >examples/2.VPC-Across-VPN/provider.tf
 ```
 
+- For Example 3 - PSC
+
+```
+export _TF_SERVICE_ACCOUNT="<ENTER THE SERVICE ACCOUNT HERE>"
+export _TF_BUCKET_NAME="<ENTER THE GCS BUCKET NAME HERE>"
+export _TF_EXAMPLE3_PREFIX="<ENTER THE GCS PREFIX NAME HERE>"
+
+sed \
+-e "s|ENTER_TF_SERVICE_ACCOUNT|$_TF_SERVICE_ACCOUNT|" \
+-e "s|ENTER_TF_BUCKET_NAME|$_TF_BUCKET_NAME|" \
+-e "s|ENTER_TF_EXAMPLE3_PREFIX|$_TF_EXAMPLE3_PREFIX|" \
+examples/3.PSC/provider.tf.template >examples/3.PSC/provider.tf
+```
+
+- For Example 4 - PSC Across VPN
+
+```
+export _TF_SERVICE_ACCOUNT="<ENTER THE SERVICE ACCOUNT HERE>"
+export _TF_BUCKET_NAME="<ENTER THE GCS BUCKET NAME HERE>"
+export _TF_EXAMPLE4_PREFIX="<ENTER THE GCS PREFIX NAME HERE>"
+
+sed \
+-e "s|ENTER_TF_SERVICE_ACCOUNT|$_TF_SERVICE_ACCOUNT|" \
+-e "s|ENTER_TF_BUCKET_NAME|$_TF_BUCKET_NAME|" \
+-e "s|ENTER_TF_EXAMPLE4_PREFIX|$_TF_EXAMPLE4_PREFIX|" \
+examples/4.PSC-Across-VPN/provider.tf.template >examples/4.PSC-Across-VPN/provider.tf
+```
+
 ## Testing
 
 Following sections describes how the examples can be tested in a GCP environment.
 
 
 ### Running locally
-While Running these locally(or in your development machines) make sure you have declared following as the environment variables.
+
+While Running these locally (or in your development machines) make sure you have declared the following as the environment variables: 
 
 ```
 export TF_VAR_host_project_id=<HOST_PROJECT_ID>
 export TF_VAR_service_project_id=<SERVICE_PROJECT_ID>
+export TF_VAR_user_project_id=<USER_PROJECT_ID>
+```
+
+For PSC based examples : 
+
+```
+export TF_VAR_consumer_project_id=<CONSUMER_PROJECT_ID>
+export TF_VAR_producer_project_id=<PRODUCER_PROJECT_ID>
 export TF_VAR_user_project_id=<USER_PROJECT_ID>
 ```
 
@@ -161,6 +203,7 @@ export TF_VAR_user_project_id=<USER_PROJECT_ID>
 
 
 ## Installation
+
 ### Terraform
 Be sure you have the correct Terraform version (1.5.x), you can choose the binary here:
 - https://releases.hashicorp.com/terraform/
