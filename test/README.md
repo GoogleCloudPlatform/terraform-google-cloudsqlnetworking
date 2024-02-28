@@ -1,11 +1,10 @@
-
 ## Testing
 
-Following sections describes how the examples can be tested in a GCP environment.
+The following sections describe how the examples can be tested in a Google Cloud Platform environment. There would be unit & integration tests for each example in this directory.
 
+### Tests - Environment Variables
 
-### Running locally
-While Running these locally(or in your development machines) make sure you have declared following as the environment variables.
+While running these tests locally (or in your development machines) make sure you have declared following as the environment variables.
 
 - For HostServiceProject and VPCAcrossVPN :
 
@@ -31,26 +30,29 @@ export TF_VAR_host_project_id=<HOST_PROJECT_ID>
 export deployed_interconnect_name=<DEPLOYED_INTERCONNECT_NAME>
 ```
 
-### Unit Test
+### Unit Testing
 
+#### Running all the unit tests
 
-#### Running all the unit test
+To run all the tests/functions under the unit testing directory for the example, please follow these steps:
 
 1. cd REPO_NAME
 2. go mod init test
 3. go mod tidy
 4. **go test -v -json ./... | ./test-summary**
 
-    **Note :** test-summary is used to provide summary of the test results. More details [here](https://pkg.go.dev/gocloud.dev/internal/testing/test-summary)
+    **Note :** [test-summary](https://pkg.go.dev/gocloud.dev/internal/testing/test-summary) is used to provide summary of the test results.
 
+#### Running specific tests
 
-#### Running Example specific test
+To run specific tests/functions under the unit testing directory for the example, please follow these steps:
+
 1. cd /tests/unit/examples/SCENARIO_NAME
 2. go mod init test
 3. go mod tidy
-4. **go test -timeout 12m -v**
+4. **go test -timeout 15m -v**
 
-    **e.g.** Here is an example demonstrating how a unit test for scenario 1 can be executed
+    **e.g.** Here is an example demonstrating how a unit test for example 1 can be executed :
     ```
     cd /tests/unit/examples/1.Host-Service-Project
     go mod init test
@@ -58,26 +60,31 @@ export deployed_interconnect_name=<DEPLOYED_INTERCONNECT_NAME>
     go test -timeout 12m -v
     ```
 
-### Integration Test
+### Integration Testing
 
+#### Running all the integration tests
 
-#### Running all the integration test
+To run all the tests/functions under the integration testing directory for the example, please follow these steps:
 
 1. cd REPO_NAME
 2. go mod init test
 3. go mod tidy
 4. **go test -v -json -timeout 60m ./... | ./test-summary**
 
-    **Note :** test-summary is used to provide summary of the test results. More details [here](https://pkg.go.dev/gocloud.dev/internal/testing/test-summary)
+    **Note :** [test-summary](https://pkg.go.dev/gocloud.dev/internal/testing/test-summary) is used to provide summary of the test results.
 
 
-#### Running Example specific test
-1. cd /tests/unit/examples/SCENARIO_NAME
+#### Running specific tests
+
+To run specific tests/functions under the integration testing directory for the example, please follow these steps:
+
+1. cd /tests/integration/examples/SCENARIO_NAME
 2. go mod init test
 3. go mod tidy
 4. **go test -timeout 60m -v**
 
-    **e.g.** Here is an example demonstrating how a unit test for scenario 1 can be executed
+    **e.g.** Here is an example demonstrating how an integration test for scenario 1 can be executed:
+
     ```
     cd /tests/integration/examples/1.Host-Service-Project
     go mod init test

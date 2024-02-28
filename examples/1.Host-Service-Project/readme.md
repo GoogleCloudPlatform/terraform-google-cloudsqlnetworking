@@ -1,18 +1,16 @@
 ## Introduction
 
-This solution guides users through the steps to establish a host and a service project, create a Cloud SQL instance and a VM instance in the service project, and connect the VM instance to the Cloud SQL instance using the VM's private IP address. The host project contains the VPC networks, subnets and firewall rules.
-
+This solution guides users to establish a private connection between Cloud SQL instance and Compute Engine instance by setting up a host and a service project, creating a Cloud SQL instance and a Compute Engine instance in the service project, and connecting the Compute Engine instance to the Cloud SQL instance using the VM's private IP address. The host project contains the VPC networks, subnets and firewall rules.
 
 Here is a brief overview of the components being created by the terraform solution :
 
-1. Creates a VPC Network and subnets in the host project.
-2. Establishes a host and a service project.
-3. Creates a Cloud SQL instance in the service project.
-4. Creates a VM instance in the service project.
-5. Establishes a connection between the VM instance to the Cloud SQL instance using the private IP address.
+1. Creates a VPC Network and subnets in the host project
+2. Establishes a host and a service project
+3. Creates a Cloud SQL instance in the service project
+4. Creates a Compute Engine instance in the service project
+5. Establishes a connection between the Compute Engine instance to the Cloud SQL instance using the private IP address
 
-This example solution is a good starting point for anyone who needs to quickly and easily connect a VM instance to a Cloud SQL instance using private IP address of the cloud sql instance.
-
+This example is a good starting point for anyone who needs to quickly and easily connect a Compute Engine instance to a Cloud SQL instance using private IP address of the Cloud SQL instance.
 
 ## Architecture
 
@@ -20,9 +18,9 @@ This example solution is a good starting point for anyone who needs to quickly a
 
 ## Pre-requisite
 
-1. User should have terraform and gcloud installed in the machine from which they plan to execute this script. Here are the link that describes the [terraform installation](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/install-cli) steps and [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install) .
-2. User should have two GCP projects which will be used as part of this guide. First GCP project will act as a Host Project and the Second GCP Project will act as a Service Project.
-3. User planning to run this script should have following permissions asssigned to them in the respective projects as described below. User can either use webconsole or gcloud cli to assign these permission to the user identity using which these scripts will be executed. User can follow either step `3.a.` or `3.b.` or `3.c.` to complete this step.
+1. User should have [terraform](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/install-cli) and [gcloud SDK](https://cloud.google.com/sdk/docs/install) installed in the machine from which they plan to execute this script.
+2. User should have two Google Cloud projects which will be used as part of this guide. One of the Google Cloud project will act as a Host Project and the other will act as a Service Project.
+3. User planning to run this script should have following permissions asssigned to them in the respective projects as described below. User can either use Google Cloud Platform console or gcloud SDK to assign these permission to the user identity using which these scripts will be executed. User can follow either step `3.a.` or `3.b.` or `3.c.` to complete this step.
    - **Host Project**
       - roles/compute.networkAdmin
       - roles/compute.securityAdmin
@@ -36,15 +34,15 @@ This example solution is a good starting point for anyone who needs to quickly a
       - roles/serviceusage.serviceUsageAdmin
       - roles/resourcemanager.projectIamAdmin
    - **Compute XpnPermission**
-      - User should have `roles/compute.xpnAdmin` permission at a common folder owning the host and service project. Here is a [link](https://cloud.google.com/compute/docs/access/iam#compute.xpnAdmin) describing the same. This is required to associate the service project with the host project.
+      - User should have `roles/compute.xpnAdmin` [permission](https://cloud.google.com/compute/docs/access/iam#compute.xpnAdmin) at a common folder owning the host and service project. This is required to associate the service project with the host project.
 
      a. **Using Webconsole** : User can either use [GCP web console](https://cloud.google.com/iam/docs/grant-role-console) to assign the IAM permission to the user who plans to run this script.
 
-     b. **Using gcloud cli** : User can either use [gcloud cli](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign IAM permission to the user who plans to run the script.
+     b. **Using gcloud SDK** : User can either use [gcloud SDK](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign IAM permission to the user who plans to run the script.
 
-     c. **[Optionally]** There is a helper script provided which can be used to create a service account with relevant permission at location `cloudsql-easy-networking/helper-scripts/1.createserviceaccount.sh`.
+     c. **[Optionally]** There is a helper script provided which can be used to create a Service Account with relevant permission at location `cloudsql-easy-networking/helper-scripts/1.createserviceaccount.sh`.
 
-     User can then use this service account and impersonate this service account while running the terraform code. You can read more about the google cloud service account impersonsation [here](https://cloud.google.com/iam/docs/service-account-overview#impersonation).
+     User can then use this Service Account and [impersonate](https://cloud.google.com/iam/docs/service-account-overview#impersonation) this Service Account while running the terraform code.
 
      Once you have created this service account you can then update `providers.tf.template` file by updating the `impersonate_service_account` field with the service account you have created with appropriate permission as described above and renaming the `providers.tf.template` to `providers.tf` file.
 
@@ -59,19 +57,18 @@ This example solution is a good starting point for anyone who needs to quickly a
         }
         ```
 
-        **Note :** User should have service account admin and project iam admin permissions in the respective GCP projects in order to assign the above mentioned permissions.
+        **Note :** User should have service account admin and project iam admin permissions in the respective Google Cloud projects in order to assign the above mentioned permissions.
 
 ## Execution
 
-1. User should have authenticated using gcloud command `gcloud auth application-default login` command in the cli/machine using which user plans to execute the terraform code. This [link](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) describes more detail about the `gcloud auth` command mentioned above.
+1. User should have [authenticated](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) using gcloud command `gcloud auth application-default login` command in the CLI/machine using which user plans to execute the terraform code.
 2. User can now cd in to the example directory `cloudsql-easy-networking/examples/1.Host-Service-Project` in order to execute the terraform code.
 3. Update the variables in **terraform.tfvars** as per your configuration like host_project_id, service_project_id etc. User can also go through the [Inputs](#inputs) section of this readme that describes the list of input variables that can be updated. Here are two [examples](#examples) of the terraform.tfvars file which can be referred while updating your terraform.tfvars file.
-4. Enter command `terraform init `. This command initializes the working directory containing terraform configuration files. More description about terraform init can be found at this [link](https://developer.hashicorp.com/terraform/cli/commands/init).
-5. Enter command `terraform validate` to validate the configuration files present in this directory. More description about terraform validate can be found at this [link](https://developer.hashicorp.com/terraform/cli/commands/validate).
-6. Enter command `terraform plan`.
-This command creates an execution plan, which lets you preview the changes that terraform plans to make in your infrastructure. More details about this command can be found at [link](https://developer.hashicorp.com/terraform/cli/commands/plan). Review the content displayed in the plan stage and if all looks good then move to next step.
-7. Enter `terraform apply`and type `yes` when asked for confirmation/approval. This command executes the actions proposed in a terraform plan. More details about this command can be found at [link](https://developer.hashicorp.com/terraform/cli/commands/apply).
-8. **Deleting resources** : Enter `terraform destroy` and type `yes` when asked for confirmation/approval. This command will delete the resources created using the terraform. More details about this command can be found at [here](https://developer.hashicorp.com/terraform/cli/commands/destroy).
+4. Enter command `terraform init `. This command [initializes](https://developer.hashicorp.com/terraform/cli/commands/init) the working directory containing terraform configuration files.
+5. Enter command `terraform validate` to [validate](https://developer.hashicorp.com/terraform/cli/commands/validate) the configuration files present in this directory.
+6. Enter command `terraform plan`. This command creates an execution [plan](https://developer.hashicorp.com/terraform/cli/commands/plan), which lets you preview the changes that terraform plans to make in your infrastructure. Review the content displayed in the plan stage and if all looks good then move to next step.
+7. Enter `terraform apply`and type `yes` when asked for confirmation/approval. This command executes the actions proposed in a terraform plan and [applies](https://developer.hashicorp.com/terraform/cli/commands/apply) the configuration changes.
+8. **Deleting resources** : Enter `terraform destroy` and type `yes` when asked for confirmation/approval. This command will [delete](https://developer.hashicorp.com/terraform/cli/commands/destroy) the resources created using the terraform.
 
 ## Examples
 
@@ -89,7 +86,7 @@ This command creates an execution plan, which lets you preview the changes that 
     subnetwork_name        = "cloudsql-easy-subnet"
     ```
 
-2. This example creates new network and subnetwork with the provided cidr range.
+2. This example creates new network and subnetwork with the provided CIDR.
     ```
     host_project_id        = "<GCP-HOST-PROJECT-ID>"
     service_project_id     = "<GCP-SERVICE-PROJECT-ID>"
