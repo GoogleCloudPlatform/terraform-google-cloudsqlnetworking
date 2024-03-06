@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2023-2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ resource "google_compute_instance" "compute_instance" {
   machine_type        = var.machine_type
   zone                = var.zone
   tags                = var.gce_tags
+  can_ip_forward      = var.can_ip_forward
   deletion_protection = var.deletion_protection
   boot_disk {
     initialize_params {
@@ -26,7 +27,8 @@ resource "google_compute_instance" "compute_instance" {
     }
   }
   network_interface {
-    subnetwork = var.subnetwork_id
+    subnetwork         = var.subnetwork_id
+    subnetwork_project = var.subnetwork_project
     dynamic "access_config" {
       for_each = var.access_config == null ? [] : [1]
       content {

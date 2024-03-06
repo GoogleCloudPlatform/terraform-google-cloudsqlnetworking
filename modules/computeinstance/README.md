@@ -43,5 +43,8 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="name"></a> [name](#name) | Name of the google compute instance. |
+
 <!-- END_TF_DOCS -->
