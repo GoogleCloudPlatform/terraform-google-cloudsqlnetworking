@@ -29,5 +29,10 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="project_id"></a> [project\_id](#project_id) | The GCP project you want to enable APIs on. |
+| <a name="enabled_apis"></a> [enabled\_apis](#enabled_apis) | Enabled APIs in the project. |
+| <a name="enabled_api_identities"></a> [enabled\_api\_identities](#enabled_api_identities) | Enabled API identities in the project. |
+
 <!-- END_TF_DOCS -->

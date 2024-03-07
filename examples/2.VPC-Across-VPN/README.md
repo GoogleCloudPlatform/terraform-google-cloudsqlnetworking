@@ -31,7 +31,7 @@ Here is a brief overview of the things being created by the terraform solution :
 
 ## Pre-requisite
 
-1. User should have terraform and gcloud installed in the machine from which they plan to execute this script. Here are the link that describes the [terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) steps and [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install) .
+1. User should have terraform and gcloud installed in the machine from which they plan to execute this script. Here are the link that describes the [terraform installation](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/install-cli) steps and [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install) .
 2. User should have three GCP projects which will be used as part of this guide. First GCP project will act as a Host Project, the Second GCP Project will act as a Service Project and the Third GCP project will act as the user project.
 3. User planning to run this script should have following permissions asssigned to them in the respective projects as described below. User can either use webconsole or gcloud cli to assign these permission to the user identity using which these scripts will be executed. User can follow either step `3.a.` or `3.b.` or `3.c.` to complete this step.
    - **Host Project**
@@ -95,7 +95,7 @@ This command creates an execution plan, which lets you preview the changes that 
 
 ## Examples
 
-1. This example leverages the existing network and subnetwork. Network information like network_name, network_id and subnetword_id should be passed in the terraform.tfvars file. The terraform.tfvars should look like
+1. This example leverages the existing network and subnetwork. Network information like network_name, network_id and subnetwork_id should be passed in the terraform.tfvars file. The terraform.tfvars should look like
     ```
     host_project_id        = "<GCP-HOST-PROJECT-ID>"
     service_project_id     = "<GCP-SERVICE-PROJECT-ID>"

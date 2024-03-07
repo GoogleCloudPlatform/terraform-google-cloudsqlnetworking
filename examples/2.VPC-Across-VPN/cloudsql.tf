@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2023-2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ module "sql-db" {
   name                = var.cloudsql_instance_name
   database_version    = var.database_version
   zone                = var.zone
+  region              = var.region
   project_id          = var.service_project_id
   ip_configuration    = local.ip_configuration
   deletion_protection = var.deletion_protection
