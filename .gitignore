@@ -10,3 +10,4 @@ go.mod
 go.sum
 **/*.log
 **/*plan*
+**/*.DS_Store
