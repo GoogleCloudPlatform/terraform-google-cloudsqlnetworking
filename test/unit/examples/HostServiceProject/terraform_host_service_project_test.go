@@ -16,7 +16,7 @@ package hostservicetest
 
 import (
 	"os"
-	"fmt"
+	"log"
 	"testing"
 	"golang.org/x/exp/slices"
 	"github.com/stretchr/testify/assert"
@@ -36,7 +36,7 @@ var testDbname                = "test_db"
 var databaseVersion 					= "MYSQL_8_0"
 var deletionProtection        = false
 
- var tfVars = map[string]interface{}{
+ var tfVars = map[string]any{
 	"host_project_id"            : hostProjectID,
 	"service_project_id"         : serviceProjectID,
 	"database_version"           : databaseVersion,
@@ -67,7 +67,6 @@ var deletionProtection        = false
 		Reconfigure : true,
 		Lock: true,
 		NoColor: true,
-		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	planExitCode := terraform.InitAndPlanWithExitCode(t, terraformOptions)
@@ -92,8 +91,8 @@ func TestInitAndPlanRunWithoutTfVarsExpectFailureScenario(t *testing.T) {
 	})
 	planExitCode, err := terraform.InitAndPlanWithExitCodeE(t, terraformOptions)
 	if err != nil  {
-		fmt.Println("==Error==")
-		fmt.Print(err.Error())
+		log.Println("==Error==")
+		log.Print(err.Error())
 	}
 	assert.Equal(t, 1, planExitCode)
 }
@@ -109,10 +108,8 @@ func TestResourcesCount(t *testing.T) {
 		Lock: true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		//VarFiles: [] string {"dev.tfvars" },
 	})
 
-	//plan *PlanStruct
 	planStruct := terraform.InitAndPlan(t, terraformOptions)
 
 	resourceCount := terraform.GetResourceCount(t, planStruct)
@@ -134,10 +131,8 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 		Reconfigure : true,
 		Lock: true,
 		NoColor: true,
-		//VarFiles: [] string {"dev.tfvars" },
 	})
 
-	//plan *PlanStruct
 	planStruct := terraform.InitAndPlanAndShow(t, terraformOptions)
 	content, err := terraform.ParsePlanJSON(planStruct)
 	print("\n\n")
