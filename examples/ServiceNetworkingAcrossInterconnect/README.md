@@ -1,32 +1,32 @@
 ## Introduction
 
-Dedicated Interconnect provides direct physical connections between customer on-premise network and Google network. Dedicated Interconnect enables you to transfer large amounts of data between networks which can be more cost-effective than purchasing additional bandwidth over the public internet. You can get a quick overview about dedicated interconnect from this [link](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview).
+[Dedicated Interconnect](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview) provides direct physical connections between customer on-premise network and Google network. Dedicated Interconnect enables you to transfer large amounts of data between networks which can be more cost-effective than purchasing additional bandwidth over the public internet.
 
-This solution guide assumes that the reader is comfortable with dedicated interconnect as described in the product page. This solution template helps the user to create a dedicated connection with redundancy & 99.9% availability between an on-premise environment and a GCP project present in Google cloud.The solution then establishes a Cloud SQL connection using the private IP address of a Cloud SQL instance created inside a GCP project and a VM instance present in the user on-premise environment.
+This solution guide assumes that the reader is comfortable with Dedicated Interconnect as described in the product page. This solution template helps the user to create a dedicated connection with redundancy & 99.9% availability between an on-premise environment and a Google Cloud Platform project.The solution then establishes a Cloud SQL connection using the private IP address of a Cloud SQL instance created inside a Google Cloud Platform project and a VM instance present in the user on-premise environment.
 
 This solution allows you to securely access Cloud SQL instances present in the host project from an onprem environment, without exposing the Cloud SQL instances to the public internet.
 
-Here is a brief overview of the resources being managed by this terraform solution :
+Here is a brief overview of the resources being managed by this terraform solution:
 
-1. Creates a VPC Network and subnet in the host project.
-2. Creates a VLAN attachment to existing physical connections established at a colocation facility and opts for redundant connection to ensure 99.9% availability. It can be in the same project or in a different project.
-3. Creates a cloud router.
-4. Configures VLAN ID and BGP IPs capacity.
-5. Configures BGP Session.
-6. Creates a Cloud SQL instance in the gcp project.
-7. Establishes a connection between the Cloud SQL instance from the on-prem VM instance.
+1. Creates a VPC Network and subnet in the host project
+2. Creates a VLAN attachment to existing physical connections established at a colocation facility and opts for redundant connection to ensure 99.9% availability. It can be in the same project or in a different project
+3. Creates a cloud router
+4. Configures VLAN ID and BGP IPs capacity
+5. Configures BGP Session
+6. Creates a Cloud SQL instance in the Google Cloud Platform project
+7. Establishes a connection between the Cloud SQL instance from the on-prem VM instance
 
 ### Benefits:
 
-- Securely access Cloud SQL instances using private IP of Cloud SQL Instance.
-- Improves performance and reliability by dedicated interconnect.
-- Reduces costs by avoiding public IP addresses.
+- Securely access Cloud SQL instances using private IP of Cloud SQL Instance
+- Improves performance and reliability by Dedicated Interconnect
+- Reduces costs by avoiding public IP addresses
 
 ### Use cases:
 
-- Developing and testing applications from onprem that use Cloud SQL.
-- Running production applications that use Cloud SQL.
-- Connecting to Cloud SQL instances from on-premises networks.
+- Developing and testing applications from onprem that use Cloud SQL
+- Running production applications that use Cloud SQL
+- Connecting to Cloud SQL instances from on-premises networks
 
 ## Architecture
 
@@ -34,23 +34,23 @@ Here is a brief overview of the resources being managed by this terraform soluti
 
 ## Pre-requisite
 
+The expectation is to have customer accessibility to a common peering location (aka colocation facility) where google offers Dedicated Interconnect & customer routers can directly connect to google device via cross connect.
 
-The expectation is to have customer accessibility to a common peering location(aka colocation facility) where google offers dedicated interconnect & customer routers can directly connect to google device via cross connect.
+While we have described the set of steps involved below but our [public documentation](https://cloud.google.com/network-connectivity/docs/interconnect/how-to/dedicated/provisioning-overview) describes the process in more detail.
 
-While we have described the set of steps involved below but this [link](https://cloud.google.com/network-connectivity/docs/interconnect/how-to/dedicated/provisioning-overview) describes the process in more detail.
-
-1. User orders dedicated interconnect through cloud console.
+1. User orders Dedicated Interconnect through Google Cloud Platform console
 2. User receives [LOA-CFA](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/terminology#loa) (letter of authorisation and connecting facility assignment) information which includes working with colocation facilities to establish cross connection with google peering network.
-3. After all the necessary connection have been established which involve setting up interconnect link which turns to `green` suggesting it is `PROVISIONED`.
-4. At this point interconnect status is available, physical connection between customer onprem to the edge of google's network is set.
-5. User should have terraform and gcloud installed in the machine from which they plan to execute this script. Here are the link that describes the [terraform installation](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) steps and [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install) .
-6.  User should have access to GCP Projects and access to use the physical connections established at colocation facilty which would be mapped to interconnect project. Following are two network design pattern that this solution template supports
+3. After all the necessary connection have been established which involve setting up interconnect link which turns green suggesting it is `PROVISIONED`.
+4. At this point Dedicated Interconnect status is available, physical connection between customer onprem to the edge of google's network is set.
+5. User should have [terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) and [gcloud SDK](https://cloud.google.com/sdk/docs/install) installed in the machine from which they plan to execute this script.
+6. User should have access to Google Cloud Platform projects and access to use the physical connections established at colocation facilty which would be mapped to interconnect project. Following are two network design patterns that this solution template supports:
 
-  a.  Using One GCP Project : if using single host project topology.
+  a.  Using One Google Cloud Platform Project : if using single host project topology.
 
-  b.  Using two or more GCP projects : if using host-service project topology for setting up Host & Service projects. Compute XpnPermission described in Step7 will be required if following the Host-Service project topology.
+  b.  Using two or more Google Cloud Platform projects : if using host-service project topology for setting up Host & Service projects. Compute XpnPermission described in Step7 will be required if following the Host-Service project topology.
 
 7. User planning to run this script should have following permissions asssigned to them in the respective projects as described below. User can either use webconsole or gcloud cli to assign these permission to the user identity using which these scripts will be executed. User can follow either step `7.a.` or `7.b.` to complete this step.
+
    - **Interconnect Project**
       - compute.interconnectAttachments.use
       - compute.interconnectAttachments.get
@@ -68,14 +68,13 @@ While we have described the set of steps involved below but this [link](https://
       - roles/serviceusage.serviceUsageAdmin
       - roles/resourcemanager.projectIamAdmin
    - [Optional] **Compute XpnPermission**
-      - User should have `roles/compute.xpnAdmin` permission at a common folder owning the host and service project. Here is a [link](https://cloud.google.com/compute/docs/access/iam#compute.xpnAdmin) describing the same. This is required to associate the service project with the host project.
+      - User should have `roles/compute.xpnAdmin` [permission](https://cloud.google.com/compute/docs/access/iam#compute.xpnAdmin) at a common folder owning the host and service project. This is required to associate the service project with the host project.
 
+     a. **Using Console** : User can either use [Google Cloud Platform console](https://cloud.google.com/iam/docs/grant-role-console) to assign the IAM permission to the user who plans to run this script.
 
-     a. **Using Webconsole** : User can either use [GCP web console](https://cloud.google.com/iam/docs/grant-role-console) to assign the IAM permission to the user who plans to run this script.
+     b. **Using gcloud SDK** : User can either use [gcloud SDK](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign IAM permission to the user who plans to run the script.
 
-     b. **Using gcloud cli** : User can either use [gcloud cli](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign IAM permission to the user who plans to run the script.
-
-     User can then use this service account and impersonate this service account while running the terraform code. You can read more about the google cloud service account impersonsation [here](https://cloud.google.com/iam/docs/service-account-overview#impersonation).
+     User can then use this service account and [impersonate](https://cloud.google.com/iam/docs/service-account-overview#impersonation) this service account while running the terraform code.
 
      Once you have created this service account you can then update `providers.tf.template` file by updating the `impersonate_service_account` field with the service account you have created with appropriate permission as described above and renaming the `providers.tf.template` to `providers.tf` file.
 
@@ -90,20 +89,19 @@ While we have described the set of steps involved below but this [link](https://
       }
       ```
 
-      **Note :** User should have service account admin and project iam admin permissions in the respective GCP projects in order to assign the above mentioned permissions.
+      **Note :** User should have service account admin and project iam admin permissions in the respective Google Cloud Platform projects in order to assign the above mentioned permissions.
 
 
 ## Execution
 
-1. User should have authenticated using gcloud command `gcloud auth application-default login` command in the cli/machine using which user plans to execute the terraform code. This [link](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) describes more detail about the `gcloud auth` command mentioned above.
+1. User should have [authenticated](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) using gcloud command `gcloud auth application-default login` command in the CLI/machine using which user plans to execute the terraform code.
 2. User can now change their working directory using `cd` to the example directory `cloudsql-easy-networking/examples/ServiceNetworkingAcrossInterconnect` in order to execute the terraform code.
 3. Update the variables in **terraform.tfvars** as per your configuration like host_project_id, service_project_id etc. User can also go through the [Inputs](#inputs) section of this readme that describes the list of input variables that can be updated. Here are two [examples](#examples) of the terraform.tfvars file which can be referred while updating your terraform.tfvars file.
-4. Run command `terraform init `. This command initializes the working directory containing terraform configuration files. More description about terraform init can be found at this [link](https://developer.hashicorp.com/terraform/cli/commands/init).
-5. Run command `terraform validate` to validate the configuration files present in this directory. More description about terraform validate can be found at this [link](https://developer.hashicorp.com/terraform/cli/commands/validate).
-6. Run command `terraform plan`.
-This command creates an execution plan, which lets you preview the changes that terraform plans to make in your infrastructure. More details about this command can be found at [link](https://developer.hashicorp.com/terraform/cli/commands/plan). Review the content displayed in the plan stage and if all looks good then move to next step.
-7. Run `terraform apply`and type `yes` when asked for confirmation/approval. This command executes the actions proposed in a terraform plan. More details about this command can be found at [link](https://developer.hashicorp.com/terraform/cli/commands/apply).
-8. **Deleting resources** : Run `terraform destroy` and type `yes` when asked for confirmation/approval. This command will delete the resources created using the terraform. More details about this command can be found at [here](https://developer.hashicorp.com/terraform/cli/commands/destroy).
+4. Enter command `terraform init `. This command [initializes](https://developer.hashicorp.com/terraform/cli/commands/init) the working directory containing terraform configuration files.
+5. Enter command `terraform validate` to [validate](https://developer.hashicorp.com/terraform/cli/commands/validate) the configuration files present in this directory.
+6. Enter command `terraform plan`. This command creates an execution [plan](https://developer.hashicorp.com/terraform/cli/commands/plan), which lets you preview the changes that terraform plans to make in your infrastructure. Review the content displayed in the plan stage and if all looks good then move to next step.
+7. Enter `terraform apply`and type `yes` when asked for confirmation/approval. This command executes the actions proposed in a terraform plan and [applies](https://developer.hashicorp.com/terraform/cli/commands/apply) the configuration changes.
+8. **Deleting resources** : Enter `terraform destroy` and type `yes` when asked for confirmation/approval. This command will [delete](https://developer.hashicorp.com/terraform/cli/commands/destroy) the resources created using the terraform.
 
 ## Examples
 
@@ -147,7 +145,7 @@ This command creates an execution plan, which lets you preview the changes that 
 
     ```
 
-2. This example creates new network and subnetwork with the provided cidr range.
+2. This example creates new network and subnetwork with the provided CIDR.
 
     ```
       host_project_id        = "<GCP-HOST-PROJECT-ID>"

@@ -40,7 +40,7 @@ var testDbname 							   = "test_db"
 var userRegion                 = "us-west1"
 var userZone                   = "us-west1-a"
 var deletionProtection 			   = false
-var tfVars = map[string]interface{}{
+var tfVars = map[string]any{
 	"host_project_id"            : hostProjectID,
 	"service_project_id"         : serviceProjectID,
 	"database_version"           : databaseVersion,
@@ -81,7 +81,6 @@ func TestInitAndPlanRunWithTfVars(t *testing.T) {
 		Lock: true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		//VarFiles: [] string {"dev.tfvars" },
 	})
 
 	planExitCode := terraform.InitAndPlanWithExitCode(t, terraformOptions)
@@ -119,10 +118,8 @@ func TestResourcesCount(t *testing.T) {
 		Lock: true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		//VarFiles: [] string {"dev.tfvars" },
 	})
 
-	//plan *PlanStruct
 	planStruct := terraform.InitAndPlan(t, terraformOptions)
 
 	resourceCount := terraform.GetResourceCount(t, planStruct)
@@ -144,10 +141,8 @@ func TestTerraformModuleResourceAddressListMatch(t *testing.T) {
 		Lock: true,
 		PlanFilePath: "./plan",
 		NoColor: true,
-		//VarFiles: [] string {"dev.tfvars" },
 	})
 
-	//plan *PlanStruct
 	planStruct := terraform.InitAndPlanAndShow(t, terraformOptions)
 	content, err := terraform.ParsePlanJSON(planStruct)
 	actualModuleAddress := make([]string, 0)
