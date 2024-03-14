@@ -17,6 +17,7 @@ package hostservicetest
 import (
 	"os"
 	"fmt"
+	"log"
 	"time"
 	"testing"
 	"github.com/tidwall/gjson"
@@ -29,7 +30,7 @@ const terraformDirectoryPath  = "../../../../examples/1.Host-Service-Project";
 var hostProjectID             = os.Getenv("TF_VAR_host_project_id");
 var serviceProjectID          = os.Getenv("TF_VAR_service_project_id");
 var cloudSQLInstanceName      = "cn-sqlinstance10-test";
-var subnetworkName            = "cloudsql-easy-subnet";
+var subnetworkName            = "cloudsql-easy-subnet-int-test";
 var region                    = "us-central1";
 var zone 											= "us-central1-a";
 var testDbname                = "test_db"
@@ -50,11 +51,11 @@ func TestMySqlPrivateModule(t *testing.T) {
 	time.Sleep(60 * time.Second)
 	var iteration int;
 
-	networkName             := "cloudsql-easy";
-	subnetworkName          = "cloudsql-easy-subnet";
+	networkName             := "cloudsql-easy-int-test";
+	subnetworkName          = "cloudsql-easy-subnet-int-test";
 	subnetworkIPCidr        := "10.2.0.0/16";
 
-	tfVars := map[string]interface{}{
+	tfVars := map[string]any{
 		"host_project_id"            : hostProjectID,
 		"service_project_id"         : serviceProjectID,
 		"database_version"           : databaseVersion,
@@ -78,7 +79,6 @@ func TestMySqlPrivateModule(t *testing.T) {
 		Lock: true,
 		NoColor : true,
 		SetVarsAfterVarFiles: true,
-		//VarFiles: [] string {"dev.tfvars" }, //an additional tfvars containing configuration files can be passed here
 	})
 
 	// Clean up resources with "terraform destroy" at the end of the test.
@@ -93,9 +93,9 @@ func TestMySqlPrivateModule(t *testing.T) {
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
 	output := terraform.Output(t, terraformOptions, "host_vpc_name")
 
-	fmt.Println(" ========= Verify Subnet Name ========= ")
+	log.Println(" ========= Verify Subnet Name ========= ")
 	assert.Equal(t, networkName, output)
-	fmt.Println(" ========= Verify Subnetwork Id ========= ")
+	log.Println(" ========= Verify Subnetwork Id ========= ")
 	output = terraform.Output(t, terraformOptions, "host_subnetwork_id")
 	cloudSQLInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
 	subnetworkID := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",hostProjectID,region,subnetworkName)
@@ -112,16 +112,16 @@ func TestMySqlPrivateModule(t *testing.T) {
 	}
 	result := gjson.Parse(op)
 	if err != nil {
-		fmt.Sprintf("===Error %s Encountered while executing %s", err ,text)
+		log.Printf("===Error %s Encountered while executing %s", err ,text)
 	}
-	fmt.Println(" ========= Verify if public IP is disabled ========= ")
+	log.Println(" ========= Verify if public IP is disabled ========= ")
 	assert.Equal(t, false, gjson.Get(result.String(),"settings.ipConfiguration.ipv4Enabled").Bool())
-	fmt.Println(" ========= Verify SQL RUNNING Instance State ========= ")
+	log.Println(" ========= Verify SQL RUNNING Instance State ========= ")
 	assert.Equal(t, "RUNNABLE", gjson.Get(result.String(),"state").String())
 
 	//Iterate through list of database to ensure a new db was created
-	fmt.Println(" ====================================================== ")
-	fmt.Println(" ========= Verify DB Creation ========= ")
+	log.Println(" ====================================================== ")
+	log.Println(" ========= Verify DB Creation ========= ")
 	iteration = 0;
 
 	// performs iterations for 3 times to check if the database gets created or not
@@ -134,7 +134,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 		if err == nil || iteration > 3 {
 			break
 		} else {
-			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", testDbname, cloudSQLInstanceName, serviceProjectID)
+			log.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", testDbname, cloudSQLInstanceName, serviceProjectID)
 		}
 		time.Sleep(60 * time.Second)
 		iteration++;
@@ -148,7 +148,7 @@ func TestMySqlPrivateModule(t *testing.T) {
 	}
 	result = gjson.Parse(op)
 	if err != nil {
-		fmt.Sprintf("=== Error %s Encountered while executing %s", err ,text)
+		log.Printf("=== Error %s Encountered while executing %s", err ,text)
 	}
 	assert.Equal(t, testDbname, gjson.Get(result.String(),"name").String())
 }
@@ -170,7 +170,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	networkName             := "host-cloudsql-easy";
 	subnetworkName          := "host-cloudsql-easy-subnet";
 
-	tfVars := map[string]interface{}{
+	tfVars := map[string]any{
 		"host_project_id"            : hostProjectID,
 		"service_project_id"         : serviceProjectID,
 		"database_version"           : databaseVersion,
@@ -190,10 +190,8 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 		TerraformDir: terraformDirectoryPath,
 		Reconfigure : true,
 		Lock: true,
-		//PlanFilePath: "./plan",
 		NoColor: true,
 		SetVarsAfterVarFiles: true,
-		//VarFiles: [] string {"dev.tfvars" }, //an additional tfvars containing configuration files can be passed here
 	})
 
 	//validate if the VPC already exists in host project
@@ -230,10 +228,10 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
 	output := terraform.Output(t, terraformOptions, "host_vpc_name")
 
-	fmt.Println(" ========= Verify Subnet Name ========= ")
+	log.Println(" ========= Verify Subnet Name ========= ")
 	assert.Equal(t, networkName, output)
 
-	fmt.Println(" ========= Verify Subnetwork Id ========= ")
+	log.Println(" ========= Verify Subnetwork Id ========= ")
 	output = terraform.Output(t, terraformOptions, "host_subnetwork_id")
 	cloudSQLInstanceName := terraform.Output(t, terraformOptions, "cloudsql_instance_name")
 	subnetworkID := fmt.Sprintf("projects/%s/regions/%s/subnetworks/%s",hostProjectID,region,subnetworkName)
@@ -249,17 +247,17 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	}
 	result := gjson.Parse(op)
 	if err != nil {
-		fmt.Sprintf("===Error %s Encountered while executing %s", err ,text)
+		log.Printf("===Error %s Encountered while executing %s", err ,text)
 	}
-	fmt.Println(" ========= Verify if public IP is disabled ========= ")
+	log.Println(" ========= Verify if public IP is disabled ========= ")
 	assert.Equal(t, false, gjson.Get(result.String(),"settings.ipConfiguration.ipv4Enabled").Bool())
-	fmt.Println(" ========= Verify SQL RUNNING Instance State ========= ")
+	log.Println(" ========= Verify SQL RUNNING Instance State ========= ")
 	assert.Equal(t, "RUNNABLE", gjson.Get(result.String(),"state").String())
 
 
 	//Iterate through list of database to ensure a new db was created
-	fmt.Println(" ====================================================== ")
-	fmt.Println(" ========= Verify DB Creation ========= ")
+	log.Println(" ====================================================== ")
+	log.Println(" ========= Verify DB Creation ========= ")
 	iteration = 0;
 	// performs iterations for 3 times to check if the database gets created or not
 	for {
@@ -271,7 +269,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 		if err == nil || iteration > 3 {
 			break
 		} else {
-			fmt.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", testDbname, cloudSQLInstanceName, serviceProjectID)
+			log.Printf("Database with Database Name %s not found in cloud sql instance %s in project %s, will reattempt in few sec", testDbname, cloudSQLInstanceName, serviceProjectID)
 		}
 		time.Sleep(60 * time.Second)
 		iteration++;
@@ -285,7 +283,7 @@ func TestUsingExistingNetworkMySqlPrivateModule(t *testing.T) {
 	}
 	result = gjson.Parse(op)
 	if err != nil {
-		fmt.Sprintf("=== Error %s Encountered while executing %s", err ,text)
+		log.Printf("=== Error %s Encountered while executing %s", err ,text)
 	}
 	assert.Equal(t, testDbname, gjson.Get(result.String(),"name").String())
 }

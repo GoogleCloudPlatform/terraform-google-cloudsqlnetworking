@@ -1,9 +1,9 @@
 ## Introduction
 
-Cloud SQL has a [Private Service Connect](https://cloud.google.com/sql/docs/mysql/configure-private-service-connect) based offering for connectivity where it exposes producer resources using a service attachment when a user creates a Cloud SQL instance accesed from on-premises customer network via VPN. Cloud SQL with enabled PSC connectivity expects the user to create an endpoint to connect to the corresponding service attachment. 
+Cloud SQL has a [Private Service Connect](https://cloud.google.com/sql/docs/mysql/configure-private-service-connect) based offering for connectivity where it exposes producer resources using a service attachment when a user creates a Cloud SQL instance accesed from on-premises customer network via HA VPN. Cloud SQL with enabled PSC connectivity expects the user to create an endpoint to connect to the corresponding service attachment. 
 
 This solution automates the process of creation of Private Service Connect endpoint for the user. You can
-[read more](https://cloud.google.com/blog/products/networking/three-consumer-private-service-connect-designs#:~:text=Components%20of%20Design) about Private Service Connect for SQL. Here the customer's user project is accessing managed producer services using a private IP address (Service Connect Endpoint in customer's consumer project) via VPN (from customer's user project's VM). The customer's producer project is exposing services to a consumer project via service attachments without exposing the SQL instances to the public Internet. Customer's user and consumer projects are connected using a hybrid networking solution - [Cloud HA VPN](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview#ha-vpn).
+[read more](https://cloud.google.com/blog/products/networking/three-consumer-private-service-connect-designs#:~:text=Components%20of%20Design) about Private Service Connect for SQL. Here the customer's user project is accessing managed producer services using a private IP address (Service Connect Endpoint in customer's consumer project) via HA VPN (from customer's user project's VM). The customer's producer project is exposing services to a consumer project via service attachments without exposing the SQL instances to the public Internet. Customer's user and consumer projects are connected using a hybrid networking solution - [Cloud HA VPN](https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview#ha-vpn).
 
 Here is a brief overview of the resources being created by the terraform solution :
 
@@ -20,7 +20,7 @@ Note :
 
 -  The terraform solution requires existing customer's user, consumer & producer projects:
 
-**User Project** : this is a customer owned Google Cloud project from which the customer is trying to access the Cloud SQL instance or any other producer service. This could be on-prem or GCP.
+**User Project** : this is a customer owned Google Cloud project from which the customer is trying to access the Cloud SQL instance or any other producer service. This could be on-prem or Google Cloud Platform.
 
 **Producer Project** : this is a customer owned Google Cloud project in which a customer creates a Cloud SQL instance or any other producer service
 
@@ -52,10 +52,10 @@ Note :
 2. Customer Organisation - User Project : Customer's project on-prem or on Google Cloud. Customer has created & manages this Google Cloud project. This is the project which contains the virtual machine/instance accessing the producer service such as Cloud SQL using the service connect endpoint.
 3. Customer Organisation - Consumer Project (12345) : Customer's project on Google Cloud. Customer has created & manages this Google Cloud project. This is the project which contains the service connect endpoint as a part of its network to access the producer services from producer projects created in Customer Organisation - Producer Project (56789).
 4. Customer Organisation - Cloud SQL (Producer) Project (56789) : Customer's project on Google Cloud. Customer has created & manages this Google Cloud project. This is the project in which customer creates a producer service such as Cloud SQL.
-5. User VPC - OnPrem/GCP : Customer's user project (GCP or on-prem) VPC which is used for connecting with GCP network using VPN.
-6. Consumer VPC : Customer's consumer project (GCP) VPC which is used for connecting with on-prem network using VPN and create a service connect endpoint to access the producer services.
-7. VPN - On Prem/GCP : On Prem VPN solution used by customer to connect to GCP.
-8. [HA VPN - GCP](https://cloud.google.com/network-connectivity/docs/vpn/concepts/key-terms#:~:text=Replaces%20Classic%20VPN%20with%20a%20gateway%20that%20provides%20a%2099.99%25%20availability%20SLA.) : HA VPN GCP solution to provide high availability to customer's connection between the user and consumer projects.
+5. User VPC - OnPrem/Google Cloud Platform : Customer's user project (Google Cloud Platform or on-prem) VPC which is used for connecting with Google Cloud Platform network using VPN.
+6. Consumer VPC : Customer's consumer project (Google Cloud Platform) VPC which is used for connecting with on-prem network using VPN and create a service connect endpoint to access the producer services.
+7. VPN - On Prem/Google Cloud Platform : On Prem VPN solution used by customer to connect to Google Cloud Platform.
+8. [HA VPN - Google Cloud Platform](https://cloud.google.com/network-connectivity/docs/vpn/concepts/key-terms#:~:text=Replaces%20Classic%20VPN%20with%20a%20gateway%20that%20provides%20a%2099.99%25%20availability%20SLA.) : HA VPN Google Cloud Platform solution to provide high availability to customer's connection between the user and consumer projects.
 9. NAT : NAT in Customer's user project to connect customer's VM Instance to the internet to retrieve packages for DB connection/creation for the VM.
 10. Cloud SQL Instance : Cloud SQL instance created in customer's producer project which is created with PSC enabled. 
 11. [PSC Endpoint](https://cloud.google.com/vpc/docs/private-service-connect#:~:text=Private%20Service%20Connect%20endpoints%20are,by%20clients%20in%20that%20network.) : Reserved internal IP address in a consumer VPC network with forwarding rule to target Service Attachment for Cloud SQL connection.
@@ -81,7 +81,7 @@ Note :
     this guide - consumer/host and producer/service and user/on-prem.
 3. Users planning to run this terraform solution should have following permissions at
     least assigned to them in the respective projects as described below. User
-    can either use [GCP web console](https://cloud.google.com/iam/docs/grant-role-console) or [gcloud cli](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign these permission to the user identity that will execute the solution/script.
+    can either use [Google Cloud Platform console](https://cloud.google.com/iam/docs/grant-role-console) or [gcloud cli](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign these permission to the user identity that will execute the solution/script.
 
     -   **Customer's Consumer Project**
         -   roles/compute.networkAdmin
@@ -105,7 +105,7 @@ Note :
 `
 To assign these roles to the account : 
 
-  a. **Using Webconsole** : User can either use [GCP web console](https://cloud.google.com/iam/docs/grant-role-console) to assign the IAM permission to the user who plans to run this script.
+  a. **Using Webconsole** : User can either use [Google Cloud Platform web console](https://cloud.google.com/iam/docs/grant-role-console) to assign the IAM permission to the user who plans to run this script.
 
   b. **Using gcloud cli** : User can either use [gcloud cli](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding) to assign IAM permission to the user who plans to run the script.
 
@@ -142,7 +142,7 @@ To assign these roles to the account :
 
 ## Examples
 
-Here's an example of the tfvars file that can be used to create the resources using Terraform for using PSC across VPN connection with another GCP project or on-prem project. This examples creates a new VPC and subnetwork in user cnd consumer projects.
+Here's an example of the tfvars file that can be used to create the resources using Terraform for using PSC across VPN connection with another Google Cloud project or on-prem project. This examples creates a new VPC and subnetwork in user and consumer projects.
 
 ```
 

@@ -69,7 +69,7 @@ Components :
     they plan to execute the TF templated scripts which are a part of this solution. Here is the link that describes the
     [Terraform installation](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started)
     steps and
-    [gcloud CLI Installation Steps](https://cloud.google.com/sdk/docs/install) .
+    [gcloud SDK Installation Steps](https://cloud.google.com/sdk/docs/install) .
 2.  Users should have the Google Cloud projects which will be used as part of
     this guide - customer's consumer and customer's producer.
 3.  Users planning to run this TF solution should have following permissions at

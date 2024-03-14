@@ -1,30 +1,30 @@
-# CloudSQL Easy Networking
+# CloudSQL Simplified Networking
 
+Streamline your Google Cloud SQL deployment and management with this comprehensive Terraform repository. This repository's solutions simplify networking configuration for Cloud SQL instances. It bundles Terraform modules to make it easier to create and manage Cloud SQL instances and all its dependencies such as cloud networking resources, IAM policies and associated service accounts.
 
-Streamline your Google Cloud SQL instance deployment and management with this comprehensive Terraform module repository. This repository simplifies Google Cloud networking configuration for Cloud SQL instances. It bundles Terraform modules to make it easier to create and manage Cloud SQL instances and all dependent resources, such as cloud networking resources, IAM policies and service accounts.
+This repository contains easy-to-use Terraform based solutions that would help a user set up all the required components to consume Cloud SQL with private IPs. This aims to help different users like database administrators and application engineers quickly configure Cloud SQL with cloud networking.
 
-This repository contains easy-to-use Terraform modules that would help you set up all the prerequisites components required to consume Cloud SQL with private IP in a GCP project. The modules make it easy to manage Cloud SQL and all relevant GCP resources. This solution will help different users like database administrators and application engineers who want to quickly configure Cloud SQL with cloud networking.
+Here are some benefits of using this repository:
 
-Here are some specific benefits of using this repository:
+- **Simplified configuration:** The Terraform modules in this repository abstract away the complexity of configuring Google Cloud networking for Cloud SQL, making it easier to get started, especially for users without a comprehensive Google Cloud experience.
 
-- **Simplified configuration:** The Terraform modules in this repository abstract away the complexity of configuring Google Cloud networking for Cloud SQL. This makes it easier to get started, even for users with less experience with Google Cloud.
+- **Consistency and repeatability:** Terraform ensures that your Cloud SQL configuration is consistent and repeatable across multiple environments. This helps reduce errors and improve operational efficiency.
 
-- **Consistency and repeatability:** Terraform ensures that your Cloud SQL configuration is consistent and repeatable across multiple environments. This can help to reduce errors and improve operational efficiency.
+- **Flexibility and scalability:** The Terraform modules in this repository are flexible and scalable enough to meet the needs of a wide range of deployments from small development projects to large scale enterprise applications.
 
-- **Flexibility and scalability:** The Terraform modules in this repository are flexible and scalable enough to meet the needs of a wide range of deployments, from small development projects to large enterprise applications.
-If you are looking for a simple and efficient way to configure Cloud SQL with private IP in Google Cloud, this repository is the perfect place to start.
+If you are looking for a simple and efficient way to configure Cloud SQL with private IP in Google Cloud, this repository is a good place to start.
 
-## Example Use Case
+## Example use-case
 
-Imagine you are a database administrator responsible for setting up a new Cloud SQL instance for a production application. You need to configure the instance to use a private IP so that it is only accessible from within your VPC network.
+A database administrator is responsible for setting up Cloud SQL instance(s) for a production application and is asked to configure the Cloud SQL instance to use a private IP using Service Networking or Private Service Connect.
 
-Using the Terraform modules in this repository, you can easily configure the Cloud SQL instance and all the necessary network resources with just a few lines of code. This would typically involve the following steps:
+Using the Terraform modules in this repository, the database administrator can easily configure the Cloud SQL instance and all the necessary network resources with just a few lines of code. This would typically involve the following steps:
 
-1. Create a new Terraform configuration file and define the variables for your Cloud SQL instance and network configuration.
-2. Initialize Terraform and download the necessary providers and modules.
-3. Plan and apply the Terraform configuration.
+1. Creating a new Terraform configuration file and defining the variables for the Cloud SQL instance and network configuration.
+2. Initializing Terraform and downloading the necessary providers and modules.
+3. Running Terraform plan and apply for the configuration.
 
-Once the Terraform configuration has been applied, your Cloud SQL instance will be up and running with a private IP. You will then be able to connect to the instance from within your VPC network using the private IP address.
+Once the Terraform configuration has been applied, your Cloud SQL instance will be up and running with a private IP address to connect to the instance.
 
 ## Supported Usage
 
@@ -47,31 +47,31 @@ All [GA offerings](https://cloud.google.com/sql/docs/sqlserver/private-ip) for C
 
 ## Variables
 
-To control module's behavior, change variables' values. Behavior of each of these variables has been documented in the readme file for the respective examples. Some of the common variables has been described below but the respective readme file should act as reference point as it describe about them in more details:
+To control a module's behavior, change variable values. Behavior of each of these variables has been documented in the README files for the respective examples. Some of the common variables have been described below but the respective README file should act as reference point as it is more descriptive: 
 
-- `cloudsql_instance_name` - set this variable to a string value and the cloud sql instance will be named after this variable.
-- `database_version` - set this variable to a specific database version for the cloud sql instance. This [link](https://cloud.google.com/sql/docs/mysql/db-versions) talks more about the database version.
-- `host_project_id` - set this variable to the GCP project id which will be acting as the host project for the setup and the necessary VPC network and subnetwork will be created here(if they do not exists already)
-- `region` - set this variable to the GCP region and this will be used to create resources like Cloud SQL instance in GCP. This [link](https://cloud.google.com/compute/docs/regions-zones) talks more about the region.
-- `create_network` - this is a boolean variable and set this to `true` if you want to create a new network else set to `false` if you plan to use existing network.
-- `create_subnetwork` - this is a boolean variable and set this to `true` if you want to create a new subnetwork else set to `false` if you plan to use existing network.
-- `network_name` - set this to the vpc name and either a new network will be created or an existing network will be used depending on the value of `create_network`.
-- `subnetwork_name` - set this to the subnetwork name and either a new sub network will be created or an existing sub network will be used depending on the value of `create_subnetwork`.
-- `deletion_protection` - set this flag to `true` if you want to enable deletion protection which protects from accidental protections else set to `false`.
-- `access_config` - set this to `null` if you do not want the compute instance to have an exernal IP
-- `create_nat` - set this to `true` if you want to have a [Cloud NAT](https://cloud.google.com/nat/docs/overview) configured else set this to `false`
+- `cloudsql_instance_name` - set this variable to a string value as the name of the Cloud SQL instance.
+- `database_version` - set this variable to a specific [database version](https://cloud.google.com/sql/docs/mysql/db-versions) for the Cloud SQL instance.
+- `host_project_id` - set this variable to the Google Cloud project ID, which will be acting as the host project for the setup. The necessary VPC network and subnetwork will be created here (if they do not exist already).
+- `region` - set this variable to the Google Cloud [region](https://cloud.google.com/compute/docs/regions-zones) and this will be used to create resources like Cloud SQL instance in Google Cloud.
+- `create_network` - this is a boolean variable. Set this to `true` if you want to create a new network, else set it to `false` if you plan to use an existing network.
+- `create_subnetwork` - this is a boolean variable. Set this to `true` if you want to create a new subnetwork, else set to `false` if you plan to use existing network.
+- `network_name` - set this to the VPC name; either a new VPC network will be created or an existing network will be used, depending on the value of `create_network`.
+- `subnetwork_name` - set this to the subnetwork name; either a new subnetwork will be created or an existing subnetwork will be used, depending on the value of `create_subnetwork`.
+- `deletion_protection` - set this flag to `true` if you want to enable deletion protection, which protects from accidental deletions. Otherwise, set it to `false`.
+- `access_config` - set this to `null` if you do not want the VM instance to have an exernal IP
+- `create_nat` - set this to `true` if you want to have a [Cloud NAT](https://cloud.google.com/nat/docs/overview) configured, else set this to `false`
 
-**Note** - Having `access_config = null` and `create_nat = false` will disable the compute instance ability to download from public internet and you will not be able to download any client etc however the connections to other VM and Cloud sql instance using private IP will continue to work.
+**Note** - If `access_config = null` and `create_nat = false`, the VM instance will be disabled from downloading any clients. However, connections to other VMs and the Cloud SQL instance using private IP will continue to work.
 
-## State Files
+## State files
 
-Terraform must store state about your managed infrastructure and configuration. It is recommended to use the GCS bucket or an equivalent storage place where the terraform stores its state file. More details at [link](https://developer.hashicorp.com/terraform/language/state).
+Terraform must store state about your managed infrastructure and configuration. It is recommended to use the Google Cloud Storage bucket or an equivalent storage place where the terraform stores its [state file](https://developer.hashicorp.com/terraform/language/state).
 
 ### provider.tf file
 
-Each providers.tf file carries information like service account to be impersonated, bucket to be used for storing the GCS bucket and prefix that will be used in this bucket for storing the terraform state.
+Each provider.tf file carries information like service account to be impersonated, bucket to be used for storing the terraform state file and prefix that will be used in this bucket for storing the terraform state.
 
-Following are sample commands that can be used to update the existing provider.tf.template file to create an provider.tf file.
+Following are sample commands that can be used to update the existing provider.tf.template file to create a provider.tf file.
 
 - For example : 1.Host-Service-Project
 
@@ -144,20 +144,19 @@ sed \
 examples/ServiceNetworkingAcrossInterconnect/provider.tf.template >examples/ServiceNetworkingAcrossInterconnect/provider.tf
 ```
 
-
 ## Testing
 
-For running the unit test cases and integration test cases, please refer to the [test](./test/README.md) documentation.
-
+For running the unit and integration tests, please refer to the [testing](./test/README.md) documentation.
 
 ## Installation
 
 ### Terraform
-Be sure you have the correct Terraform version (1.5.x), you can choose the binary here:
-- https://releases.hashicorp.com/terraform/
 
-### gcloud
-Ensure you have gcloud already installed [gcloud cli installation steps](https://cloud.google.com/sdk/docs/install)
+Be sure you have the correct Terraform version (1.5.x), you can choose the [binary](https://releases.hashicorp.com/terraform/).
+
+### gcloud SDK
+
+Ensure you have gcloud already [installed](https://cloud.google.com/sdk/docs/install).
 
 ## Contributions
 
