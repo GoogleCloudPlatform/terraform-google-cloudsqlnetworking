@@ -16,14 +16,15 @@ package sniinterconnecttest
 
 import (
 	"fmt"
-	"strconv"
 	"log"
 	"os"
+	"strconv"
 	"testing"
 	"time"
+
+	"github.com/google/go-cmp/cmp"
 	"github.com/gruntwork-io/terratest/modules/shell"
 	"github.com/gruntwork-io/terratest/modules/terraform"
-	"github.com/google/go-cmp/cmp"
 	"github.com/tidwall/gjson"
 )
 
@@ -31,6 +32,7 @@ const terraformDirectoryPath = "../../../../examples/ServiceNetworkingAcrossInte
 const terraformPreReqDirPath = "./prereq"
 
 var hostProjectID = os.Getenv("TF_VAR_host_project_id")
+
 // Name of the deployed dedicated interconnect received after deploying the resource in the test lab
 // e.g. dedicated-ix-vpn-client-0
 var deployedInterconnectName = os.Getenv("deployed_interconnect_name")
@@ -68,20 +70,23 @@ var secondVaAsn = "65418"
 var secondVlanAttachmentName = "vlan-attachment-b"
 var secondVaBandwidth = "BPS_1G"
 
-/* TestMySQLPrivateAndInterconnectVPN tests the creation of ServiceNetworkingAcrossInterconnect
-example by creating a new vpc and a new subnet. */
+/*
+	TestMySQLPrivateAndInterconnectVPN tests the creation of ServiceNetworkingAcrossInterconnect
+
+example by creating a new vpc and a new subnet.
+*/
 func TestMySQLPrivateAndInterconnectVPN(t *testing.T) {
 
 	deploymentNumber, err := strconv.Atoi(deployedInterconnectName[len(deployedInterconnectName)-1:])
 	if err != nil {
 		t.Errorf("Deployment number is not an int, using default value for deployment number.")
-		deploymentNumber = 0;
+		deploymentNumber = 0
 	}
-	var icRouterBgpAsn = 65000 + deploymentNumber;
-	var firstVaBgpRange = fmt.Sprintf("169.254.6%d.0/29",deploymentNumber)
-	var firstVlanTag = 600+deploymentNumber
-	var secondVaBgpRange = fmt.Sprintf("169.254.6%d.8/29",deploymentNumber)
-	var secondVlanTag = 600+deploymentNumber
+	var icRouterBgpAsn = 65000 + deploymentNumber
+	var firstVaBgpRange = fmt.Sprintf("169.254.6%d.0/29", deploymentNumber)
+	var firstVlanTag = 600 + deploymentNumber
+	var secondVaBgpRange = fmt.Sprintf("169.254.6%d.8/29", deploymentNumber)
+	var secondVlanTag = 600 + deploymentNumber
 	var tfVars = map[string]any{
 		"host_project_id":          hostProjectID,
 		"database_version":         databaseVersion,
@@ -122,22 +127,25 @@ func TestMySQLPrivateAndInterconnectVPN(t *testing.T) {
 		NoColor:              true,
 		SetVarsAfterVarFiles: true,
 	})
-	initiateTestForNetworkResource(t,terraformOptions,firstVlanTag)
+	initiateTestForNetworkResource(t, terraformOptions, firstVlanTag)
 }
 
-/* TestMySQLPrivateAndICVPNWithoutVPCCreation tests the creation of
-ServiceNetworkingAcrossInterconnect example by creating a new vpc and a new subnet. */
+/*
+	TestMySQLPrivateAndICVPNWithoutVPCCreation tests the creation of
+
+ServiceNetworkingAcrossInterconnect example by creating a new vpc and a new subnet.
+*/
 func TestMySQLPrivateAndICVPNWithoutVPCCreation(t *testing.T) {
 	deploymentNumber, err := strconv.Atoi(deployedInterconnectName[len(deployedInterconnectName)-1:])
 	if err != nil {
 		t.Errorf("Deployment number is not an int, using default value for deployment number.")
-		deploymentNumber = 0;
+		deploymentNumber = 0
 	}
-	var icRouterBgpAsn = 65000 + deploymentNumber;
-	var firstVaBgpRange = fmt.Sprintf("169.254.6%d.0/29",deploymentNumber)
-	var firstVlanTag = 600+deploymentNumber
-	var secondVaBgpRange = fmt.Sprintf("169.254.6%d.8/29",deploymentNumber)
-	var secondVlanTag = 600+deploymentNumber
+	var icRouterBgpAsn = 65000 + deploymentNumber
+	var firstVaBgpRange = fmt.Sprintf("169.254.6%d.0/29", deploymentNumber)
+	var firstVlanTag = 600 + deploymentNumber
+	var secondVaBgpRange = fmt.Sprintf("169.254.6%d.8/29", deploymentNumber)
+	var secondVlanTag = 600 + deploymentNumber
 	networkName = "hostcloudsql-easy"
 	subnetworkName = "hostcloudsql-easy-subnet"
 	var tfVars = map[string]any{
@@ -183,7 +191,7 @@ func TestMySQLPrivateAndICVPNWithoutVPCCreation(t *testing.T) {
 	text := "compute"
 	cmd := shell.Command{
 		Command: "gcloud",
-		Args:    []string{text, "networks", "create", networkName, "--project=" + hostProjectID, "--format=json", "--bgp-routing-mode=global", "--subnet-mode=custom","--verbosity=none"},
+		Args:    []string{text, "networks", "create", networkName, "--project=" + hostProjectID, "--format=json", "--bgp-routing-mode=global", "--subnet-mode=custom", "--verbosity=none"},
 	}
 	_, err = shell.RunCommandAndGetOutputE(t, cmd)
 	if err != nil {
@@ -191,17 +199,20 @@ func TestMySQLPrivateAndICVPNWithoutVPCCreation(t *testing.T) {
 	}
 	cmd = shell.Command{
 		Command: "gcloud",
-		Args:    []string{text, "networks", "subnets", "create", subnetworkName, "--network="+networkName ,"--project=" + hostProjectID,"--range=10.0.0.0/24","--region="+region ,"--format=json", "--enable-private-ip-google-access", "--enable-flow-logs","--verbosity=none"},
+		Args:    []string{text, "networks", "subnets", "create", subnetworkName, "--network=" + networkName, "--project=" + hostProjectID, "--range=10.0.0.0/24", "--region=" + region, "--format=json", "--enable-private-ip-google-access", "--enable-flow-logs", "--verbosity=none"},
 	}
 	_, err = shell.RunCommandAndGetOutputE(t, cmd)
 	if err != nil {
 		log.Printf("===Error %s Encountered while executing %s", err, text)
 	}
-	initiateTestForNetworkResource(t,terraformOptions, firstVlanTag)
+	initiateTestForNetworkResource(t, terraformOptions, firstVlanTag)
 }
 
-/* initiateTestForNetworkResource is a helper function that helps in verification
-of the resources being created as part of test. */
+/*
+	initiateTestForNetworkResource is a helper function that helps in verification
+
+of the resources being created as part of test.
+*/
 func initiateTestForNetworkResource(t *testing.T, terraformOptions *terraform.Options, firstVlanTag int) {
 	t.Helper()
 	var password string
@@ -212,7 +223,7 @@ func initiateTestForNetworkResource(t *testing.T, terraformOptions *terraform.Op
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	// Wait for 60 seconds to let resource acheive stable state.
+	// Wait for 60 seconds to let resource achieve stable state.
 	time.Sleep(60 * time.Second)
 
 	// Run `terraform output` to get the values of output variables and Check they have the expected values.
@@ -251,15 +262,15 @@ func initiateTestForNetworkResource(t *testing.T, terraformOptions *terraform.Op
 	}
 	log.Println(" ========= Verify if public IP is disabled ========= ")
 	want = "false"
-	got = gjson.Get(result.String(),"settings.ipConfiguration.ipv4Enabled").String()
+	got = gjson.Get(result.String(), "settings.ipConfiguration.ipv4Enabled").String()
 	if !cmp.Equal(got, want) {
 		t.Errorf("Test Public Ip configuration = %v, want = %v", got, want)
 	}
 	log.Println(" ========= Verify SQL RUNNING Instance State ========= ")
 	want = "RUNNABLE"
-	got = gjson.Get(result.String(),"state").String()
+	got = gjson.Get(result.String(), "state").String()
 	if !cmp.Equal(got, want) {
-			t.Errorf("Test SQL State = %v, want = %v", got, want)
+		t.Errorf("Test SQL State = %v, want = %v", got, want)
 	}
 
 	// Validate if interconnects vlans attachments are up & running with Established Connection.
@@ -289,26 +300,26 @@ func initiateTestForNetworkResource(t *testing.T, terraformOptions *terraform.Op
 		want = "OS_ACTIVE"
 		got = gjson.Get(result.String(), "operationalStatus").String()
 		if !cmp.Equal(got, want) {
-				t.Errorf("Test VLAN Operational State = %v, want = %v", got, want)
+			t.Errorf("Test VLAN Operational State = %v, want = %v", got, want)
 		}
 		log.Println(" ========= Check if state is Active ========= ")
 		want = "ACTIVE"
 		got = gjson.Get(result.String(), "state").String()
 		if !cmp.Equal(got, want) {
-				t.Errorf("Test VLAN State = %v, want = %v", got, want)
+			t.Errorf("Test VLAN State = %v, want = %v", got, want)
 		}
 		log.Println(" ========= Check if type is Dedicated ========= ")
 		want = "DEDICATED"
 		got = gjson.Get(result.String(), "type").String()
 		if !cmp.Equal(got, want) {
-				t.Errorf("Test Interconnect type = %v, want = %v", got, want)
+			t.Errorf("Test Interconnect type = %v, want = %v", got, want)
 		}
 
 		log.Println(" ========= Check if vlan tag is Same as Configured ========= ")
 		want = strconv.Itoa(firstVlanTag)
 		got = gjson.Get(result.String(), "vlanTag8021q").String()
 		if !cmp.Equal(got, want) {
-				t.Errorf("Test VLAN tag = %v, want = %v", got, want)
+			t.Errorf("Test VLAN tag = %v, want = %v", got, want)
 		}
 		// Fetch the cloudsql instance password and private IP address to be used for created test database.
 
@@ -318,8 +329,11 @@ func initiateTestForNetworkResource(t *testing.T, terraformOptions *terraform.Op
 	initateTestForCloudSQLTestDB(t, cloudSQLInstanceName, password, privateIPAddressSQL)
 }
 
-/* initateTestForCloudSQLTestDB is a helper fucntion that helps in creation of database
-from the onprem machine connected over interconnect to google vpc. */
+/*
+	initateTestForCloudSQLTestDB is a helper fucntion that helps in creation of database
+
+from the onprem machine connected over interconnect to google vpc.
+*/
 func initateTestForCloudSQLTestDB(t *testing.T, cloudSQLInstanceName string, password string, privateIPAddressSQL string) {
 	t.Helper()
 	var tfVars = map[string]any{
@@ -350,7 +364,7 @@ func initateTestForCloudSQLTestDB(t *testing.T, cloudSQLInstanceName string, pas
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	// Wait for 60 seconds to let resource acheive stable state.
+	// Wait for 60 seconds to let resource achieve stable state.
 	time.Sleep(60 * time.Second)
 
 	// Iterate through list of database to ensure a new db was created.
@@ -375,7 +389,7 @@ func initateTestForCloudSQLTestDB(t *testing.T, cloudSQLInstanceName string, pas
 			want := testDBName
 			got := gjson.Get(result.String(), "name").String()
 			if !cmp.Equal(got, want) {
-					t.Errorf("Test DB Name = %v, want = %v", got, want)
+				t.Errorf("Test DB Name = %v, want = %v", got, want)
 			}
 
 			break
