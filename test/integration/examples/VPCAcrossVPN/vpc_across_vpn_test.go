@@ -15,11 +15,11 @@
 package vpcacrossvpntest
 
 import (
-	"os"
 	"fmt"
 	"log"
-	"time"
+	"os"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/shell"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -62,28 +62,27 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	userZone = "us-west1-a"
 
 	tfVars := map[string]any{
-		"host_project_id"            : hostProjectID,
-		"service_project_id"         : serviceProjectID,
-		"database_version"           : databaseVersion,
-		"cloudsql_instance_name"     : cloudSQLInstanceName,
-		"region"                     : region,
-		"zone"                       : zone,
-		"create_network"             : true,
-		"create_subnetwork"          : true,
-		"network_name"               : networkName,
-		"subnetwork_name"            : subnetworkName, // this subnetwork will be created
-		"subnetwork_ip_cidr"         : subnetworkIPCidr,
-    "user_project_id"            : userProjectID,
-		"user_region"                : userRegion,
-		"user_zone"                  : userZone,
-		"create_user_vpc_network"    : true,
-		"create_user_vpc_subnetwork" : true,
-		"uservpc_network_name"       : uservpcNetworkName,
-		"uservpc_subnetwork_name"    : uservpcSubnetworkName,
-		"uservpc_subnetwork_ip_cidr" : uservpcSubnetworkIPCidr,
-		"test_dbname"                : testDbname,
-		"deletion_protection" 	     : deletionProtection,
-
+		"host_project_id":            hostProjectID,
+		"service_project_id":         serviceProjectID,
+		"database_version":           databaseVersion,
+		"cloudsql_instance_name":     cloudSQLInstanceName,
+		"region":                     region,
+		"zone":                       zone,
+		"create_network":             true,
+		"create_subnetwork":          true,
+		"network_name":               networkName,
+		"subnetwork_name":            subnetworkName, // this subnetwork will be created
+		"subnetwork_ip_cidr":         subnetworkIPCidr,
+		"user_project_id":            userProjectID,
+		"user_region":                userRegion,
+		"user_zone":                  userZone,
+		"create_user_vpc_network":    true,
+		"create_user_vpc_subnetwork": true,
+		"uservpc_network_name":       uservpcNetworkName,
+		"uservpc_subnetwork_name":    uservpcSubnetworkName,
+		"uservpc_subnetwork_ip_cidr": uservpcSubnetworkIPCidr,
+		"test_dbname":                testDbname,
+		"deletion_protection":        deletionProtection,
 	}
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
@@ -101,7 +100,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	//wait for 60 seconds to let resource acheive stable state
+	//wait for 60 seconds to let resource achieve stable state
 	time.Sleep(60 * time.Second)
 
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
@@ -128,12 +127,12 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	}
 	result := gjson.Parse(op)
 	if err != nil {
-		log.Printf("===Error %s Encountered while executing %s", err ,text)
+		log.Printf("===Error %s Encountered while executing %s", err, text)
 	}
 	log.Println(" ========= Verify if public IP is disabled ========= ")
-	assert.Equal(t, false, gjson.Get(result.String(),"settings.ipConfiguration.ipv4Enabled").Bool())
+	assert.Equal(t, false, gjson.Get(result.String(), "settings.ipConfiguration.ipv4Enabled").Bool())
 	log.Println(" ========= Verify SQL RUNNING Instance State ========= ")
-	assert.Equal(t, "RUNNABLE", gjson.Get(result.String(),"state").String())
+	assert.Equal(t, "RUNNABLE", gjson.Get(result.String(), "state").String())
 
 	// Validate if VPN tunnels are up & running with Established Connection
 	log.Println(" ====================================================== ")
@@ -157,19 +156,19 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 		}
 		result = gjson.Parse(op)
 		if err != nil {
-			log.Printf("===Error %s Encountered while executing %s", err ,text)
+			log.Printf("===Error %s Encountered while executing %s", err, text)
 		}
-		log.Printf(" \n========= validating tunnel %s ============\n",v);
-		log.Println(" ========= check if tunnel is up & running ========= ",)
-		assert.Equal(t, "Tunnel is up and running.", gjson.Get(result.String(),"detailedStatus").String())
+		log.Printf(" \n========= validating tunnel %s ============\n", v)
+		log.Println(" ========= check if tunnel is up & running ========= ")
+		assert.Equal(t, "Tunnel is up and running.", gjson.Get(result.String(), "detailedStatus").String())
 		log.Println(" ========= check if connection is established ========= ")
-		assert.Equal(t, "ESTABLISHED", gjson.Get(result.String(),"status").String())
+		assert.Equal(t, "ESTABLISHED", gjson.Get(result.String(), "status").String())
 	}
 
 	//Iterate through list of database to ensure a new db was created
 	log.Println(" ====================================================== ")
 	log.Println(" =========== Verify DB Creation =========== ")
-	iteration = 0;
+	iteration = 0
 	// performs iterations for 3 times to check if the database gets created or not
 	for {
 		cmd = shell.Command{
@@ -193,7 +192,7 @@ func TestMySqlPrivateAndVPNModule(t *testing.T) {
 	}
 	result = gjson.Parse(op)
 	if err != nil {
-		log.Printf("======= Error %s Encountered while executing %s", err ,text)
+		log.Printf("======= Error %s Encountered while executing %s", err, text)
 	}
 	assert.Equal(t, testDbname, gjson.Get(result.String(), "name").String())
 }
@@ -209,25 +208,25 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	uservpcSubnetworkName = "user-cloudsql-easy-subnet"
 
 	tfVars := map[string]any{
-		"host_project_id"            : hostProjectID,
-		"service_project_id"         : serviceProjectID,
-		"database_version"           : databaseVersion,
-		"cloudsql_instance_name"     : cloudSQLInstanceName,
-		"region"                     : region,
-		"zone"                       : zone,
-		"create_network"             : false,
-		"create_subnetwork"          : false,
-		"network_name"               : networkName,
-		"subnetwork_name"            : subnetworkName, // this subnetwork will be created
-		"user_project_id"            : userProjectID,
-		"user_region"                : userRegion,
-		"user_zone"                  : userZone,
-		"create_user_vpc_network"    : false,
-		"create_user_vpc_subnetwork" : false,
-		"uservpc_network_name"       : uservpcNetworkName,
-		"uservpc_subnetwork_name"    : uservpcSubnetworkName,
-		"test_dbname"                : testDbname,
-		"deletion_protection" 	     : deletionProtection,
+		"host_project_id":            hostProjectID,
+		"service_project_id":         serviceProjectID,
+		"database_version":           databaseVersion,
+		"cloudsql_instance_name":     cloudSQLInstanceName,
+		"region":                     region,
+		"zone":                       zone,
+		"create_network":             false,
+		"create_subnetwork":          false,
+		"network_name":               networkName,
+		"subnetwork_name":            subnetworkName, // this subnetwork will be created
+		"user_project_id":            userProjectID,
+		"user_region":                userRegion,
+		"user_zone":                  userZone,
+		"create_user_vpc_network":    false,
+		"create_user_vpc_subnetwork": false,
+		"uservpc_network_name":       uservpcNetworkName,
+		"uservpc_subnetwork_name":    uservpcSubnetworkName,
+		"test_dbname":                testDbname,
+		"deletion_protection":        deletionProtection,
 	}
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
@@ -266,7 +265,7 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	//wait for 60 seconds to let resource acheive stable state
+	//wait for 60 seconds to let resource achieve stable state
 	time.Sleep(60 * time.Second)
 
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
@@ -293,12 +292,12 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	}
 	result := gjson.Parse(op)
 	if err != nil {
-		log.Printf("===Error %s Encountered while executing %s", err ,text)
+		log.Printf("===Error %s Encountered while executing %s", err, text)
 	}
 	log.Println(" ========= Verify if public IP is disabled ========= ")
-	assert.Equal(t, false, gjson.Get(result.String(),"settings.ipConfiguration.ipv4Enabled").Bool())
+	assert.Equal(t, false, gjson.Get(result.String(), "settings.ipConfiguration.ipv4Enabled").Bool())
 	log.Println(" ========= Verify SQL RUNNING Instance State ========= ")
-	assert.Equal(t, "RUNNABLE", gjson.Get(result.String(),"state").String())
+	assert.Equal(t, "RUNNABLE", gjson.Get(result.String(), "state").String())
 
 	// Validate if VPN tunnels are up & running with Established Connection
 	log.Println(" ====================================================== ")
@@ -322,19 +321,19 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 		}
 		result = gjson.Parse(op)
 		if err != nil {
-			log.Printf("=== Error %s Encountered while executing %s", err ,text)
+			log.Printf("=== Error %s Encountered while executing %s", err, text)
 		}
-		log.Printf(" \n========= validating tunnel %s ============\n",v);
-		log.Println(" ========= check if tunnel is up & running ========= ",)
-		assert.Equal(t, "Tunnel is up and running.", gjson.Get(result.String(),"detailedStatus").String())
+		log.Printf(" \n========= validating tunnel %s ============\n", v)
+		log.Println(" ========= check if tunnel is up & running ========= ")
+		assert.Equal(t, "Tunnel is up and running.", gjson.Get(result.String(), "detailedStatus").String())
 		log.Println(" ========= check if connection is established ========= ")
-		assert.Equal(t, "ESTABLISHED", gjson.Get(result.String(),"status").String())
+		assert.Equal(t, "ESTABLISHED", gjson.Get(result.String(), "status").String())
 	}
 
 	//Iterate through list of database to ensure a new db was created
 	log.Println(" ====================================================== ")
 	log.Println(" =========== Verify DB Creation =========== ")
-	iteration = 0;
+	iteration = 0
 	//performs iterations for 3 times to check if the database gets created or not
 	for {
 		cmd = shell.Command{
@@ -358,7 +357,7 @@ func TestUsingExistingNetworkMySqlPrivateAndVPNModule(t *testing.T) {
 	}
 	result = gjson.Parse(op)
 	if err != nil {
-		log.Printf("======= Error %s Encountered while executing %s", err ,text)
+		log.Printf("======= Error %s Encountered while executing %s", err, text)
 	}
 	assert.Equal(t, testDbname, gjson.Get(result.String(), "name").String())
 }

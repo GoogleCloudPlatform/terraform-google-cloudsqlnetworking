@@ -108,7 +108,7 @@ func TestMySQLPrivateModule(t *testing.T) {
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	// Wait for 120 seconds to let resource acheive stable state
+	// Wait for 120 seconds to let resource achieve stable state
 	time.Sleep(120 * time.Second)
 
 	// Run `terraform output` to get the values of output variables and check they have the expected values.
@@ -270,7 +270,7 @@ func TestUsingExistingNetworkMySQLPrivateModule(t *testing.T) {
 	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
 
-	// Wait for 120 seconds to let resource acheive stable state
+	// Wait for 120 seconds to let resource achieve stable state
 	time.Sleep(120 * time.Second)
 
 	// Run `terraform output` to get the values of output variables and check they have the expected values.

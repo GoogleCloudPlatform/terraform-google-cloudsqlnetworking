@@ -39,7 +39,7 @@ Many examples are included in the [examples](./examples/) folder which describes
 
     2.2. [Service Networking Across Interconnect](./examples/ServiceNetworkingAcrossInterconnect) : This solution helps the user to create a dedicated interconnect connection with redundancy & 99.9% availability between an on-premise environment and a GCP project. The solution establishes a Cloud SQL connection using the private IP address of a Cloud SQL instance created inside a GCP project and a VM instance present in the user on-premise environment.
 
-3. [PSC across VPN Scenario](./examples/3.PSC) : This solution guides a user to create a PSC enabled Cloud SQL instance with a consumer and producer project setup having a compute VM instance created in the consumer project connecting to the Cloud SQL instance through PSC service endpoint. The consumer project contains the consumer VPC, service endpoint & firewall rules to connect to the SQL instance in the producer project.
+3. [PSC](./examples/3.PSC) : This solution guides a user to create a PSC enabled Cloud SQL instance with a consumer and producer project setup having a compute VM instance created in the consumer project connecting to the Cloud SQL instance through PSC service endpoint. The consumer project contains the consumer VPC, service endpoint & firewall rules to connect to the SQL instance in the producer project.
 
 4. [PSC across VPN Scenario](./examples/4.PSC-Across-VPN) : This solution guides a user to create a HA VPN connection between user and consumer project to connect to a PSC enabled Cloud SQL instance in a producer project from a compute VM instance through PSC service endpoint. The compute instance in the consumer project connects to the PSC service endpoint via the VPN connection. The PSC service endpoint connects to the Cloud SQL instance.
 
@@ -47,7 +47,7 @@ All [GA offerings](https://cloud.google.com/sql/docs/sqlserver/private-ip) for C
 
 ## Variables
 
-To control a module's behavior, change variable values. Behavior of each of these variables has been documented in the README files for the respective examples. Some of the common variables have been described below but the respective README file should act as reference point as it is more descriptive: 
+To control a module's behavior, change variable values. Behavior of each of these variables has been documented in the README files for the respective examples. Some of the common variables have been described below but the respective README file should act as reference point as it is more descriptive:
 
 - `cloudsql_instance_name` - set this variable to a string value as the name of the Cloud SQL instance.
 - `database_version` - set this variable to a specific [database version](https://cloud.google.com/sql/docs/mysql/db-versions) for the Cloud SQL instance.

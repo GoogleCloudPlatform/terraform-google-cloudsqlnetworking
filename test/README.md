@@ -6,7 +6,7 @@ The following sections describe how the examples can be tested in a Google Cloud
 
 While running these tests locally (or in your development machines) make sure you have declared following as the environment variables.
 
-- For HostServiceProject and VPCAcrossVPN :
+- For [HostServiceProject](../examples/1.Host-Service-Project/) and [VPCAcrossVPN](../examples/2.VPC-Across-VPN/) :
 
 ```
 export TF_VAR_host_project_id=<HOST_PROJECT_ID>
@@ -14,7 +14,7 @@ export TF_VAR_service_project_id=<SERVICE_PROJECT_ID>
 export TF_VAR_user_project_id=<USER_PROJECT_ID>
 ```
 
-- For PSC and PSC-Across-VPN :
+- For [PSC](../examples/3.PSC/) and [PSC-Across-VPN](../examples/4.PSC-Across-VPN/) :
 
 ```
 export TF_VAR_consumer_project_id=<CONSUMER_PROJECT_ID>
@@ -22,7 +22,7 @@ export TF_VAR_producer_project_id=<PRODUCER_PROJECT_ID>
 export TF_VAR_user_project_id=<USER_PROJECT_ID>
 ```
 
-- For ServiceNetworkingAcrossInterconnect :
+- For [ServiceNetworkingAcrossInterconnect](../examples/ServiceNetworkingAcrossInterconnect/) :
 
 ```
 export TF_VAR_interconnect_project_id=<INTERCONNECT_PROJECT_ID>
