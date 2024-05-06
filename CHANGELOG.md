@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/compare/v0.2.0...v0.2.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* doc improvements ([b5518bd](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/commit/b5518bd0b75540b9d69d36cabd220004c9544374))
+
 ## [0.2.0](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/compare/v0.1.0...v0.2.0) (2024-03-07)
 
 
