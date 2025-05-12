@@ -1,6 +1,6 @@
 # CloudSQL Simplified Networking
 
-** Note ** - This repository is no longer actively maintained. Please refer to [cloudnetworking-config-solutions](https://github.com/GoogleCloudPlatform/cloudnetworking-config-solutions/tree/main) for the latest version.
+**Note** - This repository is no longer actively maintained. Please refer to [cloudnetworking-config-solutions](https://github.com/GoogleCloudPlatform/cloudnetworking-config-solutions/tree/main) for the latest version.
 
 Streamline your Google Cloud SQL deployment and management with this comprehensive Terraform repository. This repository's solutions simplify networking configuration for Cloud SQL instances. It bundles Terraform modules to make it easier to create and manage Cloud SQL instances and all its dependencies such as cloud networking resources, IAM policies and associated service accounts.
 
