@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/compare/v0.2.0...v0.3.0) (2025-08-01)
+
+
+### Features
+
+* Depricating the CNCS CLoud SQL repo and archiving it ([295e5f7](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/commit/295e5f73382da8de27d1411fc1a5cc46c04405fc))
+
+
+### Bug Fixes
+
+* doc improvements ([b5518bd](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/commit/b5518bd0b75540b9d69d36cabd220004c9544374))
+
 ## [0.2.0](https://github.com/GoogleCloudPlatform/terraform-google-cloudsqlnetworking/compare/v0.1.0...v0.2.0) (2024-03-07)
 
 
